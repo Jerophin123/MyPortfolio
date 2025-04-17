@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, Grid, Card, CardContent, Avatar, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import profileImage from '/profile.jpg';
+import profileImage from './assets/profile.jpg';
+
 
 function App() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);

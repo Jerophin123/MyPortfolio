@@ -782,7 +782,7 @@ function App() {
         width: '100%',
         minHeight: '100%',
         overflow: 'hidden',
-        pb: 10, // Bottom spacing for content
+        pb: 10,
       }}
     >
       {/* 🔵 Spline Full Background */}
@@ -835,67 +835,76 @@ function App() {
           sx={{ px: { xs: 2, sm: 4, md: 6 } }}
         >
           {[
-            ['Waste Management System', '🧠 AI-based smart waste classification (Deep Learning) integrated with Google.'],
-            ['RV Diagnose', '🌿 Built a plant disease detection system using Deep Learning and TensorFlow.'],
-            ['Binger App', '🎬 Designed a UI/UX project for a content recommendation platform using Figma.'],
-            ['JDEL PC Factory', '🛠️ Crafted an innovative PC customization interface focused on advanced UX principles. Led to a direct increase of 200+ users within the first month of launch.'],
-            ['Student Management System', '🏫 Built a robust data handling system using JSP.'],
-            ['Market Basket Analysis', '🛒 Applied Apriori algorithm for consumer trend analysis in Python.'],
-            ['Log Analyzer', '📊 Developed a Python-based log analysis tool with visualization capabilities.'],
-            ['Fitness Tracking Dashboard', '💪 Designed an interactive dashboard for health enthusiasts using Figma.'],
-            ['Geolocation-based Attendance System', '📍 Python project combining GPS and biometric authentication.'],
-            ['TorUnveil', '🕵️ Created a Python tool to trace and deanonymize anonymous email senders.'],
-            ['AUD', '🎧 Designed a high-quality music player UI/UX tailored for audiophiles.']
-          ].map(([title, desc]) => (
+            ['Waste Management System', '🧠 AI-based smart waste classification (Deep Learning) integrated with Google.','https://github.com/Jerophin123/Waste_Management_System.git'],
+            ['RV Diagnose', '🌿 Built a plant disease detection system using Deep Learning and TensorFlow.','https://github.com/Jerophin123/RV_Diagnose.git'],
+            ['Binger App', '🎬 Designed a UI/UX project for a content recommendation platform using Figma.','https://www.figma.com/proto/LEjitauzuzA5Dgc5ZM74w4/Binger-App?node-id=23-21&t=hXXnNf3LSjeX6Rg8-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=68%3A68'],
+            ['JDEL PC Factory', '🛠️ Crafted an innovative PC customization interface focused on advanced UX principles. Led to a direct increase of 200+ users within the first month of launch.','https://www.figma.com/proto/HsaUcu8alpCAPzmRwV6DNa/Untitled?node-id=17-79&starting-point-node-id=17%3A79&scaling=scale-down-width&content-scaling=fixed&t=BNt8SYrLhIYaO9U7-1'],
+            ['Student Intern Management System', '🏫 Built a robust data handling system using JSP.','https://github.com/Jerophin123/Student-Intern-Management-System.git'],
+            ['Market Basket Analysis', '🛒 Applied Apriori algorithm for consumer trend analysis in Python.','https://github.com/Jerophin123/Market_Basket_Analysis_Sales.git'],
+            ['Log Analyzer', '📊 Developed a Python-based log analysis tool with visualization capabilities.','https://github.com/Jerophin123/log_Analyser.git'],
+            ['Fitness Tracking Dashboard', '💪 Designed an interactive dashboard for health enthusiasts using Figma.','https://www.figma.com/proto/2oFTi1cFy7noVn5dwgYYUX/Untitled?node-id=1-2&t=ZiibMn9AUuK20g2q-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1'],
+            ['Geolocation Attendance', '📍 Python project combining GPS and biometric authentication.','https://github.com/Jerophin123/Geo-Attendance.git'],
+            ['TorUnveil', '🕵️ Created a Python tool to trace and deanonymize anonymous email senders.','https://github.com/Jerophin123/Tor_Unveil.git'],
+            ['AUD', '🎧 Designed a high-quality music player UI/UX tailored for audiophiles.','https://www.behance.net/gallery/214231433/AUD-The-Music-Player-For-Audiophiles'],
+            ['Shopsavyy','🛒 A modern e-commerce web app with dynamic hero sections, real-time cart, product filtering, and a sleek UI built using React, FakeStoreAPI, React Router, and MUI for seamless shopping experience.','https://shopsavyy.vercel.app/'],
+            ['Vote System','👆 A Simple Online Voting Solution using block-chain','https://github.com/Jerophin123/Vote-System.git']
+          ].map(([title, desc, link]) => (
             <Grid item xs={12} sm={6} md={4} key={title}>
-              <Card
-                sx={{
-                  height: '100%',
-                  background: 'rgba(15, 15, 15, 0.75)',
-                  border: '1px solid rgba(77,184,255,0.2)',
-                  backdropFilter: 'blur(10px)',
-                  borderRadius: '20px',
-                  boxShadow: 'none',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    borderColor: '#4db8ff',
-                    boxShadow: '0 10px 30px rgba(77,184,255,0.25)',
-                  },
-                }}
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
               >
-                <CardContent>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: '#4db8ff',
-                      fontWeight: 600,
-                      fontFamily: '"Poppins", sans-serif',
-                      mb: 1,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {title}
-                  </Typography>
-
-                  {desc.split('. ').map((line, i) => (
+                <Card
+                  sx={{
+                    height: '100%',
+                    background: 'rgba(15, 15, 15, 0.75)',
+                    border: '1px solid rgba(77,184,255,0.2)',
+                    backdropFilter: 'blur(10px)',
+                    borderRadius: '20px',
+                    boxShadow: 'none',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      borderColor: '#4db8ff',
+                      boxShadow: '0 10px 30px rgba(77,184,255,0.25)',
+                    },
+                  }}
+                >
+                  <CardContent>
                     <Typography
-                      key={i}
-                      variant="body2"
+                      variant="h6"
                       sx={{
-                        color: '#c0c0c0',
-                        fontSize: '0.95rem',
+                        color: '#4db8ff',
+                        fontWeight: 600,
                         fontFamily: '"Poppins", sans-serif',
-                        lineHeight: 1.6,
+                        mb: 1,
                         textAlign: 'center',
-                        mb: 0.5,
                       }}
                     >
-                      {line.trim() + (line.endsWith('.') ? '' : '.')}
+                      {title}
                     </Typography>
-                  ))}
-                </CardContent>
-              </Card>
+
+                    {desc.split('. ').map((line, i) => (
+                      <Typography
+                        key={i}
+                        variant="body2"
+                        sx={{
+                          color: '#c0c0c0',
+                          fontSize: '0.95rem',
+                          fontFamily: '"Poppins", sans-serif',
+                          lineHeight: 1.6,
+                          textAlign: 'center',
+                          mb: 0.5,
+                        }}
+                      >
+                        {line.trim() + (line.endsWith('.') ? '' : '.')}
+                      </Typography>
+                    ))}
+                  </CardContent>
+                </Card>
+              </a>
             </Grid>
           ))}
         </Grid>
@@ -903,7 +912,6 @@ function App() {
     </Box>
   }
 />
-
 
 <Route
   path="/achievements"

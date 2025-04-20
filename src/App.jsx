@@ -847,7 +847,9 @@ function App() {
             ['TorUnveil', '🕵️ Created a Python tool to trace and deanonymize anonymous email senders.','https://github.com/Jerophin123/Tor_Unveil.git'],
             ['AUD', '🎧 Designed a high-quality music player UI/UX tailored for audiophiles.','https://www.behance.net/gallery/214231433/AUD-The-Music-Player-For-Audiophiles'],
             ['Shopsavyy','🛒 A modern e-commerce web app with dynamic hero sections, real-time cart, product filtering, and a sleek UI built using React, FakeStoreAPI, React Router, and MUI for seamless shopping experience.','https://shopsavyy.vercel.app/'],
-            ['Vote System','👆 A Simple Online Voting Solution using block-chain','https://github.com/Jerophin123/Vote-System.git']
+            ['Vote System','👆 A Simple Online Voting Solution using block-chain','https://github.com/Jerophin123/Vote-System.git'],
+            ['Now Weather', '🌦️ A sleek React Native weather app with splash screen, real-time forecasts, dark mode, and offline persistence via AsyncStorage!','https://github.com/Jerophin123/NowWeather.git'],
+            ['GPACGPA','📱 A modern React Native app with dark/light mode, sharing, and smooth UI to calculate and track academic performance!','https://github.com/Jerophin123/GPACGPA.git']
           ].map(([title, desc, link]) => (
             <Grid item xs={12} sm={6} md={4} key={title}>
               <a

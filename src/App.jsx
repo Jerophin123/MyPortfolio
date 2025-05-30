@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AppBar, Toolbar, Typography, Button, Box, Grid, Card, CardContent, Avatar, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Fade, Typography, Button, Box, Grid, Card, CardContent, Avatar, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import profileImage from './assets/profile.jpg';
@@ -16,6 +16,13 @@ function App() {
   const [visible, setVisible] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [showText, setShowText] = useState(false);
+
+  const handleClick = () => {
+    if (isMobile) {
+      setShowText((prev) => !prev);
+    }
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,19 +45,44 @@ function App() {
     { label: 'Skills', path: '/skills' },
     { label: 'Experience', path: '/experience' },
     { label: 'Projects', path: '/projects' },
+    { label: 'Certifications', path: '/certifications' },
     { label: 'Achievements', path: '/achievements' },
     { label: 'Contact', path: '/contact' },
     { label: 'Other Profiles', path: '/otherprofiles' }
   ];
 
-  const NavMenu = ({ isMobile, drawerOpen, setDrawerOpen, navLinks }) => (
+  const NavMenu = ({ isMobile, drawerOpen, setDrawerOpen, navLinks }) => {
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) section.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
     <>
       {isMobile ? (
         <>
-          {/* Mobile: Menu Button & Drawer */}
-          <Button variant="outlined" color="inherit" onClick={() => setDrawerOpen(true)}>
-            Menu
+          {/* 📱 Mobile Hamburger Button */}
+          <Button
+            onClick={() => setDrawerOpen(true)}
+            sx={{
+              fontFamily: '"Poppins", sans-serif',
+              fontSize: '1rem',
+              color: '#4db8ff',
+              fontWeight: 600,
+              border: '1px solid #4db8ff',
+              px: 2,
+              py: 1,
+              borderRadius: '8px',
+              backgroundColor: 'transparent',
+              '&:hover': {
+                backgroundColor: 'rgba(77,184,255,0.1)'
+              }
+            }}
+          >
+            ☰
           </Button>
+
+          {/* 🧾 Mobile Drawer */}
           <Drawer
             anchor="right"
             open={drawerOpen}
@@ -59,7 +91,7 @@ function App() {
               sx: {
                 backgroundColor: '#121212',
                 color: '#fff',
-                width: 240
+                width: 260
               }
             }}
           >
@@ -68,13 +100,21 @@ function App() {
                 <ListItem
                   button
                   key={i}
-                  component={Link}
-                  to={link.path}
-                  onClick={() => setDrawerOpen(false)}
+                  onClick={() => {
+                    scrollToSection(link.path.replace('/', ''));
+                    setDrawerOpen(false);
+                  }}
                 >
                   <ListItemText
                     primary={link.label}
-                    primaryTypographyProps={{ sx: { fontFamily: '"Poppins", sans-serif', fontWeight: 500, fontSize: '1rem', color: '#4db8ff' } }}
+                    primaryTypographyProps={{
+                      sx: {
+                        fontFamily: '"Poppins", sans-serif',
+                        fontWeight: 500,
+                        fontSize: '1rem',
+                        color: '#4db8ff'
+                      }
+                    }}
                   />
                 </ListItem>
               ))}
@@ -82,33 +122,50 @@ function App() {
           </Drawer>
         </>
       ) : (
-        // Desktop: horizontal nav buttons (already in your AppBar, this is optional reuse)
-        navLinks.map((link, i) => (
-          <Button
-            key={i}
-            component={Link}
-            to={link.path}
-            sx={{
-              color: '#e6e6e6',
-              fontFamily: '"Poppins", sans-serif',
-              fontWeight: 500,
-              textTransform: 'none',
-              fontSize: '1rem',
-              '&:hover': {
-                color: '#4db8ff',
-                backgroundColor: 'transparent',
-                borderBottom: '2px solid #4db8ff',
-                borderRadius: 0
-              }
-            }}
-          >
-            {link.label}
-          </Button>
-        ))
+        // 🖥 Desktop: Floating Bubble Nav
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            right: '1.5rem',
+            transform: 'translateY(-50%)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            zIndex: 1000
+          }}
+        >
+          {navLinks.map((link, i) => (
+            <Tooltip title={link.label} placement="left" arrow key={i}>
+              <Button
+                onClick={() => scrollToSection(link.path.replace('/', ''))}
+                sx={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '50%',
+                  minWidth: 0,
+                  backgroundColor: '#1e1e1e',
+                  color: '#4db8ff',
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  boxShadow: '0 4px 12px rgba(77,184,255,0.4)',
+                  transition: 'all 0.3s ease-in-out',
+                  '&:hover': {
+                    backgroundColor: '#4db8ff',
+                    color: '#121212',
+                    transform: 'scale(1.1)'
+                  }
+                }}
+              >
+                {link.label[0]}
+              </Button>
+            </Tooltip>
+          ))}
+        </Box>
       )}
     </>
   );
-  
+};
   
   const Section = ({ title, children, bg = '#1e1e1e' }) => (
     <Box
@@ -158,107 +215,158 @@ function App() {
           zIndex: 1300
         }}
       >
-        <Toolbar
+<Toolbar
+  sx={{
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    px: { xs: 2, sm: 3, md: 6 },
+    minHeight: { xs: 56, md: 72 }
+  }}
+>
+    <Box
+      sx={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '&:hover .brand-text': {
+          ...(isMobile ? {} : {
+            opacity: 1,
+            transform: 'translateX(10px)'
+          })
+        }
+      }}
+      onClick={handleClick}
+    >
+      {/* 🧊 Favicon Bubble */}
+      <Box
+        component="img"
+        src="/favicon.png"
+        alt="Jerophin Logo"
+        sx={{
+          height: { xs: 28, sm: 32, md: 36 },
+          width: 'auto',
+          objectFit: 'contain',
+          border: '2px solid #4db8ff',
+          borderRadius: '30%',
+          padding: '6px',
+          backgroundColor: '#121212',
+          boxShadow: '0 4px 12px rgba(77, 184, 255, 0.3)',
+          transition: 'all 0.3s ease'
+        }}
+      />
+
+      {/* 💬 Brand Text */}
+      <Typography
+        className="brand-text"
+        sx={{
+          ml: 1.5,
+          color: '#4db8ff',
+          fontFamily: '"Poppins", sans-serif',
+          fontWeight: 700,
+          fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' },
+          opacity: isMobile ? (showText ? 1 : 0) : 0,
+          whiteSpace: 'nowrap',
+          transition: 'all 0.4s ease-in-out',
+          transform: isMobile
+            ? (showText ? 'translateX(10px)' : 'translateX(0)')
+            : 'translateX(0)'
+        }}
+      >
+        JEROPHIN D R
+      </Typography>
+    </Box>
+
+
+  {/* 🔘 Right-Aligned Nav and Toggle */}
+  <Box
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 2,
+      ml: 'auto'
+    }}
+  >
+    {/* 🖥️ Desktop Navigation */}
+    <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+      {navLinks.map((link, i) => (
+        <Button
+          key={i}
+          component={Link}
+          to={link.path}
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            px: { xs: 2, sm: 3, md: 6 },
-            minHeight: { xs: 56, md: 72 }
+            position: 'relative',
+            color: '#dddddd',
+            fontFamily: '"Poppins", sans-serif',
+            fontWeight: 500,
+            fontSize: '0.95rem',
+            textTransform: 'none',
+            px: 1,
+            transition: 'color 0.2s ease-in-out',
+
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: -3,
+              left: 0,
+              width: '0%',
+              height: '2px',
+              backgroundColor: '#4db8ff',
+              transition: 'width 0.15s ease-in-out'
+            },
+
+            '&:hover': {
+              color: '#4db8ff'
+            },
+
+            '&:hover::after': {
+              width: '100%'
+            }
           }}
         >
-          {/* 🔷 Brand Name */}
-          <Typography
-            variant="h6"
-            sx={{
-              color: '#4db8ff',
-              fontFamily: '"Poppins", sans-serif',
-              fontWeight: 700,
-              fontSize: { xs: '1.3rem', sm: '1.6rem', md: '1.7rem' },
-              letterSpacing: '0.7px',
-              userSelect: 'none'
-            }}
-          >
-            JEROPHIN D R
-          </Typography>
+          {link.label}
+        </Button>
+      ))}
+    </Box>
 
-          {/* 🖥️ Desktop Navigation */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
-            {navLinks.map((link, i) => (
-              <Button
-                key={i}
-                component={Link}
-                to={link.path}
-                sx={{
-                  position: 'relative',
-                  color: '#dddddd',
-                  fontFamily: '"Poppins", sans-serif',
-                  fontWeight: 500,
-                  fontSize: '1rem',
-                  textTransform: 'none',
-                  px: 1.5,
-                  transition: 'color 0.2s ease-in-out',
+    {/* 📱 Mobile Toggle (hidden on desktop) */}
+    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+      <Button
+        onClick={() => setDrawerOpen(prev => !prev)}
+        sx={{
+          color: '#4db8ff',
+          px: 2,
+          py: 0.5,
+          textTransform: 'none',
+          height: 36,
+          minWidth: 40,
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            backgroundColor: 'rgba(77, 184, 255, 0.1)'
+          }
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            d="M2.75 12.25h10.5m-10.5-4h10.5m-10.5-4h10.5"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+          />
+        </svg>
+      </Button>
+    </Box>
+  </Box>
+</Toolbar>
 
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: -3,
-                    left: 0,
-                    width: '0%',
-                    height: '2px',
-                    backgroundColor: '#4db8ff',
-                    transition: 'width 0.15s ease-in-out'
-                  },
-
-                  '&:hover': {
-                    color: '#4db8ff'
-                  },
-
-                  '&:hover::after': {
-                    width: '100%'
-                  }
-                }}
-              >
-                {link.label}
-              </Button>
-            ))}
-          </Box>
-
-          {/* 📱 Mobile Menu */}
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <Button
-              onClick={() => setDrawerOpen(prev => !prev)}
-              sx={{
-                color: '#4db8ff',
-                px: 2,
-                py: 0.5,
-                textTransform: 'none',
-                height: 36,
-                minWidth: 40,
-                transition: 'all 0.2s ease-in-out',
-                '&:hover': {
-                  backgroundColor: 'rgba(77, 184, 255, 0.1)'
-                }
-              }}
-            >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M2.75 12.25h10.5m-10.5-4h10.5m-10.5-4h10.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                />
-              </svg>
-            </Button>
-          </Box>
-        </Toolbar>
       </AppBar>
       <Drawer
         anchor="right"
@@ -595,12 +703,15 @@ function App() {
             }}
           >
             {[
-              ['🎨 UI/UX Design', 'Figma, Adobe XD, Sketch\nWireframing & Prototyping'],
-              ['🧩 Full Stack Development', 'React, Node.js, REST APIs\nHTML, CSS, SQL'],
-              ['🛠️ Languages & Tools', 'Python, Java, Git\nLinux, MongoDB'],
-              ['📊 Data Science', 'Pandas, NumPy, Matplotlib\nJupyter Notebooks'],
-              ['🤝 Soft Skills', 'Teamwork, Communication\nTime Management'],
-              ['📅 Project Management', 'Agile, Jira, Trello']
+              ['🎨 UI/UX Design', 'Figma, Adobe XD, Sketch\nUser Interface & Experience\nWireframing, Prototyping, Design Thinking'],
+              ['🧩 Full Stack Development', 'React, Angular, Vue, Next.js, Nest.js\nHTML, CSS, JavaScript, SQL, PHP\nReact Native, Flutter'],
+              ['🛠️ Programming & Tools', 'Python, Java, Git\nLinux, Windows, UNIX, Mac\nDocker, Vercel, Apache Hadoop'],
+              ['🔌 Backend & Integration', 'Node.js, Flask, FastAPI, SAP\nREST APIs, OpenAPI, RAML\nAPI Lifecycle, MuleSoft (exposure)'],
+              ['📊 Data Science & Visualization', 'Pandas, NumPy, Matplotlib, R,\nJupyter Notebooks, Tableau, Power BI'],
+              ['🗄️ Database & Cloud', 'MongoDB, MySQL, MariaDB\nRelational Design, Query Optimization\nCloud Basics, Jenkins, DevOps'],
+              ['🔐 Networking & Security', 'VPN, Firewall, IPSec\nIDS/IPS, Network Debugging'],
+              ['🗂️ Project & Office Tools', 'Agile, Scrum, Kanban, Jira, Trello\nMS Excel, Word, PowerPoint, Access'],
+              ['🤝 Soft Skills', 'Problem-Solving, Communication\nTime Management, Teamwork\nCreative Thinking, Relationship Building']
             ].map(([title, desc], index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card
@@ -751,6 +862,79 @@ function App() {
                   '✅ Created responsive apps focused on accessibility & performance.',
                   '✅ Built a Student Management System reducing data errors by 50%.',
                   '✅ Enhanced interactivity via RESTful API integration.',
+                  '✅ Improved load times through JS/CSS optimization.'
+                ].map((item, index) => (
+                  <Box
+                    component="li"
+                    key={index}
+                    sx={{ mb: 1.2, display: 'flex', alignItems: 'flex-start' }}
+                  >
+                    <Typography component="span">{item}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
+          <Card
+            sx={{
+              maxWidth: '800px',
+              mx: 'auto',
+              background: 'rgba(15, 15, 15, 0.75)',
+              border: '1px solid rgba(77,184,255,0.2)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '20px',
+              marginTop: '30px',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+              px: { xs: 2, sm: 4 },
+              py: 4,
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                borderColor: '#4db8ff',
+                boxShadow: '0 12px 36px rgba(77,184,255,0.25)'
+              }
+            }}
+          >
+            <CardContent>
+              <Typography
+                variant="h5"
+                sx={{
+                  color: '#4db8ff',
+                  fontWeight: 700,
+                  fontFamily: '"Poppins", sans-serif',
+                  fontSize: '1.4rem',
+                  mb: 1
+                }}
+              >
+                🏢 Delphin Associates
+              </Typography>
+
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  color: '#bbbbbb',
+                  fontStyle: 'italic',
+                  fontSize: '1rem',
+                  mb: 3,
+                  fontFamily: '"Poppins", sans-serif'
+                }}
+              >
+                Web Development Intern — May 2025 to June 2025
+              </Typography>
+
+              <Box
+                component="ul"
+                sx={{
+                  listStyle: 'none',
+                  paddingLeft: 0,
+                  fontSize: '0.95rem',
+                  color: '#d0d0d0',
+                  lineHeight: 1.8,
+                  fontFamily: '"Poppins", sans-serif'
+                }}
+              >
+                {[
+                  '✅ Created Website for their Business Growth upto 75%',
                   '✅ Improved load times through JS/CSS optimization.'
                 ].map((item, index) => (
                   <Box
@@ -916,6 +1100,108 @@ function App() {
 />
 
 <Route
+  path="/certifications"
+  element={
+    <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
+      {/* 🌐 Background */}
+      <Box sx={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+      </Box>
+
+      {/* 🧊 Overlay */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2))',
+          zIndex: 1
+        }}
+      />
+
+      {/* 🎯 Foreground Section */}
+      <Box sx={{ position: 'relative', zIndex: 2 }}>
+        <Section title="Certifications" bg="transparent">
+          <Grid
+            container
+            spacing={4}
+            justifyContent="center"
+            direction={{ xs: 'column', sm: 'column', md: 'row' }}
+            alignItems={{ xs: 'center', md: 'stretch' }}
+            sx={{ mt: 2 }}
+          >
+            {[
+              ['Linguaskill – Cambridge Assessment English', 'Achieved CEFR Level C1 in English proficiency, validating advanced skills in reading, listening, speaking, and writing.'],
+              ['Introduction to Git and GitHub – Coursera', 'Learned version control using Git and collaborated using GitHub repositories and pull requests in real-world projects.'],
+              ['MongoDB Essentials – Self Learning', 'Gained hands-on experience with NoSQL database concepts, schema design, queries, aggregation, and performance optimization.'],
+              ['Adobe XD for UI/UX Design – LinkedIn Learning', 'Mastered wireframing, prototyping, and interactive design workflows using Adobe XD for rapid product development.'],
+              ['User Experience Design – Coursera', 'Explored UX principles, usability testing, persona creation, and user-centric interface strategies for digital products.'],
+              ['Figma Masterclass – Udemy', 'Built real-world UI components, responsive design layouts, and interactive prototypes using Figma’s advanced features.'],
+              ['Full Stack Development – LinkedIn Learning', 'Completed end-to-end full-stack training covering React, Node.js, Express, MongoDB, and RESTful API development.']
+            ].map(([title, description], index) => (
+              <Grid
+                item
+                xs={12}
+                sm={10}
+                md={4}
+                key={index}
+                sx={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Card
+                  sx={{
+                    background: 'rgba(15, 15, 15, 0.75)',
+                    border: '1px solid rgba(77,184,255,0.2)',
+                    backdropFilter: 'blur(10px)',
+                    borderRadius: '20px',
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+                    height: '100%',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-6px)',
+                      boxShadow: '0 10px 30px rgba(77,184,255,0.2)',
+                      borderColor: '#4db8ff'
+                    },
+                    width: '100%',
+                    maxWidth: 360
+                  }}
+                >
+                  <CardContent>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        color: '#4db8ff',
+                        fontWeight: 600,
+                        fontSize: '1.15rem',
+                        fontFamily: '"Poppins", sans-serif',
+                        mb: 1
+                      }}
+                    >
+                      {title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: '#c0c0c0',
+                        fontSize: '0.95rem',
+                        fontFamily: '"Poppins", sans-serif',
+                        lineHeight: 1.6
+                      }}
+                    >
+                      {description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Section>
+      </Box>
+    </Box>
+  }
+/>
+
+
+
+<Route
   path="/achievements"
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
@@ -947,12 +1233,14 @@ function App() {
         <Section title="Achievements" bg="transparent">
           <Grid container spacing={4} justifyContent="center" sx={{ mt: 2 }}>
             {[
-              ['IEEE Code Debugging Event', '🥈 Secured 2nd Place in a competitive debugging round.'],
-              ['Paper Presentation – Guru Nanak College', '🥈 Presented innovative research and won 2nd Place.'],
-              ['Guru Nanak Symposium (Overall)', '🥈 Contributed to team’s win of Overall 2nd Place through leadership and initiative.'],
-              ['Data Preprocessing & Graphs Event', '🥈 Won 2nd Place in data visualization & analysis.'],
-              ['Code Debugging – Dr. MGR Institute', '🥉 Achieved 3rd Place in debugging challenge.'],
-              ['Hack-o-Mania 5.0 (SJIT)', '⚡ Successfully completed 24hr hackathon challenge with an innovative solution.']
+              ['2nd Place: IEEE Code Debugging Event', '🥈 Excelled in competitive debugging, earning 2nd place.'],
+              ['2nd Place: Paper Presentation at Guru Nanak College', '🥈 Presented innovative research and secured 2nd place.'],
+              ['2nd Place: Guru Nanak College Symposium (Overall)', '🥈 Played a key role in achieving overall 2nd place through leadership.'],
+              ['2nd Place: Data Preprocessing and Quantitative Graphs Event', '🥈 Demonstrated strong data skills and secured 2nd place.'],
+              ['3rd Place: Code Debugging at Dr. MGR Research Institute', '🥉 Placed 3rd in a competitive debugging challenge.'],
+              ['Hackathon Success: Hack-o-Mania 5.0 (SJIT)', '⚡ Completed a 24-hour hackathon with an innovative tech solution.'],
+              ['Hackathon Success: Blaze-A-Trail 1.0 (SJIT)', '⚡ Delivered an impactful solution within 24 hours at SJIT hackathon.'],
+              ['Hackathon Success: Hack2Skills – UN SDG', '🌍 Built a solution aligned with the UN Sustainable Development Goals.']
             ].map(([title, desc]) => (
               <Grid item xs={12} sm={6} md={4} key={title}>
                 <Card
@@ -1067,6 +1355,28 @@ function App() {
                 </svg>,
                 'LinkedIn',
                 'https://www.linkedin.com/in/jerophin-d-r-b9a73b257/'
+              ],
+              [
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="60"
+                  height="60"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M8.75 10a3.25 3.25 0 1 1 6.5 0a3.25 3.25 0 0 1-6.5 0Z"
+                    fill="#4db8ff"
+                  />
+                  <path
+                    fill="#4db8ff"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M3.774 8.877a8.04 8.04 0 0 1 8.01-7.377h.432a8.04 8.04 0 0 1 8.01 7.377a8.7 8.7 0 0 1-1.933 6.217L13.5 20.956a1.937 1.937 0 0 1-3 0l-4.792-5.862a8.7 8.7 0 0 1-1.934-6.217Zm8.226-3.627a4.75 4.75 0 1 0 0 9.5a4.75 4.75 0 0 0 0-9.5Z"
+                  />
+                </svg>,
+                'Location',
+                'https://maps.app.goo.gl/wj4R5RuBersWa33JA'
               ]
             ].map(([icon, text, link], index) => (
               <a
@@ -1202,7 +1512,7 @@ function App() {
               [
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m8 18v-1c0-1.33-2.67-2-4-2s-4 .67-4 2v1zm-4-8a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"/></svg>,
                 'Resume',
-                'https://jsquads-my.sharepoint.com/:b:/g/personal/jsquads_jsquads_onmicrosoft_com/EapMR6VGgzZPj6rHWew8IiUBY5nZLcWN2ZgMDkSTlYKn_w'
+                'https://drive.google.com/file/d/1q0mH6H_RAD7UGqMR-IoJ_UOrzngfQuMc/view?usp=drive_link'
               ]
             ].map(([icon, display, link], index) => (
               <Grid

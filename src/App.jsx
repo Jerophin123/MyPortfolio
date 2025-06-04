@@ -703,15 +703,61 @@ function App() {
             }}
           >
             {[
-              ['🎨 UI/UX Design', 'Figma, Adobe XD, Sketch\nUser Interface & Experience\nWireframing, Prototyping, Design Thinking'],
-              ['🧩 Full Stack Development', 'React, Angular, Vue, Next.js, Nest.js\nHTML, CSS, JavaScript, SQL, PHP\nReact Native, Flutter'],
-              ['🛠️ Programming & Tools', 'Python, Java, Git\nLinux, Windows, UNIX, Mac\nDocker, Vercel, Apache Hadoop'],
-              ['🔌 Backend & Integration', 'Node.js, Flask, FastAPI, SAP\nREST APIs, OpenAPI, RAML\nAPI Lifecycle, MuleSoft (exposure)'],
-              ['📊 Data Science & Visualization', 'Pandas, NumPy, Matplotlib, R,\nJupyter Notebooks, Tableau, Power BI'],
-              ['🗄️ Database & Cloud', 'MongoDB, MySQL, MariaDB\nRelational Design, Query Optimization\nCloud Basics, Jenkins, DevOps'],
-              ['🔐 Networking & Security', 'VPN, Firewall, IPSec\nIDS/IPS, Network Debugging'],
-              ['🗂️ Project & Office Tools', 'Agile, Scrum, Kanban, Jira, Trello\nMS Excel, Word, PowerPoint, Access'],
-              ['🤝 Soft Skills', 'Problem-Solving, Communication\nTime Management, Teamwork\nCreative Thinking, Relationship Building']
+               ['🖥️ Platforms & Operating Systems', 
+                'Windows, Linux (Ubuntu, XFCE)\n' + 
+                'Cross-platform environments, Portfolio hosting'
+                ],
+
+                ['🛠️ Programming & Scripting Languages', 
+                'C, C++, Java, JavaScript (ES6+), Python\n' + 
+                'R, PHP, SQL, Bash'
+                ],
+
+                ['🧩 Full-Stack Development', 
+                'Frontend – HTML5, CSS3, Tailwind, Bootstrap, React, Vue, Angular\n' + 
+                'React Native, Next.js, MUI, Vite, Web3.js, Context API, React Router, React Hook Form\n' +
+                'Backend – Node.js, Express, Django, Flask, FastAPI, NestJS, Spring Boot, Apache, Tomcat, Gunicorn, Jinja'
+                ],
+
+                ['🔌 API Design & Integration', 
+                'RESTful API Development, JWT Authentication\n' + 
+                'OpenAPI/Swagger, Versioning, Socket.IO'
+                ],
+
+                ['☁️ Cloud & DevOps', 
+                'AWS, Google Cloud, Azure, Firebase, Vercel, Heroku\n'+ 
+                'Cloudflare, Docker (Basic), Jenkins, CI/CD Pipelines'
+                ],
+
+                ['🗄️ Data & Databases', 
+                'MySQL, PostgreSQL, SQLite, MongoDB\n' +
+                'MariaDB, Apache Hadoop, Relational Modeling, Query Optimization'
+                ],
+
+                ['📊 Data Science & Machine Learning', 
+                'Pandas, NumPy, Matplotlib, Seaborn, Chart.js, OpenCV\n' +
+                'Scikit-learn, TensorFlow, PyTorch, SciPy, Anaconda'
+                ],
+
+                ['🔐 Security & Networking Fundamentals', 
+                'VPN, Firewall, IPS/IDS, IPSec, TLS\n' + 
+                'HTTP/HTTPS, Cisco Tools, Tor Browser Security'
+                ],
+
+                ['✅ Testing & Quality Assurance', 
+                'Jest, Mocha, Selenium Basics\n' + 
+                'Manual Testing, Automation Frameworks'
+                ],
+
+                ['🎨 UI/UX & Visual Design', 
+                'Figma, Adobe XD, Illustrator, Fonts, Canva\n' +
+                'Creative Cloud, GIMP, Inkscape, SketchUp, Dribbble'
+                ],
+
+                ['📂 Office & Collaboration Tools', 
+                'Microsoft Excel, Word, PowerPoint\n' + 
+                'Jira, Trello, Notion, Git, GitHub, Gradle'
+                ]
             ].map(([title, desc], index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card
@@ -1019,9 +1065,9 @@ function App() {
           sx={{ px: { xs: 2, sm: 4, md: 6 } }}
         >
           {[
-            ['Waste Management System', '🧠 AI-based smart waste classification (Deep Learning) integrated with Google.','https://github.com/Jerophin123/Waste_Management_System.git'],
-            ['RV Diagnose', '🌿 Built a plant disease detection system using Deep Learning and TensorFlow.','https://github.com/Jerophin123/RV_Diagnose.git'],
-            ['Binger App', '🎬 Designed a UI/UX project for a content recommendation platform using Figma.','https://www.figma.com/proto/LEjitauzuzA5Dgc5ZM74w4/Binger-App?node-id=23-21&t=hXXnNf3LSjeX6Rg8-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=68%3A68'],
+            ['Waste Management System', '🧠 AI-based smart waste classification (Deep Learning). Which is being integrated with Google.','https://github.com/Jerophin123/Waste_Management_System.git'],
+            ['RV Diagnose', '🌿 Built a plant disease detection system. It uses Deep Learning and TensorFlow.','https://github.com/Jerophin123/RV_Diagnose.git'],
+            ['Binger App', '🎬 Designed an app Binger. an E-Commerce platform using Figma.','https://www.figma.com/proto/LEjitauzuzA5Dgc5ZM74w4/Binger-App?node-id=23-21&t=hXXnNf3LSjeX6Rg8-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=68%3A68'],
             ['JDEL PC Factory', '🛠️ Crafted an innovative PC customization interface focused on advanced UX principles. Led to a direct increase of 200+ users within the first month of launch.','https://www.figma.com/proto/HsaUcu8alpCAPzmRwV6DNa/Untitled?node-id=17-79&starting-point-node-id=17%3A79&scaling=scale-down-width&content-scaling=fixed&t=BNt8SYrLhIYaO9U7-1'],
             ['Student Intern Management System', '🏫 Built a robust data handling system using JSP.','https://github.com/Jerophin123/Student-Intern-Management-System.git'],
             ['Market Basket Analysis', '🛒 Applied Apriori algorithm for consumer trend analysis in Python.','https://github.com/Jerophin123/Market_Basket_Analysis_Sales.git'],
@@ -1030,10 +1076,10 @@ function App() {
             ['Geolocation Attendance', '📍 Python project combining GPS and biometric authentication.','https://github.com/Jerophin123/Geo-Attendance.git'],
             ['TorUnveil', '🕵️ Created a Python tool to trace and deanonymize anonymous email senders.','https://github.com/Jerophin123/Tor_Unveil.git'],
             ['AUD', '🎧 Designed a high-quality music player UI/UX tailored for audiophiles.','https://www.behance.net/gallery/214231433/AUD-The-Music-Player-For-Audiophiles'],
-            ['Shopsavyy','🛒 A modern e-commerce web app with dynamic hero sections, real-time cart, product filtering, and a sleek UI built using React, FakeStoreAPI, React Router, and MUI for seamless shopping experience.','https://shopsavyy.vercel.app/'],
+            ['Shopsavyy','🛒 A modern e-commerce app built with React and MUI. Includes dynamic sections, real-time cart, and product filtering. Delivers a smooth shopping experience.','https://shopsavyy.vercel.app/'],
             ['Vote System','👆 A Simple Online Voting Solution using block-chain','https://github.com/Jerophin123/Vote-System.git'],
-            ['Now Weather', '🌦️ A sleek React Native weather app with splash screen, real-time forecasts, dark mode, and offline persistence via AsyncStorage!','https://github.com/Jerophin123/NowWeather.git'],
-            ['GPACGPA','📱 A modern React Native app with dark/light mode, sharing, and smooth UI to calculate and track academic performance!','https://github.com/Jerophin123/GPACGPA.git']
+            ['Now Weather', '🌦️ A sleek React Native weather app. Includes a splash screen, real-time forecasts, dark mode, and offline support via AsyncStorage.','https://github.com/Jerophin123/NowWeather.git'],
+            ['GPACGPA','📱 A modern React Native app with dark/light mode, sharing, and smooth UI. in order to calculate and track academic performance!','https://github.com/Jerophin123/GPACGPA.git']
           ].map(([title, desc, link]) => (
             <Grid item xs={12} sm={6} md={4} key={title}>
               <a
@@ -1130,13 +1176,21 @@ function App() {
             sx={{ mt: 2 }}
           >
             {[
-              ['Linguaskill – Cambridge Assessment English', 'Achieved CEFR Level C1 in English proficiency, validating advanced skills in reading, listening, speaking, and writing.'],
-              ['Introduction to Git and GitHub – Coursera', 'Learned version control using Git and collaborated using GitHub repositories and pull requests in real-world projects.'],
-              ['MongoDB Essentials – Self Learning', 'Gained hands-on experience with NoSQL database concepts, schema design, queries, aggregation, and performance optimization.'],
-              ['Adobe XD for UI/UX Design – LinkedIn Learning', 'Mastered wireframing, prototyping, and interactive design workflows using Adobe XD for rapid product development.'],
-              ['User Experience Design – Coursera', 'Explored UX principles, usability testing, persona creation, and user-centric interface strategies for digital products.'],
-              ['Figma Masterclass – Udemy', 'Built real-world UI components, responsive design layouts, and interactive prototypes using Figma’s advanced features.'],
-              ['Full Stack Development – LinkedIn Learning', 'Completed end-to-end full-stack training covering React, Node.js, Express, MongoDB, and RESTful API development.']
+                ['Linguaskill – Cambridge Assessment English', 'Achieved CEFR Level C1 in English proficiency, validating advanced skills in reading, listening, speaking, and writing.'],
+                
+                ['Introduction to Git and GitHub – Coursera', 'Learned version control using Git and collaborated using GitHub repositories and pull requests in real-world projects.'],
+                
+                ['MongoDB Essentials – Self Learning', 'Gained hands-on experience with NoSQL database concepts, schema design, queries, aggregation, and performance optimization.'],
+                
+                ['Adobe XD for UI/UX Design – LinkedIn Learning', 'Mastered wireframing, prototyping, and interactive design workflows using Adobe XD for rapid product development.'],
+                
+                ['User Experience Design – Coursera', 'Explored UX principles, usability testing, persona creation, and user-centric interface strategies for digital products.'],
+                
+                ['Figma Masterclass – Udemy', 'Built real-world UI components, responsive design layouts, and interactive prototypes using Figma’s advanced features.'],
+                
+                ['Full Stack Development – LinkedIn Learning', 'Completed end-to-end full-stack training covering React, Node.js, Express, MongoDB, and RESTful API development.'],
+                
+                ['NCAT 2025 Participation – Naukri Campus All India Career Aptitude Test', 'Participated in India’s largest career aptitude test; scored 28/60 with 100% attempt rate and secured 56.79 percentile in Tamil Nadu, demonstrating verbal and analytical strengths.']
             ].map(([title, description], index) => (
               <Grid
                 item
@@ -1233,14 +1287,23 @@ function App() {
         <Section title="Achievements" bg="transparent">
           <Grid container spacing={4} justifyContent="center" sx={{ mt: 2 }}>
             {[
-              ['2nd Place: IEEE Code Debugging Event', '🥈 Excelled in competitive debugging, earning 2nd place.'],
-              ['2nd Place: Paper Presentation at Guru Nanak College', '🥈 Presented innovative research and secured 2nd place.'],
-              ['2nd Place: Guru Nanak College Symposium (Overall)', '🥈 Played a key role in achieving overall 2nd place through leadership.'],
-              ['2nd Place: Data Preprocessing and Quantitative Graphs Event', '🥈 Demonstrated strong data skills and secured 2nd place.'],
-              ['3rd Place: Code Debugging at Dr. MGR Research Institute', '🥉 Placed 3rd in a competitive debugging challenge.'],
-              ['Hackathon Success: Hack-o-Mania 5.0 (SJIT)', '⚡ Completed a 24-hour hackathon with an innovative tech solution.'],
-              ['Hackathon Success: Blaze-A-Trail 1.0 (SJIT)', '⚡ Delivered an impactful solution within 24 hours at SJIT hackathon.'],
-              ['Hackathon Success: Hack2Skills – UN SDG', '🌍 Built a solution aligned with the UN Sustainable Development Goals.']
+                ['2nd Place: IEEE Code Debugging Event', '🥈 Excelled in competitive debugging, earning 2nd place.'],
+                
+                ['2nd Place: Paper Presentation Competition at Guru Nanak College', '🥈 Presented innovative research ideas and secured 2nd place.'],
+                
+                ['2nd Place: Overall Runner-up at Guru Nanak College Symposium', '🥈 Contributed significantly to the team’s overall 2nd place win.'],
+                
+                ['2nd Place: Data Preprocessing and Quantitative Graphs Event', '🥈 Showcased data analysis skills to win 2nd place.'],
+                
+                ['3rd Place: Code Debugging at Dr. MGR Research Institute', '🥉 Achieved 3rd place in a national-level debugging contest.'],
+                
+                ['Hackathon: Hack-o-Mania 5.0 (SJIT)', '⚡ Completed a 24-hour hackathon with a functional tech prototype.'],
+                
+                ['Hackathon: Blaze-A-Trail 1.0 (SJIT)', '⚡ Delivered an innovative solution within 24 hours of intensive coding.'],
+                
+                ['Hackathon: Hack2Skills – UN SDG', '🌍 Built and presented a project aligned with the UN Sustainable Development Goals.'],
+                
+                ['NCAT 2025 – Naukri Campus All India Career Aptitude Test', '📊 Scored 28/60 with 100% attempt rate; secured 56.79 percentile in Tamil Nadu with top scores in Verbal & Reasoning.']
             ].map(([title, desc]) => (
               <Grid item xs={12} sm={6} md={4} key={title}>
                 <Card
@@ -1512,7 +1575,7 @@ function App() {
               [
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m8 18v-1c0-1.33-2.67-2-4-2s-4 .67-4 2v1zm-4-8a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"/></svg>,
                 'Resume',
-                'https://drive.google.com/file/d/1q0mH6H_RAD7UGqMR-IoJ_UOrzngfQuMc/view?usp=drive_link'
+                'https://drive.google.com/file/d/1wiJn84kSkNsOWIkY0XphgpQp8a-E8Fo0/view?usp=sharing'
               ]
             ].map(([icon, display, link], index) => (
               <Grid

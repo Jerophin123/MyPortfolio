@@ -4,8 +4,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppBar, Toolbar, Fade, Typography, Button, Box, Grid, Card, CardContent, Avatar, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Menu, MenuItem, Tooltip } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import profileImage from './assets/profile.jpg';
+import Appbar from './Appbar'; // adjust the path if it's in a different folder
 import Spline from '@splinetool/react-spline';
 
 const roles = ['Full Stack Developer', 'UI UX Designer'];
@@ -17,7 +19,7 @@ function App() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showText, setShowText] = useState(false);
-
+ 
   const handleClick = () => {
     if (isMobile) {
       setShowText((prev) => !prev);
@@ -47,21 +49,34 @@ function App() {
     { label: 'Projects', path: '/projects' },
     { label: 'Certifications', path: '/certifications' },
     { label: 'Achievements', path: '/achievements' },
-    { label: 'Contact', path: '/contact' },
-    { label: 'Other Profiles', path: '/otherprofiles' }
+    { label: 'Profiles & Contact', path: '/otherprofiles' }
   ];
 
   const NavMenu = ({ isMobile, drawerOpen, setDrawerOpen, navLinks }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) section.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Customize this logic as needed
+  const mainLinks = navLinks.slice(0, 3); // Show 3 main bubbles
+  const moreLinks = navLinks.slice(3);    // Rest inside menu
+
   return (
     <>
       {isMobile ? (
         <>
-          {/* 📱 Mobile Hamburger Button */}
+          {/* 📱 Mobile Menu Button */}
           <Button
             onClick={() => setDrawerOpen(true)}
             sx={{
@@ -82,7 +97,7 @@ function App() {
             ☰
           </Button>
 
-          {/* 🧾 Mobile Drawer */}
+          {/* 📜 Mobile Drawer */}
           <Drawer
             anchor="right"
             open={drawerOpen}
@@ -122,7 +137,7 @@ function App() {
           </Drawer>
         </>
       ) : (
-        // 🖥 Desktop: Floating Bubble Nav
+        // 🖥️ Desktop Bubble Nav
         <Box
           sx={{
             position: 'fixed',
@@ -135,7 +150,7 @@ function App() {
             zIndex: 1000
           }}
         >
-          {navLinks.map((link, i) => (
+          {mainLinks.map((link, i) => (
             <Tooltip title={link.label} placement="left" arrow key={i}>
               <Button
                 onClick={() => scrollToSection(link.path.replace('/', ''))}
@@ -161,6 +176,72 @@ function App() {
               </Button>
             </Tooltip>
           ))}
+
+          {/* ➕ More Button */}
+          {moreLinks.length > 0 && (
+            <>
+              <Tooltip title="More" placement="left" arrow>
+                <Button
+                  onClick={handleOpenMenu}
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: '50%',
+                    minWidth: 0,
+                    backgroundColor: '#1e1e1e',
+                    color: '#4db8ff',
+                    fontWeight: 700,
+                    fontSize: '1.1rem',
+                    boxShadow: '0 4px 12px rgba(77,184,255,0.4)',
+                    transition: 'all 0.3s ease-in-out',
+                    '&:hover': {
+                      backgroundColor: '#4db8ff',
+                      color: '#121212',
+                      transform: 'scale(1.1)'
+                    }
+                  }}
+                >
+                  More
+                </Button>
+              </Tooltip>
+
+              {/* More Menu */}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+                PaperProps={{
+                  style: {
+                    backgroundColor: '#121212',
+                    border: '1px solid #4db8ff',
+                    borderRadius: 10,
+                    boxShadow: '0 6px 18px rgba(0,0,0,0.5)'
+                  }
+                }}
+              >
+                {moreLinks.map((link, i) => (
+                  <MenuItem
+                    key={i}
+                    onClick={() => {
+                      scrollToSection(link.path.replace('/', ''));
+                      handleCloseMenu();
+                    }}
+                    sx={{
+                      color: '#c0c0c0',
+                      fontFamily: '"Poppins", sans-serif',
+                      fontSize: '0.9rem',
+                      '&:hover': {
+                        backgroundColor: 'rgba(77,184,255,0.1)',
+                        color: '#4db8ff'
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
         </Box>
       )}
     </>
@@ -205,169 +286,12 @@ function App() {
           overflowX: 'hidden'
         }}
       >
-      <AppBar
-        position="sticky"
-        elevation={0}
-        sx={{
-          backgroundColor: 'rgba(12, 12, 12, 0.96)',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.65)',
-          zIndex: 1300
-        }}
-      >
-<Toolbar
-  sx={{
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    px: { xs: 2, sm: 3, md: 6 },
-    minHeight: { xs: 56, md: 72 }
-  }}
->
-    <Box
-      sx={{
-        position: 'relative',
-        display: 'inline-flex',
-        alignItems: 'center',
-        cursor: 'pointer',
-        '&:hover .brand-text': {
-          ...(isMobile ? {} : {
-            opacity: 1,
-            transform: 'translateX(10px)'
-          })
-        }
-      }}
-      onClick={handleClick}
-    >
-      {/* 🧊 Favicon Bubble */}
-      <Box
-        component="img"
-        src="/favicon.png"
-        alt="Jerophin Logo"
-        sx={{
-          height: { xs: 28, sm: 32, md: 36 },
-          width: 'auto',
-          objectFit: 'contain',
-          border: '2px solid #4db8ff',
-          borderRadius: '30%',
-          padding: '6px',
-          backgroundColor: '#121212',
-          boxShadow: '0 4px 12px rgba(77, 184, 255, 0.3)',
-          transition: 'all 0.3s ease'
-        }}
-      />
+      <Appbar
+  handleClick={handleClick}
+  showText={showText}
+  setDrawerOpen={setDrawerOpen}
+/>
 
-      {/* 💬 Brand Text */}
-      <Typography
-        className="brand-text"
-        sx={{
-          ml: 1.5,
-          color: '#4db8ff',
-          fontFamily: '"Poppins", sans-serif',
-          fontWeight: 700,
-          fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' },
-          opacity: isMobile ? (showText ? 1 : 0) : 0,
-          whiteSpace: 'nowrap',
-          transition: 'all 0.4s ease-in-out',
-          transform: isMobile
-            ? (showText ? 'translateX(10px)' : 'translateX(0)')
-            : 'translateX(0)'
-        }}
-      >
-        JEROPHIN D R
-      </Typography>
-    </Box>
-
-
-  {/* 🔘 Right-Aligned Nav and Toggle */}
-  <Box
-    sx={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 2,
-      ml: 'auto'
-    }}
-  >
-    {/* 🖥️ Desktop Navigation */}
-    <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-      {navLinks.map((link, i) => (
-        <Button
-          key={i}
-          component={Link}
-          to={link.path}
-          sx={{
-            position: 'relative',
-            color: '#dddddd',
-            fontFamily: '"Poppins", sans-serif',
-            fontWeight: 500,
-            fontSize: '0.95rem',
-            textTransform: 'none',
-            px: 1,
-            transition: 'color 0.2s ease-in-out',
-
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: -3,
-              left: 0,
-              width: '0%',
-              height: '2px',
-              backgroundColor: '#4db8ff',
-              transition: 'width 0.15s ease-in-out'
-            },
-
-            '&:hover': {
-              color: '#4db8ff'
-            },
-
-            '&:hover::after': {
-              width: '100%'
-            }
-          }}
-        >
-          {link.label}
-        </Button>
-      ))}
-    </Box>
-
-    {/* 📱 Mobile Toggle (hidden on desktop) */}
-    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-      <Button
-        onClick={() => setDrawerOpen(prev => !prev)}
-        sx={{
-          color: '#4db8ff',
-          px: 2,
-          py: 0.5,
-          textTransform: 'none',
-          height: 36,
-          minWidth: 40,
-          transition: 'all 0.2s ease-in-out',
-          '&:hover': {
-            backgroundColor: 'rgba(77, 184, 255, 0.1)'
-          }
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="22"
-          height="22"
-          viewBox="0 0 16 16"
-          fill="none"
-        >
-          <path
-            d="M2.75 12.25h10.5m-10.5-4h10.5m-10.5-4h10.5"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.5"
-          />
-        </svg>
-      </Button>
-    </Box>
-  </Box>
-</Toolbar>
-
-      </AppBar>
       <Drawer
         anchor="right"
         open={drawerOpen}
@@ -525,7 +449,7 @@ function App() {
                 fontSize: { xs: '0.85rem', sm: '1rem' },
                 borderRadius: '12px',
                 background: 'linear-gradient(135deg, #007fff 0%, #00c6ff 100%)',
-                color: '#fff',
+                color: '#000',
                 textTransform: 'uppercase',
                 fontWeight: 600,
                 minWidth: 180,
@@ -573,17 +497,18 @@ function App() {
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       {/* Spline 3D Background */}
       <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
-
+  sx={{
+    position: 'absolute',
+    inset: 0,
+    zIndex: 0
+  }}
+>
+  {window.innerWidth > 600 && (
+    <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+  )}
+</Box>
       {/* Foreground Section Content */}
-      <Section title="About Me" bg="transparent">
+      <Section  bg="transparent">
         <Box
           sx={{
             fontFamily: '"Poppins", sans-serif',
@@ -656,6 +581,71 @@ function App() {
             gap between design and engineering. I love hackathons, am open to relocation, and enjoy
             building real-world tools that make a difference.
           </Typography>
+          {/* Education Section */}
+<Box
+  sx={{
+    mt: 6,
+    width: '90%',
+    textAlign: 'left',
+    background: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: '16px',
+    border: '1px solid rgba(255,255,255,0.06)',
+    p: { xs: 3, sm: 4 },
+    boxShadow: '0 6px 20px rgba(0,0,0,0.5)'
+  }}
+>
+  <Typography
+    variant="h6"
+    sx={{
+      color: '#4db8ff',
+      fontWeight: 600,
+      mb: 3,
+      fontSize: { xs: '1.2rem', sm: '1.4rem' }
+    }}
+  >
+    🎓 Education
+  </Typography>
+
+  {/* Engineering */}
+  <Box sx={{ mb: 4 }}>
+    <Typography sx={{ color: '#ffffff', fontWeight: 500 }}>
+      Bachelor of Engineering in Computer Science <span style={{ color: '#4db8ff' }}>(CGPA: 8.3)</span>
+    </Typography>
+    <Typography sx={{ color: '#bbbbbb', fontSize: '0.95rem' }}>
+      St. Joseph’s Institute of Technology, OMR, Chennai
+    </Typography>
+    <Typography sx={{ color: '#888888', fontSize: '0.85rem', mt: 0.5 }}>
+      Expected Graduation: <span style={{ color: '#4db8ff' }}>May 2026</span>
+    </Typography>
+  </Box>
+
+  {/* HSC */}
+  <Box sx={{ mb: 4 }}>
+    <Typography sx={{ color: '#ffffff', fontWeight: 500 }}>
+      Higher Secondary Certificate (HSC) <span style={{ color: '#4db8ff' }}>(77.5%)</span>
+    </Typography>
+    <Typography sx={{ color: '#bbbbbb', fontSize: '0.95rem' }}>
+      Holy Family Convent Matriculation Hr. Sec. School, Keelkattalai, Chennai
+    </Typography>
+    <Typography sx={{ color: '#888888', fontSize: '0.85rem', mt: 0.5 }}>
+      Graduation: <span style={{ color: '#4db8ff' }}>May 2022</span>
+    </Typography>
+  </Box>
+
+  {/* SSLC */}
+  <Box>
+    <Typography sx={{ color: '#ffffff', fontWeight: 500 }}>
+      Secondary School Leaving Certificate (SSLC) <span style={{ color: '#4db8ff' }}>(71.6%)</span>
+    </Typography>
+    <Typography sx={{ color: '#bbbbbb', fontSize: '0.95rem' }}>
+      Holy Family Convent Matriculation Hr. Sec. School, Keelkattalai, Chennai
+    </Typography>
+    <Typography sx={{ color: '#888888', fontSize: '0.85rem', mt: 0.5 }}>
+      Graduation: <span style={{ color: '#4db8ff' }}>March 2020</span>
+    </Typography>
+  </Box>
+</Box>
+
         </Box>
       </Section>
     </Box>
@@ -669,16 +659,17 @@ function App() {
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
       {/* 🎯 Spline Background (interactive enabled) */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0
-          // Removed pointerEvents to allow interaction
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
+       {typeof window !== 'undefined' && window.innerWidth > 600 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0
+          }}
+        >
+          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+        </Box>
+      )}
 
       {/* 🔲 Optional Overlay (can be adjusted or removed) */}
       <Box
@@ -828,10 +819,12 @@ function App() {
         sx={{
           position: 'absolute',
           inset: 0,
-          zIndex: 0,
+          zIndex: 0
         }}
       >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+        {window.innerWidth > 600 && (
+          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+        )}
       </Box>
 
       {/* 🔲 Optional Transparent Overlay */}
@@ -1016,21 +1009,23 @@ function App() {
       }}
     >
       {/* 🔵 Spline Full Background */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          minHeight: '100%',
-          width: '100%',
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
+      {typeof window !== 'undefined' && window.innerWidth > 600 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            minHeight: '100%',
+            width: '100%',
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
+          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+        </Box>
+      )}
 
       {/* 🔲 Optional Overlay */}
       <Box
@@ -1150,9 +1145,12 @@ function App() {
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       {/* 🌐 Background */}
-      <Box sx={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
+     {typeof window !== 'undefined' && window.innerWidth > 600 && (
+  <Box sx={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+    <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+  </Box>
+)}
+
 
       {/* 🧊 Overlay */}
       <Box
@@ -1183,6 +1181,8 @@ function App() {
                 ['MongoDB Essentials – Self Learning', 'Gained hands-on experience with NoSQL database concepts, schema design, queries, aggregation, and performance optimization.'],
                 
                 ['Adobe XD for UI/UX Design – LinkedIn Learning', 'Mastered wireframing, prototyping, and interactive design workflows using Adobe XD for rapid product development.'],
+
+                ['Skill Rack', 'Earned Certifications in Python 3.x - Programming Course (Hands-On), C - Programming Course (Hands-On), Java Basics - Programming Course (Hands-On), SQL - Basics (Standard), Data Structure - C - Course (Hands-On)'],
                 
                 ['User Experience Design – Coursera', 'Explored UX principles, usability testing, persona creation, and user-centric interface strategies for digital products.'],
                 
@@ -1261,16 +1261,19 @@ function App() {
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
       {/* 🎯 Spline Background for Desktop */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
+      {typeof window !== 'undefined' && window.innerWidth > 600 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
+          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+        </Box>
+      )}
+
 
       {/* 🔲 Optional Transparent Overlay for readability */}
       <Box
@@ -1357,157 +1360,6 @@ function App() {
   }
 />
 
-<Route
-  path="/contact"
-  element={
-    <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
-      
-      {/* 🌐 Spline 3D Background */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none'
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
-
-      {/* 🧊 Overlay for readability */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2))',
-          zIndex: 1
-        }}
-      />
-
-      {/* 💬 Foreground Section */}
-      <Box sx={{ position: 'relative', zIndex: 2, py: { xs: 1, md: 0 }, px: { xs: 0, sm: 0, md: 0 } }}>
-        <Section title="Contact" bg="transparent">
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4,
-              width: '100%',
-              maxWidth: '500px',
-              mx: 'auto'
-            }}
-          >
-            {[
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25a.85.85 0 1 1 .9-1.44L12 11l6.7-4.19a.85.85 0 1 1 .9 1.44"/>
-                </svg>,
-                'Email',
-                'mailto:jerophinstanley47@gmail.com'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="m19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.05 15.05 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2 2 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07c.53 8.54 7.36 15.36 15.89 15.89c1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98"/>
-                </svg>,
-                'Phone',
-                'tel:+919940306399'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M17.04 17.043h-2.962v-4.64c0-1.107-.023-2.531-1.544-2.531c-1.544 0-1.78 1.204-1.78 2.449v4.722H7.793V7.5h2.844v1.3h.039c.397-.75 1.364-1.54 2.808-1.54c3.001 0 3.556 1.974 3.556 4.545zM4.447 6.194c-.954 0-1.72-.771-1.72-1.72s.767-1.72 1.72-1.72a1.72 1.72 0 0 1 0 3.44m1.484 10.85h-2.97V7.5h2.97zM18.522 0H1.476C.66 0 0 .645 0 1.44v17.12C0 19.355.66 20 1.476 20h17.042c.815 0 1.482-.644 1.482-1.44V1.44C20 .646 19.333 0 18.518 0z"/>
-                </svg>,
-                'LinkedIn',
-                'https://www.linkedin.com/in/jerophin-d-r-b9a73b257/'
-              ],
-              [
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="60"
-                  height="60"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M8.75 10a3.25 3.25 0 1 1 6.5 0a3.25 3.25 0 0 1-6.5 0Z"
-                    fill="#4db8ff"
-                  />
-                  <path
-                    fill="#4db8ff"
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M3.774 8.877a8.04 8.04 0 0 1 8.01-7.377h.432a8.04 8.04 0 0 1 8.01 7.377a8.7 8.7 0 0 1-1.933 6.217L13.5 20.956a1.937 1.937 0 0 1-3 0l-4.792-5.862a8.7 8.7 0 0 1-1.934-6.217Zm8.226-3.627a4.75 4.75 0 1 0 0 9.5a4.75 4.75 0 0 0 0-9.5Z"
-                  />
-                </svg>,
-                'Location',
-                'https://maps.app.goo.gl/wj4R5RuBersWa33JA'
-              ]
-            ].map(([icon, text, link], index) => (
-              <a
-                key={index}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none' }}
-              >
-                <Card
-                  sx={{
-                    width: '100%',
-                    background: 'rgba(15, 15, 15, 0.75)',
-                    border: '1px solid rgba(77,184,255,0.2)',
-                    backdropFilter: 'blur(10px)',
-                    borderRadius: '20px',
-                    boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    px: { xs: 0, sm: 0, md: 0 },
-                    py: { xs: 4, sm: 4, md: 4 },
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-6px)',
-                      boxShadow: '0 10px 25px rgba(77,184,255,0.2)',
-                      borderColor: '#4db8ff'
-                    },
-                    '& svg': {
-                      fill: '#4db8ff'
-                    }
-                  }}
-                >
-                  <CardContent sx={{ textAlign: 'center' }}>
-                  <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          mb: 1,
-                          '& svg': {
-                            width: 60,
-                            height: 60
-                          }
-                        }}
-                      >
-                        {icon}
-                      </Box>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: '#c0c0c0',
-                        fontSize: '1rem',
-                        fontFamily: '"Poppins", sans-serif'
-                      }}
-                    >
-                      {text}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </a>
-            ))}
-          </Box>
-        </Section>
-      </Box>
-    </Box>
-  }
-/>
 
 
 
@@ -1516,15 +1368,18 @@ function App() {
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       {/* 🔵 Spline 3D Background (interactive) */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
+      {typeof window !== 'undefined' && window.innerWidth > 600 && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0
+          }}
+        >
+          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+        </Box>
+      )}
+
 
       {/* 🎛 Overlay */}
       <Box
@@ -1538,7 +1393,8 @@ function App() {
 
       {/* 🧾 Foreground Content */}
       <Box sx={{ position: 'relative', zIndex: 2, py: { xs: 1, md: 0 } }}>
-        <Section title="Other Profiles" bg="transparent">
+        <Section title="Profiles & Contact" bg="transparent">
+
           <Grid
             container
             spacing={4}
@@ -1552,6 +1408,37 @@ function App() {
             }}
           >
             {[
+              [
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="m19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.05 15.05 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2 2 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07c.53 8.54 7.36 15.36 15.89 15.89c1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98"/>
+                </svg>,
+                'Phone',
+                'tel:+919940306399'
+              ],
+              [
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25a.85.85 0 1 1 .9-1.44L12 11l6.7-4.19a.85.85 0 1 1 .9 1.44"/>
+                </svg>,
+                'Email',
+                'mailto:jerophinstanley47@gmail.com'
+              ],
+              [
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M17.04 17.043h-2.962v-4.64c0-1.107-.023-2.531-1.544-2.531c-1.544 0-1.78 1.204-1.78 2.449v4.722H7.793V7.5h2.844v1.3h.039c.397-.75 1.364-1.54 2.808-1.54c3.001 0 3.556 1.974 3.556 4.545zM4.447 6.194c-.954 0-1.72-.771-1.72-1.72s.767-1.72 1.72-1.72a1.72 1.72 0 0 1 0 3.44m1.484 10.85h-2.97V7.5h2.97zM18.522 0H1.476C.66 0 0 .645 0 1.44v17.12C0 19.355.66 20 1.476 20h17.042c.815 0 1.482-.644 1.482-1.44V1.44C20 .646 19.333 0 18.518 0z"/>
+                </svg>,
+                'LinkedIn',
+                'https://www.linkedin.com/in/jerophin-d-r-b9a73b257/'
+              ],
+              [
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none">
+                  <path d="M8.75 10a3.25 3.25 0 1 1 6.5 0a3.25 3.25 0 0 1-6.5 0Z" fill="#4db8ff" />
+                  <path fill="#4db8ff" fillRule="evenodd" clipRule="evenodd" d="M3.774 8.877a8.04 8.04 0 0 1 8.01-7.377h.432a8.04 8.04 0 0 1 8.01 7.377a8.7 8.7 0 0 1-1.933 6.217L13.5 20.956a1.937 1.937 0 0 1-3 0l-4.792-5.862a8.7 8.7 0 0 1-1.934-6.217Zm8.226-3.627a4.75 4.75 0 1 0 0 9.5a4.75 4.75 0 0 0 0-9.5Z" />
+                </svg>,
+                'Location',
+                'https://maps.app.goo.gl/wj4R5RuBersWa33JA'
+              ],
+
+              
               [
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/>
@@ -1573,9 +1460,19 @@ function App() {
                 'https://leetcode.com/u/Jerophinstanley/'
               ],
               [
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+                  <g fill="none" stroke="#4db8ff" strokeLinejoin="round" strokeWidth="4">
+                    <path fill="#4db8ff" d="M18 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 24H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V30a2 2 0 0 0-2-2ZM42 4H30a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/>
+                    <path strokeLinecap="round" d="M28 28h16m-8 8h8m-16 8h16"/>
+                  </g>
+                </svg>,
+                'Skillrack',
+                'https://www.skillrack.com/faces/resume.xhtml?id=407184&key=646464b7d513f90965adc2db415744472430d117'
+              ],
+              [
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m8 18v-1c0-1.33-2.67-2-4-2s-4 .67-4 2v1zm-4-8a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"/></svg>,
                 'Resume',
-                'https://drive.google.com/file/d/1wiJn84kSkNsOWIkY0XphgpQp8a-E8Fo0/view?usp=sharing'
+                'https://drive.google.com/file/d/1ektlBVo7ma44BNL2oDV3vDJ5v7gZfolq/view?usp=sharing'
               ]
             ].map(([icon, display, link], index) => (
               <Grid
@@ -1653,23 +1550,51 @@ function App() {
 
 
       </Routes>
-
-      <Box
+<Box
   component="footer"
   sx={{
     bgcolor: '#0d0d0d',
-    textAlign: 'center',
-    fontFamily: '"Poppins", sans-serif',
-    py: 3,
     borderTop: '1px solid #333',
-    width: '100vw'
+    py: 4,
+    px: 2,
   }}
 >
-  <Typography variant="body2" color="#c0c0c0">
-    &copy; 2025 JEROPHIN D R | All Rights Reserved
-  </Typography>
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: { xs: 'column', md: 'row' },
+      justifyContent: 'space-between',
+      alignItems: { xs: 'center', md: 'flex-start' },
+      maxWidth: '1200px',
+      mx: 'auto',
+      width: '100%',
+      gap: 4,
+    }}
+  >
+    {/* Left Section */}
+    <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' } }}>
+      <Typography variant="body2" color="#c0c0c0" sx={{ mb: 1 }}>
+        &copy; 2025 JEROPHIN D R | All Rights Reserved
+      </Typography>
+      <Typography variant="body2" color="#999999" sx={{ mb: 2 }}>
+        Passionate about building intuitive UIs and scalable backend systems. Let’s build meaningful digital experiences together.
+      </Typography>
+      <Typography sx={{ fontSize: '0.9rem', color: '#aaaaaa' }}>
+        📍 Chennai, India &nbsp;|&nbsp; 📧 jerophinstanley47@gmail.com &nbsp;|&nbsp; 📞 +919940306399
+      </Typography>
+    </Box>
 
-  <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 3 }}>
+    {/* Right Section */}
+    <Box
+      sx={{
+        flex: 1,
+        display: 'flex',
+        justifyContent: { xs: 'center', md: 'flex-end' },
+        alignItems: 'center',
+        gap: 3,
+        mt: { xs: 3, md: 0 },
+      }}
+    >
     {/* LinkedIn */}
     <a
       href="https://linkedin.com/in/jerophin-d-r-b9a73b257/"
@@ -1694,19 +1619,6 @@ function App() {
       </svg>
     </a>
 
-    {/* Behance */}
-    <a
-      href="https://www.behance.net/jerophinstanley"
-      target="_blank"
-      rel="noreferrer"
-      style={{ color: '#4db8ff' }}
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-        <path d="M6.316 7.009c.203-.147.3-.391.3-.728a.94.94 0 0 0-.097-.459a.7.7 0 0 0-.272-.278a1.1 1.1 0 0 0-.388-.141a2.4 2.4 0 0 0-.453-.041H3.759v1.869H5.54q.47.004.775-.222zm.278 1.688q-.346-.262-.919-.262H3.759v2.203h1.878q.261 0 .494-.05c.233-.05.297-.088.416-.169q.18-.117.287-.319c.107-.202.106-.309.106-.519q0-.617-.347-.884z"/>
-        <path d="M14.5 0h-13C.675 0 0 .675 0 1.5v13c0 .825.675 1.5 1.5 1.5h13c.825 0 1.5-.675 1.5-1.5v-13c0-.825-.675-1.5-1.5-1.5m-4.012 4.209h3.241V5h-3.241zm-2.025 6.516a2.06 2.06 0 0 1-.631.725a2.8 2.8 0 0 1-.909.416A4 4 0 0 1 5.879 12H2.001V4.003H5.77q.57 0 1.044.1q.469.1.806.331q.334.23.522.609c.122.25.184.566.184.938q0 .604-.275 1.006c-.275.402-.453.487-.816.659c.494.141.856.391 1.097.744q.364.534.363 1.284q.004.614-.231 1.05zm6.528-1.237h-4.178c0 .456.156.891.394 1.125q.357.348 1.028.35q.481 0 .831-.244q.346-.244.425-.512h1.4q-.335 1.045-1.031 1.494c-.459.3-1.022.45-1.675.45q-.683-.001-1.234-.219a2.6 2.6 0 0 1-.934-.622a2.9 2.9 0 0 1-.588-.966A3.6 3.6 0 0 1 9.22 9.11q0-.65.213-1.213a2.82 2.82 0 0 1 1.544-1.616a3 3 0 0 1 1.206-.234q.736-.001 1.287.287q.548.286.903.769c.355.483.403.688.509 1.1q.153.609.109 1.284z"/>
-      </svg>
-    </a>
-
     {/* LeetCode */}
     <a
       href="https://leetcode.com/u/Jerophinstanley/"
@@ -1720,7 +1632,7 @@ function App() {
     </a>
   </Box>
 </Box>
-
+</Box>
       </Box>
     </Router>
   );

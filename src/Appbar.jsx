@@ -123,10 +123,21 @@ const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
             }}
           >
             <Box component="span" sx={{ color: '#4db8ff' }}>
-              JEROPHIN D R
+              Jerophin D R
+            </Box>{' '}
+            <Box
+              component="span"
+              sx={{
+                background: 'linear-gradient(90deg, #4db8ff, #ffffff)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                mx: 0.5 // margin to balance spacing
+              }}
+            >
+              |
             </Box>{' '}
             <Box component="span" sx={{ color: '#ffffff' }}>
-              - Portfolio
+              Portfolio
             </Box>
           </Typography>
 

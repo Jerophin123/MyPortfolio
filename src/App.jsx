@@ -298,7 +298,7 @@ function App() {
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
           sx: {
-            backgroundColor: '#121212',
+            backgroundColor: '#00192f',
             width: 240,
             pt: 8
           }
@@ -503,9 +503,18 @@ function App() {
     zIndex: 0
   }}
 >
-  {window.innerWidth > 600 && (
-    <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-  )}
+ {window.innerWidth > 600 ? (
+  <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+) : (
+  <Box
+    sx={{
+      position: 'absolute',
+      inset: 0,
+      backgroundColor: '#00192F', // Valid dark grey
+      zIndex: 0
+    }}
+  />
+)}
 </Box>
       {/* Foreground Section Content */}
       <Section  bg="transparent">
@@ -523,7 +532,10 @@ function App() {
             borderRadius: '20px',
             zIndex: 1,
             position: 'relative',
-            background: 'linear-gradient(145deg, #111111ee, #0d0d0dee)',
+            background: {
+              xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+              sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+            },
             boxShadow: '0 8px 40px rgba(0, 0, 0, 0.7)',
             border: '1px solid rgba(255, 255, 255, 0.05)'
           }}
@@ -659,17 +671,29 @@ function App() {
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
       {/* 🎯 Spline Background (interactive enabled) */}
-       {typeof window !== 'undefined' && window.innerWidth > 600 && (
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0
-          }}
-        >
-          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-        </Box>
-      )}
+      {typeof window !== 'undefined' && (
+  window.innerWidth > 600 ? (
+    <Box
+      sx={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 0
+      }}
+    >
+      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: '#00192F',
+        zIndex: 0
+      }}
+    />
+  )
+)}
+
 
       {/* 🔲 Optional Overlay (can be adjusted or removed) */}
       <Box
@@ -765,7 +789,10 @@ function App() {
                 <Card
                   sx={{
                     height: '100%',
-                    background: 'rgba(15, 15, 15, 0.75)',
+                    background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
                     border: '1px solid rgba(77,184,255,0.2)',
                     borderRadius: '20px',
                     boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
@@ -848,9 +875,18 @@ function App() {
           zIndex: 0
         }}
       >
-        {window.innerWidth > 600 && (
-          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-        )}
+        {window.innerWidth > 600 ? (
+  <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+) : (
+  <Box
+    sx={{
+      position: 'absolute',
+      inset: 0,
+      backgroundColor: '#00192F', // Valid dark grey
+      zIndex: 0
+    }}
+  />
+)}
       </Box>
 
       {/* 🔲 Optional Transparent Overlay */}
@@ -870,7 +906,10 @@ function App() {
             sx={{
               maxWidth: '800px',
               mx: 'auto',
-              background: 'rgba(15, 15, 15, 0.75)',
+              background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
               border: '1px solid rgba(77,184,255,0.2)',
               backdropFilter: 'blur(10px)',
               borderRadius: '20px',
@@ -944,7 +983,10 @@ function App() {
             sx={{
               maxWidth: '800px',
               mx: 'auto',
-              background: 'rgba(15, 15, 15, 0.75)',
+              background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
               border: '1px solid rgba(77,184,255,0.2)',
               backdropFilter: 'blur(10px)',
               borderRadius: '20px',
@@ -1034,24 +1076,41 @@ function App() {
         pb: 10,
       }}
     >
-      {/* 🔵 Spline Full Background */}
-      {typeof window !== 'undefined' && window.innerWidth > 600 && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            minHeight: '100%',
-            width: '100%',
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        >
-          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-        </Box>
-      )}
+     {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
+{typeof window !== 'undefined' && (
+  window.innerWidth > 600 ? (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }}
+    >
+      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        backgroundColor: '#00192F',
+        zIndex: 0,
+      }}
+    />
+  )
+)}
+
 
       {/* 🔲 Optional Overlay */}
       <Box
@@ -1112,7 +1171,10 @@ function App() {
                 <Card
                   sx={{
                     height: '100%',
-                    background: 'rgba(15, 15, 15, 0.75)',
+                    background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
                     border: '1px solid rgba(77,184,255,0.2)',
                     backdropFilter: 'blur(10px)',
                     borderRadius: '20px',
@@ -1171,11 +1233,41 @@ function App() {
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       {/* 🌐 Background */}
-     {typeof window !== 'undefined' && window.innerWidth > 600 && (
-  <Box sx={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-    <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-  </Box>
+    {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
+{typeof window !== 'undefined' && (
+  window.innerWidth > 600 ? (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }}
+    >
+      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        backgroundColor: '#00192F',
+        zIndex: 0,
+      }}
+    />
+  )
 )}
+
 
 
       {/* 🧊 Overlay */}
@@ -1228,7 +1320,10 @@ function App() {
               >
                 <Card
                   sx={{
-                    background: 'rgba(15, 15, 15, 0.75)',
+                    background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
                     border: '1px solid rgba(77,184,255,0.2)',
                     backdropFilter: 'blur(10px)',
                     borderRadius: '20px',
@@ -1287,18 +1382,41 @@ function App() {
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
       {/* 🎯 Spline Background for Desktop */}
-      {typeof window !== 'undefined' && window.innerWidth > 600 && (
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        >
-          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-        </Box>
-      )}
+      {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
+{typeof window !== 'undefined' && (
+  window.innerWidth > 600 ? (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }}
+    >
+      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        backgroundColor: '#00192F',
+        zIndex: 0,
+      }}
+    />
+  )
+)}
+
 
 
       {/* 🔲 Optional Transparent Overlay for readability */}
@@ -1337,7 +1455,10 @@ function App() {
               <Grid item xs={12} sm={6} md={4} key={title}>
                 <Card
                   sx={{
-                    background: 'rgba(15, 15, 15, 0.75)',
+                    background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
                     border: '1px solid rgba(77,184,255,0.2)',
                     backdropFilter: 'blur(10px)',
                     borderRadius: '20px',
@@ -1394,17 +1515,41 @@ function App() {
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       {/* 🔵 Spline 3D Background (interactive) */}
-      {typeof window !== 'undefined' && window.innerWidth > 600 && (
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0
-          }}
-        >
-          <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-        </Box>
-      )}
+      {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
+{typeof window !== 'undefined' && (
+  window.innerWidth > 600 ? (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        zIndex: 0,
+        pointerEvents: 'none',
+      }}
+    >
+      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
+    </Box>
+  ) : (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        minHeight: '100%',
+        width: '100%',
+        backgroundColor: '#00192F',
+        zIndex: 0,
+      }}
+    />
+  )
+)}
+
 
 
       {/* 🎛 Overlay */}
@@ -1524,7 +1669,10 @@ function App() {
                   <Card
                     sx={{
                       height: '100%',
-                      background: 'rgba(15, 15, 15, 0.75)',
+                      background: {
+                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
+                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+                    },
                       border: '1px solid rgba(77,184,255,0.2)',
                       backdropFilter: 'blur(10px)',
                       borderRadius: '20px',
@@ -1586,7 +1734,10 @@ function App() {
 <Box
   component="footer"
   sx={{
-    bgcolor: '#0d0d0d',
+    bgcolor: {
+      xs: '#001626', // For mobile devices
+      sm: '#0d0d0d'  // For tablets and desktops (≥600px)
+    },
     borderTop: '1px solid #333',
     py: 4,
     px: 2,

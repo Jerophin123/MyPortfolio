@@ -36,16 +36,20 @@ const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
   const moreLinks = navLinks.slice(3);
 
   return (
-    <AppBar
-      position="sticky"
-      elevation={0}
-      sx={{
-        backgroundColor: 'rgba(12, 12, 12, 0.96)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.65)',
-        zIndex: 1300
-      }}
-    >
+      <AppBar
+        position="sticky"
+        elevation={0}
+        sx={{
+          backgroundColor: {
+            xs: 'rgba(0, 25, 47, 0.96)', // bluish for mobile (xs breakpoint)
+            sm: 'rgba(7, 7, 7, 0.96)'    // dark for tablets and above
+          },
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.65)',
+          zIndex: 1300
+        }}
+      >
+
 
 
       <Toolbar

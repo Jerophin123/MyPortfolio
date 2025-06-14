@@ -107,7 +107,6 @@ const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
             className="brand-text"
             sx={{
               ml: 1.5,
-              color: '#4db8ff',
               fontFamily: '"Poppins", sans-serif',
               fontWeight: 700,
               fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' },
@@ -119,8 +118,14 @@ const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
                 : 'translateX(0)'
             }}
           >
-            JEROPHIN D R
+            <Box component="span" sx={{ color: '#4db8ff' }}>
+              JEROPHIN D R
+            </Box>{' '}
+            <Box component="span" sx={{ color: '#ffffff' }}>
+              - Portfolio
+            </Box>
           </Typography>
+
         </Box>
 
         {/* 🌐 Navigation */}

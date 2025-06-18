@@ -9,16 +9,31 @@ import { useTheme } from '@mui/material/styles';
 import profileImage from './assets/profile.jpg';
 import Appbar from './Appbar'; // adjust the path if it's in a different folder
 import Spline from '@splinetool/react-spline';
+import { keyframes } from '@emotion/react';
+
 
 const roles = ['Full Stack Developer', 'UI UX Designer'];
 
 function App() {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+const [drawerOpen, setDrawerOpen] = useState(false);
   const [currentRole, setCurrentRole] = useState(0);
   const [visible, setVisible] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showText, setShowText] = useState(false);
+
+  const fallIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
  
   const handleClick = () => {
     if (isMobile) {
@@ -77,25 +92,27 @@ function App() {
       {isMobile ? (
         <>
           {/* 📱 Mobile Menu Button */}
-          <Button
-            onClick={() => setDrawerOpen(true)}
-            sx={{
-              fontFamily: '"Poppins", sans-serif',
-              fontSize: '1rem',
-              color: '#4db8ff',
-              fontWeight: 600,
-              border: '1px solid #4db8ff',
-              px: 2,
-              py: 1,
-              borderRadius: '8px',
-              backgroundColor: 'transparent',
-              '&:hover': {
-                backgroundColor: 'rgba(77,184,255,0.1)'
-              }
-            }}
-          >
-            ☰
-          </Button>
+        <Button
+          onClick={() => setDrawerOpen(!drawerOpen)}
+          sx={{
+            fontFamily: '"Poppins", sans-serif',
+            fontSize: '1.2rem',
+            color: '#4db8ff',
+            fontWeight: 600,
+            border: '1px solid #4db8ff',
+            px: 2,
+            py: 1,
+            borderRadius: '8px',
+            backgroundColor: 'transparent',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              backgroundColor: 'rgba(77,184,255,0.1)'
+            }
+          }}
+        >
+          {drawerOpen ? '×' : '☰'}
+        </Button>
+
 
           {/* 📜 Mobile Drawer */}
           <Drawer
@@ -289,21 +306,28 @@ function App() {
       <Appbar
   handleClick={handleClick}
   showText={showText}
+  drawerOpen={drawerOpen}
   setDrawerOpen={setDrawerOpen}
 />
 
+
       <Drawer
-        anchor="right"
+        anchor="top"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
           sx: {
-            backgroundColor: '#00192f',
-            width: 240,
-            pt: 8
+          backgroundColor: {
+            xs: 'rgba(0, 25, 47, 0.96)', // bluish for mobile (xs breakpoint)
+            sm: 'rgba(7, 7, 7, 0.96)'    // dark for tablets and above
+          },
+            width: "100%",
+            height: "100%",
+            pt: 17
           }
         }}
       >
+        
         <List>
           {navLinks.map((link, i) => (
             <ListItem
@@ -318,9 +342,11 @@ function App() {
                 primaryTypographyProps={{
                   sx: {
                     color: '#4db8ff',
+                    marginTop: "15px",
                     fontWeight: 500,
-                    fontSize: '1rem',
-                    textAlign: 'center'
+                    fontSize: '1.2rem',
+                    textAlign: 'center',
+                    animation: `${fallIn} 0.6s ease-out`
                   }
                 }}
               />
@@ -455,7 +481,8 @@ function App() {
                 fontWeight: 600,
                 minWidth: 180,
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #3399ff 0%, #00aaff 100%)'
+                  background: 'linear-gradient(135deg, #3399ff 0%, #00aaff 100%)',
+                  color: '#000'
                 }
               }}
             >
@@ -575,26 +602,51 @@ function App() {
               mb: 3
             }}
           >
-            I'm a results-driven <strong style={{ color: '#4db8ff' }}>Full Stack Developer</strong> &{' '}
-            <strong style={{ color: '#4db8ff' }}>UI/UX Designer</strong> passionate about crafting
-            digital experiences that blend function and beauty. I specialize in building scalable web
-            apps using modern frameworks and intuitive interfaces with Figma, Adobe XD, and design
-            thinking.
+            I'm a dedicated <strong style={{ color: '#4db8ff' }}>Full Stack Developer</strong> and{' '}
+            <strong style={{ color: '#4db8ff' }}>UI/UX Designer</strong> with a focus on building scalable,
+            responsive web applications. I specialize in modern frameworks like React and FastAPI, and I turn
+            high-fidelity designs from tools like Figma into clean, accessible user interfaces.
+            My work blends engineering precision with intuitive design thinking.
           </Typography>
 
-          <Typography
-            variant="body1"
-            sx={{
-              color: '#dddddd',
-              fontSize: { xs: '1rem', md: '1.1rem' },
-              lineHeight: 1.9
-            }}
-          >
-            With strong skills in{' '}
-            <span style={{ color: '#4db8ff' }}>Python, Java, SQL, and JavaScript</span>, I bridge the
-            gap between design and engineering. I love hackathons, am open to relocation, and enjoy
-            building real-world tools that make a difference.
-          </Typography>
+
+         <Typography
+          variant="body1"
+          sx={{
+            color: '#dddddd',
+            fontSize: { xs: '1rem', md: '1.1rem' },
+            lineHeight: 1.9
+          }}
+        >
+          Proficient in <span style={{ color: '#4db8ff' }}>React.js, Vite, Next.js, FastAPI, Express.js, Angular, Vue, Python, Java, SQL, JavaScript</span> and many more, I apply
+          strong backend and frontend skills to bridge the gap between design and engineering. I actively
+          participate in hackathons, enjoy building practical, real-world solutions, and am open to
+          relocation for the right opportunity in software development or product engineering.
+        </Typography>
+           <Button
+              variant="contained"
+              component={Link}
+              to="https://drive.google.com/file/d/1ektlBVo7ma44BNL2oDV3vDJ5v7gZfolq/view?usp=sharing"
+              sx={{
+                px: { xs: 3, sm: 4 },
+                py: { xs: 1, sm: 1.5 },
+                fontFamily: '"Poppins", sans-serif',
+                marginTop: "20px",
+                fontSize: { xs: '0.85rem', sm: '1rem' },
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #007fff 0%, #00c6ff 100%)',
+                color: '#000',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                minWidth: 180,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #3399ff 0%, #00aaff 100%)',
+                  color: '#000'
+                }
+              }}
+            >
+              Download Resume
+            </Button>
           {/* Education Section */}
 <Box
   sx={{
@@ -1835,11 +1887,6 @@ function App() {
                 'Skillrack',
                 'https://www.skillrack.com/faces/resume.xhtml?id=407184&key=646464b7d513f90965adc2db415744472430d117'
               ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m8 18v-1c0-1.33-2.67-2-4-2s-4 .67-4 2v1zm-4-8a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2"/></svg>,
-                'Resume',
-                'https://drive.google.com/file/d/1ektlBVo7ma44BNL2oDV3vDJ5v7gZfolq/view?usp=sharing'
-              ]
             ].map(([icon, display, link], index) => (
               <Grid
                 item

@@ -24,7 +24,13 @@ const navLinks = [
   { label: 'Profiles & Contact', path: '/otherprofiles' }
 ];
 
-const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
+const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
+   const [open, setOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setOpen(prev => !prev);
+    setDrawerOpen(prev => !prev); // update parent too
+  };
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -57,7 +63,7 @@ const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
           display: 'flex',
           alignItems: 'center',
           px: { xs: 2, sm: 3, md: 6 },
-          minHeight: { xs: 56, md: 72 }
+          minHeight: { xs: 72, sm: 80, md: 96 }
         }}
       >
  <Box
@@ -237,38 +243,63 @@ const Appbar = ({ handleClick, showText, setDrawerOpen }) => {
           </Box>
 
           {/* 📱 Mobile Hamburger */}
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <Button
-              onClick={() => setDrawerOpen(prev => !prev)}
-              sx={{
-                color: '#4db8ff',
-                px: 2,
-                py: 0.5,
-                textTransform: 'none',
-                height: 36,
-                minWidth: 40,
-                '&:hover': {
-                  backgroundColor: 'rgba(77, 184, 255, 0.1)'
-                }
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M2.75 12.25h10.5m-10.5-4h10.5m-10.5-4h10.5"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                />
-              </svg>
-            </Button>
-          </Box>
+<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+  <Button
+    disableRipple
+    disableElevation
+    onClick={() => setDrawerOpen(prev => !prev)}
+    sx={{
+      color: '#4db8ff',
+      px: 2,
+      py: 0.5,
+      textTransform: 'none',
+      outline: 'none',
+      height: 36,
+      minWidth: 40,
+      '&:hover': {
+        backgroundColor: 'rgba(77, 184, 255, 0.1)'
+      }
+    }}
+  >
+    {drawerOpen ? (
+      // Cross icon
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M6 6L18 18M6 18L18 6"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ) : (
+      // Hamburger icon
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 16 16"
+        fill="none"
+      >
+        <path
+          d="M2.75 12.25h10.5m-10.5-4h10.5m-10.5-4h10.5"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.5"
+        />
+      </svg>
+    )}
+  </Button>
+</Box>
+
+
         </Box>
       </Toolbar>
     </AppBar>

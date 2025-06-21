@@ -355,7 +355,9 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         </List>
       </Drawer>
 
-
+ <h1 style={{ display: 'none' }}>
+        Jerophin D R – Full-Stack Developer & UI/UX Designer Portfolio
+      </h1>
 
         <Routes>
         <Route

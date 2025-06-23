@@ -54,12 +54,32 @@
       });
     </script>
     <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "s42lyzhke3");
-    </script>
+    // 1. Define clarity function & config
+    window.clarity = window.clarity || function(){ (clarity.q = clarity.q || []).push(arguments) };
+    clarity('config', { debug: false });
+
+    // 2. Load the Clarity script async
+    (function(c, l, a, r, i, t, y){
+      c[a] = c[a] || function(){ (c[a].q = c[a].q || []).push(arguments) };
+      t = l.createElement(r); 
+      t.async = 1; 
+      t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; 
+      y.parentNode.insertBefore(t, y);
+    })(window, document, "clarity", "script", "s42lyzhke3");
+
+    // 3. Once DOM is ready, identify user & report current “page”
+    document.addEventListener('DOMContentLoaded', function(){
+      if (window.CURRENT_USER_ID) {
+        clarity('identify', window.CURRENT_USER_ID, {
+          email: window.CURRENT_USER_EMAIL,
+          plan:  window.CURRENT_USER_PLAN,
+          role:  window.CURRENT_USER_ROLE
+        });
+      }
+      clarity('set', 'page', location.pathname + location.search);
+    });
+  </script>
   </head>
   <body>
     <h1 style="display: none;">

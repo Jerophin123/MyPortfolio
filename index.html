@@ -60,6 +60,26 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "s42lyzhke3");
     </script>
+    <!-- OneSignal SDK -->
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+      window.OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "6a1af8c7-5284-4b52-845a-01fd7608803b", // ← Replace with your actual ID
+          safari_web_id: null, // Leave null unless you're supporting Safari
+          notifyButton: {
+            enable: true, // Show the floating bell button
+          },
+          promptOptions: {
+            actionMessage: "Enable notifications to get project updates!",
+            acceptButtonText: "Yes!",
+            cancelButtonText: "Nope"
+          }
+        });
+      });
+    </script>
+
   </head>
   <body>
     <h1 style="display: none;">

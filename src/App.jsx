@@ -679,7 +679,7 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   {[
     {
       title: 'Bachelor of Engineering in Computer Science',
-      score: 'CGPA: 8.3',
+      score: 'CGPA: 8.4',
       institute: 'St. Joseph’s Institute of Technology, OMR, Chennai',
       date: 'Expected Graduation: May 2026',
       logo: '/engglogo.png',

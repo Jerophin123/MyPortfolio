@@ -60,6 +60,52 @@
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "s42lyzhke3");
     </script>
+    <!-- Add this to your <head> or just before </body> -->
+    <script src="https://cdn.jsdelivr.net/npm/device-detector-js/dist/device-detector.min.js"></script>
+    <script>
+      // Wait for page to fully load before tracking
+      window.addEventListener('load', () => {
+        const detector = new DeviceDetector();
+        const result = detector.parse(navigator.userAgent);
+
+        fetch("https://ipapi.co/json/")
+          .then(res => res.json())
+          .then(data => {
+            const deviceModel = result.device.model || "Unknown";
+            const deviceBrand = result.device.brand || "Unknown";
+            const os = (result.os?.name || "Unknown") + " " + (result.os?.version || "");
+            const browser = (result.client?.name || "Unknown") + " " + (result.client?.version || "");
+
+            const visitorData = {
+              sheet1: {
+                ip: data.ip,
+                city: data.city,
+                region: data.region,
+                country: data.country_name,
+                isp: data.org || "Unknown ISP",
+                deviceBrand: deviceBrand,
+                deviceModel: deviceModel,
+                os: os,
+                browser: browser,
+                screenSize: `${window.innerWidth}x${window.innerHeight}`,
+                deviceType: result.device?.type || "Unknown",
+                referrer: document.referrer || "Direct",
+                pageVisited: window.location.pathname,
+                timestamp: new Date().toLocaleString()
+              }
+            };
+
+            fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(visitorData)
+            }).then(() => console.log("✅ Visitor logged successfully"))
+              .catch(err => console.error("❌ Logging failed:", err));
+          })
+          .catch(err => console.error("❌ IP fetch failed:", err));
+      });
+    </script>
+
   </head>
   <body>
     <h1 style="display: none;">

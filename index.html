@@ -62,61 +62,51 @@
     </script>
     <!-- Add this to your <head> or just before </body> -->
 <!-- Load the Device Detector Library -->
-<script src="https://cdn.jsdelivr.net/npm/device-detector-js/dist/device-detector.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/device-detector-js@2.2.10/dist/device-detector.min.js"></script>
 <script>
-  window.addEventListener('load', () => {
-    const detector = new DeviceDetector();
-    const result = detector.parse(navigator.userAgent);
+  const detector = new DeviceDetector();
+  const result = detector.parse(navigator.userAgent);
 
-    fetch("https://ipapi.co/json/")
-      .then(res => res.json())
-      .then(data => {
-        const deviceModel = result.device.model || "Unknown";
-        const deviceBrand = result.device.brand || "Unknown";
-        const os = (result.os?.name || "Unknown") + " " + (result.os?.version || "");
-        const browser = (result.client?.name || "Unknown") + " " + (result.client?.version || "");
+  fetch("https://ipapi.co/json/")
+    .then(res => res.json())
+    .then(data => {
+      const deviceModel = result.device.model || "Unknown";
+      const deviceBrand = result.device.brand || "Unknown";
+      const os = result.os.name + " " + result.os.version;
+      const browser = result.client.name + " " + result.client.version;
 
-        const body = {
-          sheet1: {
-            ip: data.ip,
-            city: data.city,
-            region: data.region,
-            country: data.country_name,
-            isp: data.org || "Unknown ISP",
-            deviceBrand: deviceBrand,
-            deviceModel: deviceModel,
-            os: os,
-            browser: browser,
-            screenSize: `${window.innerWidth}x${window.innerHeight}`,
-            deviceType: result.device?.type || "Unknown",
-            referrer: document.referrer || "Direct",
-            pageVisited: window.location.pathname,
-            timestamp: new Date().toLocaleString()
-          }
-        };
+      const visitorData = {
+        sheet1: {
+          ip: data.ip,
+          city: data.city,
+          region: data.region,
+          country: data.country_name,
+          isp: data.org,
+          deviceBrand: deviceBrand,
+          deviceModel: deviceModel,
+          os: os,
+          browser: browser,
+          screenSize: `${window.innerWidth}x${window.innerHeight}`,
+          deviceType: result.device.type || "Unknown",
+          referrer: document.referrer || "Direct",
+          pageVisited: window.location.pathname,
+          timestamp: new Date().toLocaleString()
+        }
+      };
 
-        const url = 'https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1';
-
-        fetch(url, {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        })
-        .then(response => response.json())
-        .then(json => {
-          console.log("✅ Visitor data recorded:", json.sheet1);
-        })
-        .catch(error => {
-          console.error("❌ Error recording data:", error);
-        });
+      fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(visitorData)
       })
-      .catch(err => {
-        console.error("❌ Failed to fetch IP/location:", err);
-      });
-  });
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.json();
+      })
+      .then(data => console.log("✅ Visitor logged:", data))
+      .catch(err => console.error("❌ Logging failed:", err));
+    });
 </script>
-
 
   </head>
   <body>

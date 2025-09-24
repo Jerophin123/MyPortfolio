@@ -8,7 +8,7 @@ import { Menu, MenuItem, Tooltip } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import profileImage from './assets/profile.jpg';
 import Appbar from './Appbar'; // adjust the path if it's in a different folder
-import Spline from '@splinetool/react-spline';
+import AnimatedBackground from './components/AnimatedBackground';
 import { keyframes } from '@emotion/react';
 
 
@@ -50,8 +50,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
       setTimeout(() => {
         setCurrentRole((prev) => (prev + 1) % roles.length);
         setVisible(true);
-      }, 300); // Match this to exit duration
-    }, 2500);
+      }, 400); // Slightly longer to match new animation duration
+    }, 3000); // Increased interval for better readability
 
     return () => clearInterval(interval);
   }, []);
@@ -265,14 +265,16 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   );
 };
   
-  const Section = ({ title, children, bg = '#1e1e1e' }) => (
+  const Section = ({ title, children, bg = 'transparent' }) => (
     <Box
       sx={{
         bgcolor: bg,
         py: 10,
         width: '100vw',
         minHeight: '100vh',
-        fontFamily: '"Poppins", sans-serif' // ✅ Poppins font applied here
+        fontFamily: '"Poppins", sans-serif',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
       <Box sx={{ maxWidth: '1600px', mx: 'auto', px: 4 }}>
@@ -281,7 +283,12 @@ const [drawerOpen, setDrawerOpen] = useState(false);
           color="#4db8ff"
           align="center"
           gutterBottom
-          sx={{ fontWeight: 700 }} // Optional: make title bold
+          sx={{ 
+            fontWeight: 700,
+            textShadow: '0 2px 10px rgba(77, 184, 255, 0.3)',
+            marginBottom: '48px',
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }
+          }}
         >
           {title}
         </Typography>
@@ -317,13 +324,14 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
           sx: {
-          backgroundColor: {
-            xs: 'rgba(0, 25, 47, 0.96)', // bluish for mobile (xs breakpoint)
-            sm: 'rgba(7, 7, 7, 0.96)'    // dark for tablets and above
-          },
+            background: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
             width: "100%",
             height: "100%",
-            pt: 17
+            pt: 17,
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
           }
         }}
       >
@@ -371,17 +379,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         overflow: 'hidden',
       }}
     >
-      {/* ✅ Spline 3D Background (interactive enabled) */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          // Removed pointerEvents: 'none' to allow user interaction
-        }}
-      >
-        <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-      </Box>
+      {/* ✅ Custom Animated Background */}
+      <AnimatedBackground />
 
       {/* 🎯 Main Foreground Content */}
       <Box
@@ -397,7 +396,7 @@ const [drawerOpen, setDrawerOpen] = useState(false);
           textAlign: 'center',
           px: { xs: 2, sm: 6, md: 8 },
           py: { xs: 0, sm: 0, md: 0 },
-          pointerEvents: 'none' ,// Optional: prevents clicks on content being blocked
+          pointerEvents: 'none',
           transform: 'translateY(-30px)'
         }}
       >
@@ -410,20 +409,47 @@ const [drawerOpen, setDrawerOpen] = useState(false);
             fontFamily: '"Poppins", sans-serif',
             fontWeight: 800,
             lineHeight: 1.2,
-            letterSpacing: '-0.5px'
+            letterSpacing: '-0.5px',
+            textShadow: '0 2px 10px rgba(77, 184, 255, 0.3)'
           }}
         >
           Hi, I'm Jerophin <br />
         </Typography>
-        <Box sx={{ height: '4.5rem', overflow: 'hidden', mb: 3 }}>
+        <Box sx={{ height: '4.5rem', overflow: 'hidden', mb: 3, position: 'relative' }}>
   <AnimatePresence mode="wait">
     {visible && (
       <motion.div
         key={roles[currentRole]}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5 }}
+        initial={{ 
+          opacity: 0, 
+          y: 30,
+          scale: 0.95,
+          rotateX: 15
+        }}
+        animate={{ 
+          opacity: 1, 
+          y: 0,
+          scale: 1,
+          rotateX: 0
+        }}
+        exit={{ 
+          opacity: 0, 
+          y: -30,
+          scale: 1.05,
+          rotateX: -15
+        }}
+        transition={{ 
+          duration: 0.6,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          type: "spring",
+          stiffness: 100,
+          damping: 15
+        }}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          textAlign: 'center'
+        }}
       >
         <Typography
           variant="h2"
@@ -433,7 +459,13 @@ const [drawerOpen, setDrawerOpen] = useState(false);
             fontFamily: '"Poppins", sans-serif',
             fontWeight: 800,
             lineHeight: 1.2,
-            letterSpacing: '-0.5px'
+            letterSpacing: '-0.5px',
+            textShadow: '0 4px 20px rgba(77, 184, 255, 0.4)',
+            background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            filter: 'drop-shadow(0 2px 8px rgba(77, 184, 255, 0.3))'
           }}
         >
           A {roles[currentRole]}
@@ -476,15 +508,21 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 py: { xs: 1, sm: 1.5 },
                 fontFamily: '"Poppins", sans-serif',
                 fontSize: { xs: '0.85rem', sm: '1rem' },
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #007fff 0%, #00c6ff 100%)',
-                color: '#000',
+                borderRadius: '20px',
+                background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)',
+                backdropFilter: 'blur(30px) saturate(150%)',
+                WebkitBackdropFilter: 'blur(30px) saturate(150%)',
+                border: '1px solid rgba(77, 184, 255, 0.25)',
+                color: '#4db8ff',
                 textTransform: 'uppercase',
                 fontWeight: 600,
                 minWidth: 180,
+                boxShadow: '0 8px 25px rgba(77, 184, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #3399ff 0%, #00aaff 100%)',
-                  color: '#000'
+                  background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.3) 0%, rgba(77, 184, 255, 0.2) 50%, rgba(77, 184, 255, 0.25) 100%)',
+                  transform: 'translateY(-3px) scale(1.02)',
+                  boxShadow: '0 15px 40px rgba(77, 184, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.15)'
                 }
               }}
             >
@@ -500,15 +538,22 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 py: { xs: 1, sm: 1.5 },
                 fontFamily: '"Poppins", sans-serif',
                 fontSize: { xs: '0.85rem', sm: '1rem' },
-                borderRadius: '12px',
-                borderColor: '#4db8ff',
-                color: '#4db8ff',
+                borderRadius: '20px',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.06) 100%)',
+                backdropFilter: 'blur(30px) saturate(150%)',
+                WebkitBackdropFilter: 'blur(30px) saturate(150%)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                color: 'rgba(255, 255, 255, 0.9)',
                 fontWeight: 600,
                 minWidth: 180,
+                boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                 '&:hover': {
-                  backgroundColor: '#1c1c1c',
-                  borderColor: '#3399ff',
-                  color: '#3399ff'
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.12) 100%)',
+                  borderColor: 'rgba(77, 184, 255, 0.3)',
+                  color: '#4db8ff',
+                  transform: 'translateY(-3px) scale(1.02)',
+                  boxShadow: '0 15px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.15)'
                 }
               }}
             >
@@ -525,27 +570,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   path="/about"
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
-      {/* Spline 3D Background */}
-      <Box
-  sx={{
-    position: 'absolute',
-    inset: 0,
-    zIndex: 0
-  }}
->
- {window.innerWidth > 600 ? (
-  <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-) : (
-  <Box
-    sx={{
-      position: 'absolute',
-      inset: 0,
-      backgroundColor: '#00192F', // Valid dark grey
-      zIndex: 0
-    }}
-  />
-)}
-</Box>
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
       {/* Foreground Section Content */}
       <Section  bg="transparent">
         <Box
@@ -560,15 +586,30 @@ const [drawerOpen, setDrawerOpen] = useState(false);
             py: { xs: 6, sm: 10 },
             px: { xs: 2, sm: 4 },
             mx: 'auto',
-            borderRadius: '20px',
+            borderRadius: '28px',
             zIndex: 1,
             position: 'relative',
-            background: {
-              xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
-              sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+            backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+            WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+            transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '1px',
+              background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+              zIndex: 1
             },
-            boxShadow: '0 8px 40px rgba(0, 0, 0, 0.7)',
-            border: '1px solid rgba(255, 255, 255, 0.05)'
+            '&:hover': {
+              transform: 'translateY(-8px) scale(1.02)',
+              boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
+            }
           }}
         >
           <Avatar
@@ -578,8 +619,29 @@ const [drawerOpen, setDrawerOpen] = useState(false);
               width: 160,
               height: 160,
               mb: 4,
-              border: '4px solid #4db8ff',
-              boxShadow: '0 0 25px rgba(77, 184, 255, 0.4)'
+              border: '2px solid rgba(77, 184, 255, 0.2)',
+              background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
+              backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+              WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+              boxShadow: '0 12px 40px rgba(77, 184, 255, 0.2), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+              transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                zIndex: 1
+              },
+              '&:hover': {
+                transform: 'scale(1.05)',
+                background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)',
+                boxShadow: '0 16px 50px rgba(77, 184, 255, 0.3), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
+              }
             }}
           />
 
@@ -635,15 +697,33 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 fontFamily: '"Poppins", sans-serif',
                 marginTop: "20px",
                 fontSize: { xs: '0.85rem', sm: '1rem' },
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #007fff 0%, #00c6ff 100%)',
-                color: '#000',
+                borderRadius: '20px',
+                background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)',
+                backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                border: '1px solid rgba(77, 184, 255, 0.25)',
+                color: '#4db8ff',
                 textTransform: 'uppercase',
                 fontWeight: 600,
                 minWidth: 180,
+                boxShadow: '0 8px 25px rgba(77, 184, 255, 0.2), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '1px',
+                  background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                  zIndex: 1
+                },
                 '&:hover': {
-                  background: 'linear-gradient(135deg, #3399ff 0%, #00aaff 100%)',
-                  color: '#000'
+                  background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.3) 0%, rgba(77, 184, 255, 0.2) 50%, rgba(77, 184, 255, 0.25) 100%)',
+                  transform: 'translateY(-3px) scale(1.02)',
+                  boxShadow: '0 15px 40px rgba(77, 184, 255, 0.3), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
                 }
               }}
             >
@@ -655,11 +735,30 @@ const [drawerOpen, setDrawerOpen] = useState(false);
     mt: 6,
     width: '90%',
     textAlign: 'left',
-    background: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: '16px',
-    border: '1px solid rgba(255,255,255,0.06)',
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+    borderRadius: '28px',
+    border: '1px solid rgba(255, 255, 255, 0.18)',
     p: { xs: 3, sm: 4 },
-    boxShadow: '0 6px 20px rgba(0,0,0,0.5)'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    position: 'relative',
+    overflow: 'hidden',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '1px',
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+      zIndex: 1
+    },
+    '&:hover': {
+      transform: 'translateY(-8px) scale(1.02)',
+      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
+    }
   }}
 >
  <Typography
@@ -709,7 +808,32 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         flexDirection: { xs: 'column', md: 'row' },
         alignItems: { xs: 'center', md: 'flex-start' },
         gap: 2,
-        mb: 4
+        mb: 4,
+        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+        backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+        WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+        border: '1px solid rgba(255, 255, 255, 0.18)',
+        borderRadius: '20px',
+        p: 3,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+        transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+          zIndex: 1
+        },
+        '&:hover': {
+          transform: 'translateY(-5px) scale(1.02)',
+          boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+          borderColor: 'rgba(77, 184, 255, 0.25)'
+        }
       }}
     >
       {/* 🎓 Logo */}
@@ -720,14 +844,44 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         rel="noopener noreferrer"
         sx={{
           width: { xs: '100px', md: '100px' },
-          flexShrink: 0
+          flexShrink: 0,
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
+          backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+          WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          borderRadius: '12px',
+          p: 1,
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+          transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+            zIndex: 1
+          },
+          '&:hover': {
+            transform: 'scale(1.05)',
+            boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+            borderColor: 'rgba(77, 184, 255, 0.3)'
+          }
         }}
       >
         <Box
           component="img"
           src={logo}
           alt={`${title} Logo`}
-          sx={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+          sx={{ 
+            width: '100%', 
+            height: 'auto', 
+            borderRadius: '8px',
+            filter: 'brightness(1.1) contrast(1.05)'
+          }}
         />
       </Box>
 
@@ -766,29 +920,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
-      {/* 🎯 Spline Background (interactive enabled) */}
-      {typeof window !== 'undefined' && (
-  window.innerWidth > 600 ? (
-    <Box
-      sx={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 0
-      }}
-    >
-      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-    </Box>
-  ) : (
-    <Box
-      sx={{
-        position: 'absolute',
-        inset: 0,
-        backgroundColor: '#00192F',
-        zIndex: 0
-      }}
-    />
-  )
-)}
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
 
 
       {/* 🔲 Optional Overlay (can be adjusted or removed) */}
@@ -885,20 +1018,30 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 <Card
                   sx={{
                     height: '100%',
-                    background: {
-                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
-                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
-                    },
-                    border: '1px solid rgba(77,184,255,0.2)',
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
                     marginTop: '20px',
-                    borderRadius: '20px',
-                    boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-                    backdropFilter: 'blur(10px)',
-                    transition: 'all 0.3s ease-in-out',
+                    borderRadius: '28px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '1px',
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      zIndex: 1
+                    },
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      borderColor: '#4db8ff',
-                      boxShadow: '0 16px 36px rgba(77,184,255,0.25)'
+                      transform: 'translateY(-8px) scale(1.02)',
+                      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+                      borderColor: 'rgba(77, 184, 255, 0.25)'
                     }
                   }}
                 >
@@ -964,27 +1107,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
-      {/* 🌌 Spline Background */}
-      <Box
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0
-        }}
-      >
-        {window.innerWidth > 600 ? (
-  <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-) : (
-  <Box
-    sx={{
-      position: 'absolute',
-      inset: 0,
-      backgroundColor: '#00192F', // Valid dark grey
-      zIndex: 0
-    }}
-  />
-)}
-      </Box>
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
 
       {/* 🔲 Optional Transparent Overlay */}
       <Box
@@ -1005,21 +1129,31 @@ const [drawerOpen, setDrawerOpen] = useState(false);
     maxWidth: '800px',
     mx: 'auto',
     marginTop: '40px',
-    background: {
-      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)',
-      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'
-    },
-    border: '1px solid rgba(77,184,255,0.2)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
-    boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+    border: '1px solid rgba(255, 255, 255, 0.18)',
+    borderRadius: '28px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
     px: { xs: 2, sm: 4 },
     py: 4,
-    transition: 'all 0.3s ease-in-out',
+    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    position: 'relative',
+    overflow: 'hidden',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '1px',
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+      zIndex: 1
+    },
     '&:hover': {
-      transform: 'translateY(-8px)',
-      borderColor: '#4db8ff',
-      boxShadow: '0 12px 36px rgba(77,184,255,0.25)'
+      transform: 'translateY(-8px) scale(1.02)',
+      borderColor: 'rgba(77, 184, 255, 0.25)',
+      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
     }
   }}
 >
@@ -1121,22 +1255,32 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   sx={{
     maxWidth: '800px',
     mx: 'auto',
-    background: {
-      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)',
-      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'
-    },
-    border: '1px solid rgba(77,184,255,0.2)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
+    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+    border: '1px solid rgba(255, 255, 255, 0.18)',
+    borderRadius: '28px',
     marginTop: '30px',
-    boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
     px: { xs: 2, sm: 4 },
     py: 4,
-    transition: 'all 0.3s ease-in-out',
+    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    position: 'relative',
+    overflow: 'hidden',
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '1px',
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+      zIndex: 1
+    },
     '&:hover': {
-      transform: 'translateY(-8px)',
-      borderColor: '#4db8ff',
-      boxShadow: '0 12px 36px rgba(77,184,255,0.25)'
+      transform: 'translateY(-8px) scale(1.02)',
+      borderColor: 'rgba(77, 184, 255, 0.25)',
+      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
     }
   }}
 >
@@ -1257,40 +1401,9 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         pb: 10,
       }}
     >
-     {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
-{typeof window !== 'undefined' && (
-  window.innerWidth > 600 ? (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        zIndex: 0,
-        pointerEvents: 'none',
-      }}
-    >
-      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-    </Box>
-  ) : (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        backgroundColor: '#00192F',
-        zIndex: 0,
-      }}
-    />
-  )
-)}
+     {/* Custom Animated Background */}
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
 
 
       {/* 🔲 Optional Overlay */}
@@ -1339,20 +1452,30 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 <Card
                   sx={{
                     height: '100%',
-                    background: {
-                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
-                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
-                    },
-                    border: '1px solid rgba(77,184,255,0.2)',
-                    backdropFilter: 'blur(10px)',
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
                     marginTop: '30px',
-                    borderRadius: '20px',
-                    boxShadow: 'none',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    borderRadius: '28px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '1px',
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      zIndex: 1
+                    },
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      borderColor: '#4db8ff',
-                      boxShadow: '0 10px 30px rgba(77,184,255,0.25)',
+                      transform: 'translateY(-8px) scale(1.02)',
+                      borderColor: 'rgba(77, 184, 255, 0.25)',
+                      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
                     },
                   }}
                 >
@@ -1419,39 +1542,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       {/* 🌐 Background */}
     {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
-{typeof window !== 'undefined' && (
-  window.innerWidth > 600 ? (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        zIndex: 0,
-        pointerEvents: 'none',
-      }}
-    >
-      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-    </Box>
-  ) : (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        backgroundColor: '#00192F',
-        zIndex: 0,
-      }}
-    />
-  )
-)}
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
 
 
 
@@ -1541,21 +1633,31 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 >
                 <Card
                   sx={{
-                    background: {
-                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
-                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
-                    },
-                    border: '1px solid rgba(77,184,255,0.2)',
-                    backdropFilter: 'blur(10px)',
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
                     marginTop: '40px',
-                    borderRadius: '20px',
-                    boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+                    borderRadius: '28px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
                     height: '100%',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '1px',
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      zIndex: 1
+                    },
                     '&:hover': {
-                      transform: 'translateY(-6px)',
-                      boxShadow: '0 10px 30px rgba(77,184,255,0.2)',
-                      borderColor: '#4db8ff'
+                      transform: 'translateY(-8px) scale(1.02)',
+                      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+                      borderColor: 'rgba(77, 184, 255, 0.25)'
                     },
                     width: '100%',
                     maxWidth: 360
@@ -1617,41 +1719,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
       
-      {/* 🎯 Spline Background for Desktop */}
-      {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
-{typeof window !== 'undefined' && (
-  window.innerWidth > 600 ? (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        zIndex: 0,
-        pointerEvents: 'none',
-      }}
-    >
-      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-    </Box>
-  ) : (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        backgroundColor: '#00192F',
-        zIndex: 0,
-      }}
-    />
-  )
-)}
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
 
 
 
@@ -1698,21 +1767,31 @@ const [drawerOpen, setDrawerOpen] = useState(false);
               <Grid item xs={12} sm={6} md={4} key={title}>
                 <Card
                   sx={{
-                    background: {
-                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
-                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
-                    },
-                    border: '1px solid rgba(77,184,255,0.2)',
-                    backdropFilter: 'blur(10px)',
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
                     marginTop: '10px',
-                    borderRadius: '20px',
-                    boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+                    borderRadius: '28px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
                     height: '100%',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '1px',
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      zIndex: 1
+                    },
                     '&:hover': {
-                      transform: 'translateY(-6px)',
-                      boxShadow: '0 10px 30px rgba(77,184,255,0.2)',
-                      borderColor: '#4db8ff'
+                      transform: 'translateY(-8px) scale(1.02)',
+                      boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+                      borderColor: 'rgba(77, 184, 255, 0.25)'
                     }
                   }}
                 >
@@ -1778,41 +1857,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   path="/otherprofiles"
   element={
     <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
-      {/* 🔵 Spline 3D Background (interactive) */}
-      {/* 🔵 Spline Full Background or Dark Mobile Fallback */}
-{typeof window !== 'undefined' && (
-  window.innerWidth > 600 ? (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        zIndex: 0,
-        pointerEvents: 'none',
-      }}
-    >
-      <Spline scene="https://prod.spline.design/DF5jLfAGU5aX7BPy/scene.splinecode" />
-    </Box>
-  ) : (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        minHeight: '100%',
-        width: '100%',
-        backgroundColor: '#00192F',
-        zIndex: 0,
-      }}
-    />
-  )
-)}
+      {/* Custom Animated Background */}
+      <AnimatedBackground />
 
 
 
@@ -1928,25 +1974,40 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                   <Card
                     sx={{
                       height: '100%',
-                      background: {
-                      xs: 'linear-gradient(145deg, #0a2a43dd, #123456dd)', // Light bluish gradient for mobile
-                      sm: 'linear-gradient(145deg, #111111ee, #0d0d0dee)'   // Original for larger screens
-                    },
-                      border: '1px solid rgba(77,184,255,0.2)',
-                      backdropFilter: 'blur(10px)',
-                      borderRadius: '20px',
-                      boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
+                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                      border: '1px solid rgba(255, 255, 255, 0.18)',
+                      borderRadius: '28px',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
                       display: 'flex',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        zIndex: 1
+                      },
+                      '&:hover': {
+                        transform: 'translateY(-8px) scale(1.02)',
+                        boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+                        borderColor: 'rgba(77, 184, 255, 0.25)'
+                      },
                       flexDirection: 'column',
                       justifyContent: 'center',
                       alignItems: 'center',
                       px: 3,
                       py: 2,
-                      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       '&:hover': {
-                        transform: 'translateY(-6px)',
-                        boxShadow: '0 10px 25px rgba(77,184,255,0.2)',
-                        borderColor: '#4db8ff'
+                        transform: 'translateY(-8px) scale(1.02)',
+                        boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.15)',
+                        borderColor: 'rgba(77, 184, 255, 0.25)'
                       }
                     }}
                   >
@@ -1994,10 +2055,9 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   component="footer"
   sx={{
     bgcolor: {
-      xs: '#001626', // For mobile devices
+      xs: '#000000', // Black for mobile devices
       sm: '#0d0d0d'  // For tablets and desktops (≥600px)
     },
-    borderTop: '1px solid #333',
     py: 4,
     px: 2,
   }}

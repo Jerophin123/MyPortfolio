@@ -307,7 +307,12 @@ const [drawerOpen, setDrawerOpen] = useState(false);
           flexDirection: 'column',
           minHeight: '100vh',
           width: '100vw',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}
       >
       <Appbar
@@ -324,14 +329,14 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
           sx: {
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(30px)',
-            WebkitBackdropFilter: 'blur(30px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.01)',
+            backdropFilter: 'blur(8px) saturate(120%)',
+            WebkitBackdropFilter: 'blur(8px) saturate(120%)',
+            border: '1px solid rgba(255, 255, 255, 0.02)',
             width: "100%",
             height: "100%",
             pt: 17,
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+            boxShadow: 'none'
           }
         }}
       >

@@ -64,7 +64,7 @@ const [drawerOpen, setDrawerOpen] = useState(false);
     { label: 'Projects', path: '/projects' },
     { label: 'Certifications', path: '/certifications' },
     { label: 'Achievements', path: '/achievements' },
-    { label: 'Profiles & Contact', path: '/otherprofiles' }
+    { label: 'Connect', path: '/otherprofiles' }
   ];
 
   const NavMenu = ({ isMobile, drawerOpen, setDrawerOpen, navLinks }) => {
@@ -307,7 +307,12 @@ const [drawerOpen, setDrawerOpen] = useState(false);
           flexDirection: 'column',
           minHeight: '100vh',
           width: '100vw',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}
       >
       <Appbar
@@ -324,14 +329,14 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
           sx: {
-            background: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(30px)',
-            WebkitBackdropFilter: 'blur(30px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.01)',
+            backdropFilter: 'blur(8px) saturate(120%)',
+            WebkitBackdropFilter: 'blur(8px) saturate(120%)',
+            border: '1px solid rgba(255, 255, 255, 0.02)',
             width: "100%",
             height: "100%",
             pt: 17,
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.4)'
+            boxShadow: 'none'
           }
         }}
       >
@@ -687,48 +692,102 @@ const [drawerOpen, setDrawerOpen] = useState(false);
           participate in hackathons, enjoy building practical, real-world solutions, and am open to
           relocation for the right opportunity in software development or product engineering.
         </Typography>
-           <Button
-              variant="contained"
-              component={Link}
-              to="https://drive.google.com/file/d/1BoebZhCMfeiN5B37gbJ9pbEjr8PT1gR_/view?usp=sharing"
-              sx={{
-                px: { xs: 3, sm: 4 },
-                py: { xs: 1, sm: 1.5 },
-                fontFamily: '"Poppins", sans-serif',
-                marginTop: "20px",
-                fontSize: { xs: '0.85rem', sm: '1rem' },
-                borderRadius: '20px',
-                background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)',
-                backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                border: '1px solid rgba(77, 184, 255, 0.25)',
-                color: '#4db8ff',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-                minWidth: 180,
-                boxShadow: '0 8px 25px rgba(77, 184, 255, 0.2), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
-                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                position: 'relative',
-                overflow: 'hidden',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '1px',
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
-                  zIndex: 1
-                },
-                '&:hover': {
-                  background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.3) 0%, rgba(77, 184, 255, 0.2) 50%, rgba(77, 184, 255, 0.25) 100%)',
-                  transform: 'translateY(-3px) scale(1.02)',
-                  boxShadow: '0 15px 40px rgba(77, 184, 255, 0.3), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
-                }
-              }}
-            >
-              Download Resume
-            </Button>
+        
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            mt: 3,
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Button
+            variant="contained"
+            component={Link}
+            to="https://drive.google.com/file/d/1BoebZhCMfeiN5B37gbJ9pbEjr8PT1gR_/view?usp=sharing"
+            sx={{
+              px: { xs: 3, sm: 4 },
+              py: { xs: 1, sm: 1.5 },
+              fontFamily: '"Poppins", sans-serif',
+              fontSize: { xs: '0.85rem', sm: '1rem' },
+              borderRadius: '20px',
+              background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)',
+              backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+              WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+              border: '1px solid rgba(77, 184, 255, 0.25)',
+              color: '#4db8ff',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              minWidth: 180,
+              boxShadow: '0 8px 25px rgba(77, 184, 255, 0.2), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+              transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                zIndex: 1
+              },
+              '&:hover': {
+                background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.3) 0%, rgba(77, 184, 255, 0.2) 50%, rgba(77, 184, 255, 0.25) 100%)',
+                transform: 'translateY(-3px) scale(1.02)',
+                boxShadow: '0 15px 40px rgba(77, 184, 255, 0.3), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
+              }
+            }}
+          >
+            Download Resume
+          </Button>
+
+          <Button
+            variant="outlined"
+            component="a"
+            href="https://linktr.ee/Jerophin"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              px: { xs: 3, sm: 4 },
+              py: { xs: 1, sm: 1.5 },
+              fontFamily: '"Poppins", sans-serif',
+              fontSize: { xs: '0.85rem', sm: '1rem' },
+              borderRadius: '20px',
+              background: 'transparent',
+              border: '2px solid rgba(77, 184, 255, 0.3)',
+              color: '#4db8ff',
+              textTransform: 'uppercase',
+              fontWeight: 600,
+              minWidth: 180,
+              boxShadow: '0 8px 25px rgba(77, 184, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+              transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '1px',
+                background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                zIndex: 1
+              },
+              '&:hover': {
+                background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.1) 0%, rgba(77, 184, 255, 0.05) 50%, rgba(77, 184, 255, 0.08) 100%)',
+                borderColor: 'rgba(77, 184, 255, 0.5)',
+                transform: 'translateY(-3px) scale(1.02)',
+                boxShadow: '0 15px 40px rgba(77, 184, 255, 0.2), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
+              }
+            }}
+          >
+            Connect
+          </Button>
+        </Box>
           {/* Education Section */}
 <Box
   sx={{
@@ -1874,174 +1933,124 @@ const [drawerOpen, setDrawerOpen] = useState(false);
 
       {/* 🧾 Foreground Content */}
       <Box sx={{ position: 'relative', zIndex: 2, py: { xs: 1, md: 0 }, marginTop: '60px'}}>
-        <Section title="Profiles & Contact" bg="transparent">
+        <Section title="Connect" bg="transparent">
 
-          <Grid
-            container
-            spacing={4}
-            justifyContent="center"
+          <Box
             sx={{
-              mt: 2,
-              px: { xs: 2, sm: 2 },
-              py: { xs: 0, sm: 0 },
-              maxWidth: '900px',
-              mx: 'auto'
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 4,
+              px: { xs: 0.1, sm: 2 },
+              py: { xs: 2, sm: 0 },
+              maxWidth: { xs: '100%', sm: '600px' },
+              mx: 'auto',
+              width: '100%'
             }}
           >
-            {[
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="m19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.05 15.05 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2 2 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07c.53 8.54 7.36 15.36 15.89 15.89c1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98"/>
-                </svg>,
-                'Phone',
-                'tel:+919940306399'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path fill="#4db8ff" d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91c0-2.65-1.03-5.14-2.9-7.01m-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18l-3.12.82l.83-3.04l-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24c2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23m4.52-6.16c-.25-.12-1.47-.72-1.69-.81c-.23-.08-.39-.12-.56.12c-.17.25-.64.81-.78.97c-.14.17-.29.19-.54.06c-.25-.12-1.05-.39-1.99-1.23c-.74-.66-1.23-1.47-1.38-1.72c-.14-.25-.02-.38.11-.51c.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31c-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74c.59.26 1.05.41 1.41.52c.59.19 1.13.16 1.56.1c.48-.07 1.47-.6 1.67-1.18c.21-.58.21-1.07.14-1.18s-.22-.16-.47-.28"/>
-                </svg>,
-                'WhatsApp',
-                'https://wa.me/+919940306399'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25a.85.85 0 1 1 .9-1.44L12 11l6.7-4.19a.85.85 0 1 1 .9 1.44"/>
-                </svg>,
-                'Email',
-                'mailto:jerophinstanley47@gmail.com'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M17.04 17.043h-2.962v-4.64c0-1.107-.023-2.531-1.544-2.531c-1.544 0-1.78 1.204-1.78 2.449v4.722H7.793V7.5h2.844v1.3h.039c.397-.75 1.364-1.54 2.808-1.54c3.001 0 3.556 1.974 3.556 4.545zM4.447 6.194c-.954 0-1.72-.771-1.72-1.72s.767-1.72 1.72-1.72a1.72 1.72 0 0 1 0 3.44m1.484 10.85h-2.97V7.5h2.97zM18.522 0H1.476C.66 0 0 .645 0 1.44v17.12C0 19.355.66 20 1.476 20h17.042c.815 0 1.482-.644 1.482-1.44V1.44C20 .646 19.333 0 18.518 0z"/>
-                </svg>,
-                'LinkedIn',
-                'https://www.linkedin.com/in/jerophin-d-r-b9a73b257/'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none">
-                  <path d="M8.75 10a3.25 3.25 0 1 1 6.5 0a3.25 3.25 0 0 1-6.5 0Z" fill="#4db8ff" />
-                  <path fill="#4db8ff" fillRule="evenodd" clipRule="evenodd" d="M3.774 8.877a8.04 8.04 0 0 1 8.01-7.377h.432a8.04 8.04 0 0 1 8.01 7.377a8.7 8.7 0 0 1-1.933 6.217L13.5 20.956a1.937 1.937 0 0 1-3 0l-4.792-5.862a8.7 8.7 0 0 1-1.934-6.217Zm8.226-3.627a4.75 4.75 0 1 0 0 9.5a4.75 4.75 0 0 0 0-9.5Z" />
-                </svg>,
-                'Location',
-                'https://maps.app.goo.gl/wj4R5RuBersWa33JA'
-              ],
-
-              
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/>
-                </svg>,
-                'Github',
-                'https://github.com/Jerophin123'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M6.316 7.009c.203-.147.3-.391.3-.728a.94.94 0 0 0-.097-.459a.7.7 0 0 0-.272-.278a1.1 1.1 0 0 0-.388-.141a2.4 2.4 0 0 0-.453-.041H3.759v1.869H5.54q.47.004.775-.222zm.278 1.688q-.346-.262-.919-.262H3.759v2.203h1.878q.261 0 .494-.05c.233-.05.297-.088.416-.169q.18-.117.287-.319c.107-.202.106-.309.106-.519q0-.617-.347-.884z"/>
-                  <path d="M14.5 0h-13C.675 0 0 .675 0 1.5v13c0 .825.675 1.5 1.5 1.5h13c.825 0 1.5-.675 1.5-1.5v-13c0-.825-.675-1.5-1.5-1.5m-4.012 4.209h3.241V5h-3.241zm-2.025 6.516a2.06 2.06 0 0 1-.631.725a2.8 2.8 0 0 1-.909.416A4 4 0 0 1 5.879 12H2.001V4.003H5.77q.57 0 1.044.1q.469.1.806.331q.334.23.522.609c.122.25.184.566.184.938q0 .604-.275 1.006c-.275.402-.453.487-.816.659c.494.141.856.391 1.097.744q.364.534.363 1.284q.004.614-.231 1.05zm6.528-1.237h-4.178c0 .456.156.891.394 1.125q.357.348 1.028.35q.481 0 .831-.244q.346-.244.425-.512h1.4q-.335 1.045-1.031 1.494c-.459.3-1.022.45-1.675.45q-.683-.001-1.234-.219a2.6 2.6 0 0 1-.934-.622a2.9 2.9 0 0 1-.588-.966A3.6 3.6 0 0 1 9.22 9.11q0-.65.213-1.213a2.82 2.82 0 0 1 1.544-1.616a3 3 0 0 1 1.206-.234q.736-.001 1.287.287q.548.286.903.769c.355.483.403.688.509 1.1q.153.609.109 1.284z"/>
-                </svg>,
-                'Behance',
-                'https://www.behance.net/jerophinstanley'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13h7.5M9.424 7.268l4.999-4.999m2.21 14.375l-2.402 2.415a3.19 3.19 0 0 1-4.524 0l-3.77-3.787a3.223 3.223 0 0 1 0-4.544l3.77-3.787a3.19 3.19 0 0 1 4.524 0l2.302 2.313"/></svg>,
-                'LeetCode',
-                'https://leetcode.com/u/Jerophinstanley/'
-              ],
-              [
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
-                  <g fill="none" stroke="#4db8ff" strokeLinejoin="round" strokeWidth="4">
-                    <path fill="#4db8ff" d="M18 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 24H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V30a2 2 0 0 0-2-2ZM42 4H30a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/>
-                    <path strokeLinecap="round" d="M28 28h16m-8 8h8m-16 8h16"/>
-                  </g>
-                </svg>,
-                'Skillrack',
-                'https://www.skillrack.com/faces/resume.xhtml?id=407184&key=646464b7d513f90965adc2db415744472430d117'
-              ],
-            ].map(([icon, display, link], index) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                key={index}
-                sx={{ mb: { xs: 4, sm: 4 } }}
+            <a
+              href="https://linktr.ee/Jerophin"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none', width: '100%', display: 'flex', justifyContent: 'center' }}
+            >
+              <Card
+                sx={{
+                  width: { xs: '280px', sm: '100%' },
+                  maxWidth: { xs: '280px', sm: 400 },
+                  minHeight: { xs: '400px', sm: 'auto' },
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                  backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                  WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  borderRadius: { xs: '20px', sm: '28px' },
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                  display: 'flex',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                    zIndex: 1
+                  },
+                  '&:hover': {
+                    transform: 'translateY(-8px) scale(1.02)',
+                    boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
+                    borderColor: 'rgba(77, 184, 255, 0.25)'
+                  },
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  px: { xs: 3, sm: 4 },
+                  py: { xs: 3, sm: 3 },
+                  transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
               >
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: 'none' }}
-                >
-                  <Card
+                <CardContent sx={{ textAlign: 'center', color: '#4db8ff' }}>
+                  <Box
                     sx={{
-                      height: '100%',
-                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(255, 255, 255, 0.18)',
-                      borderRadius: '28px',
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
                       display: 'flex',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
-                        zIndex: 1
-                      },
-                      '&:hover': {
-                        transform: 'translateY(-8px) scale(1.02)',
-                        boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.25)'
-                      },
-                      flexDirection: 'column',
                       justifyContent: 'center',
-                      alignItems: 'center',
-                      px: 3,
-                      py: 2,
-                      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                      '&:hover': {
-                        transform: 'translateY(-8px) scale(1.02)',
-                        boxShadow: '0 15px 50px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.25)'
+                      mb: { xs: 1.5, sm: 2 },
+                      '& svg': {
+                        width: { xs: 60, sm: 80 },
+                        height: { xs: 60, sm: 80 }
                       }
                     }}
                   >
-                   <CardContent sx={{ textAlign: 'center', color: '#4db8ff' }}>
-                   <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          mb: 1,
-                          '& svg': {
-                            width: 60,
-                            height: 60
-                          }
-                        }}
-                      >
-                        {icon}
-                      </Box>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: '#c0c0c0',
-                            fontSize: '1rem',
-                            fontFamily: '"Poppins", sans-serif'
-                          }}
-                        >
-
-                        {display}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </a>
-              </Grid>
-            ))}
-          </Grid>
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 80 97.7" style={{enableBackground: 'new 0 0 80 97.7'}} xmlSpace="preserve" width="80" height="80">
+                      <g>
+                        <path fill="#4db8ff" d="M0.2,33.1h24.2L7.1,16.7l9.5-9.6L33,23.8V0h14.2v23.8L63.6,7.1l9.5,9.6L55.8,33H80v13.5H55.7l17.3,16.7
+                        l-9.5,9.4L40,49.1L16.5,72.7L7,63.2l17.3-16.7H0V33.1H0.2z M33.1,65.8h14.2v32H33.1V65.8z">
+                        </path>
+                      </g>
+                    </svg>
+                  </Box>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: '#4db8ff',
+                      fontSize: { xs: '1.25rem', sm: '1.5rem' },
+                      fontFamily: '"Poppins", sans-serif',
+                      fontWeight: 600,
+                      mb: { xs: 0.5, sm: 1 }
+                    }}
+                  >
+                    Linktree
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: '#c0c0c0',
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                      fontFamily: '"Poppins", sans-serif',
+                      mb: { xs: 1, sm: 2 },
+                      textAlign: 'center'
+                    }}
+                  >
+                    Connect with me on all platforms
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#999',
+                      fontSize: { xs: '0.8rem', sm: '0.9rem' },
+                      fontFamily: '"Poppins", sans-serif',
+                      textAlign: 'center',
+                      lineHeight: 1.4
+                    }}
+                  >
+                    Click to access all my social links, contact info, and more
+                  </Typography>
+                </CardContent>
+              </Card>
+            </a>
+          </Box>
         </Section>
       </Box>
     </Box>

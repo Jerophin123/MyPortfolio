@@ -138,7 +138,19 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                   }}
                 >
                   <ListItemText
-                    primary={link.label}
+                    primary={
+                      <a 
+                        href={link.path}
+                        style={{ 
+                          textDecoration: 'none', 
+                          color: 'inherit',
+                          display: 'block',
+                          width: '100%'
+                        }}
+                      >
+                        {link.label}
+                      </a>
+                    }
                     primaryTypographyProps={{
                       sx: {
                         fontFamily: '"Poppins", sans-serif',
@@ -351,7 +363,19 @@ const [drawerOpen, setDrawerOpen] = useState(false);
               onClick={() => setDrawerOpen(false)}
             >
               <ListItemText
-                primary={link.label}
+                primary={
+                  <a 
+                    href={link.path}
+                    style={{ 
+                      textDecoration: 'none', 
+                      color: 'inherit',
+                      display: 'block',
+                      width: '100%'
+                    }}
+                  >
+                    {link.label}
+                  </a>
+                }
                 primaryTypographyProps={{
                   sx: {
                     color: '#4db8ff',
@@ -371,6 +395,18 @@ const [drawerOpen, setDrawerOpen] = useState(false);
  <h1 style={{ display: 'none' }}>
         Jerophin D R – Full-Stack Developer & UI/UX Designer Portfolio
       </h1>
+      
+      {/* SEO Navigation Links - Hidden but accessible to crawlers */}
+      <nav style={{ display: 'none' }}>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/skills">Skills</a>
+        <a href="/experience">Experience</a>
+        <a href="/projects">Projects</a>
+        <a href="/certifications">Certifications</a>
+        <a href="/achievements">Achievements</a>
+        <a href="/otherprofiles">Connect</a>
+      </nav>
 
         <Routes>
         <Route

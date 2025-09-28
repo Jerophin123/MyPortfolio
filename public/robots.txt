@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://jerophin-portfolio.vercel.app/sitemap.xml

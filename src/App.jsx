@@ -22,6 +22,8 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showText, setShowText] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   const fallIn = keyframes`
   0% {
@@ -38,6 +40,27 @@ const [drawerOpen, setDrawerOpen] = useState(false);
   const handleClick = () => {
     if (isMobile) {
       setShowText((prev) => !prev);
+    }
+  };
+
+  // Touch gesture handling for swipe up to close
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isUpSwipe = distance > 50; // Minimum swipe distance
+    
+    if (isUpSwipe && drawerOpen) {
+      setDrawerOpen(false);
     }
   };
 
@@ -340,56 +363,232 @@ const [drawerOpen, setDrawerOpen] = useState(false);
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         PaperProps={{
+          className: 'ios-control-center',
+          onTouchStart: handleTouchStart,
+          onTouchMove: handleTouchMove,
+          onTouchEnd: handleTouchEnd,
           sx: {
-            background: 'rgba(255, 255, 255, 0.01)',
+            background: 'rgba(255, 255, 255, 0.02)',
             backdropFilter: 'blur(8px) saturate(120%)',
             WebkitBackdropFilter: 'blur(8px) saturate(120%)',
-            border: '1px solid rgba(255, 255, 255, 0.02)',
+            border: '1px solid rgba(255, 255, 255, 0.03)',
             width: "100%",
             height: "100%",
-            pt: 17,
-            boxShadow: 'none'
+            boxShadow: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            touchAction: 'pan-y'
           }
         }}
       >
-        
-        <List>
-          {navLinks.map((link, i) => (
-            <ListItem
-              key={i}
-              button
-              component={Link}
-              to={link.path}
-              onClick={() => setDrawerOpen(false)}
-            >
-              <ListItemText
-                primary={
-                  <a 
-                    href={link.path}
-                    style={{ 
-                      textDecoration: 'none', 
-                      color: 'inherit',
-                      display: 'block',
-                      width: '100%'
-                    }}
-                  >
-                    {link.label}
-                  </a>
-                }
-                primaryTypographyProps={{
-                  sx: {
-                    color: '#4db8ff',
-                    marginTop: "15px",
-                    fontWeight: 500,
-                    fontSize: '1.2rem',
-                    textAlign: 'center',
-                    animation: `${fallIn} 0.6s ease-out`
+
+        {/* iOS Control Center Grid */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            columnGap: 0.5,
+            rowGap: 3,
+            width: '100%',
+            maxWidth: 300,
+            px: 2,
+            animation: 'slideDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: '0 auto',
+            placeItems: 'center'
+          }}
+        >
+          {navLinks.map((link, i) => {
+            const getIcon = (label) => {
+              const iconProps = {
+                width: 32,
+                height: 32,
+                fill: 'currentColor'
+              };
+              
+              switch (label) {
+                case 'Home':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                  );
+                case 'About':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  );
+                case 'Skills':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H9V5H1v14h22V7z"/>
+                    </svg>
+                  );
+                case 'Experience':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M20 6h-2l-2-2H8L6 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                    </svg>
+                  );
+                case 'Projects':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                  );
+                case 'Certifications':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm2.5-7L7 13h10l-1.5-4h-8z"/>
+                    </svg>
+                  );
+                case 'Achievements':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  );
+                case 'Connect':
+                  return (
+                    <svg {...iconProps} viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                  );
+                default:
+                  return null;
+              }
+            };
+            
+            return (
+              <Button
+                key={i}
+                component={Link}
+                to={link.path}
+                onClick={() => setDrawerOpen(false)}
+                className="ios-control-button"
+                sx={{
+                  gridColumn: 'span 1',
+                  gridRow: 'span 1',
+                  width: 110,
+                  height: 110,
+                  borderRadius: '20px',
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 1,
+                  color: 'white',
+                  textTransform: 'none',
+                  fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  minWidth: 0,
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '1px',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
+                    zIndex: 1
+                  },
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.1) 100%)',
+                    transform: 'translateY(-2px) scale(1.02)',
+                    boxShadow: '0 12px 40px rgba(77, 184, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                    borderColor: 'rgba(77, 184, 255, 0.3)'
+                  },
+                  '&:active': {
+                    transform: 'translateY(0) scale(0.98)'
                   }
                 }}
-              />
-            </ListItem>
-          ))}
-        </List>
+              >
+                <Box
+                  sx={{
+                    mb: 0.5,
+                    filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#4DB8FF'
+                  }}
+                >
+                  {getIcon(link.label)}
+                </Box>
+                <Box
+                  sx={{
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    lineHeight: 1.2,
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
+                    color: '#4DB8FF'
+                  }}
+                >
+                  {link.label}
+                </Box>
+              </Button>
+            );
+          })}
+        </Box>
+
+        {/* iOS Control Center Footer - Swipe Indicator */}
+        <Box
+          sx={{
+            width: '100%',
+            height: 80,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            pb: 2,
+            cursor: 'pointer'
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <Box
+            sx={{
+              width: 40,
+              height: 4,
+              borderRadius: '2px',
+              background: 'rgba(255, 255, 255, 0.3)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              mb: 1
+            }}
+          />
+          <Box
+            sx={{
+              fontSize: '0.7rem',
+              color: 'rgba(255, 255, 255, 0.5)',
+              fontFamily: '"SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif',
+              fontWeight: 500,
+              textAlign: 'center'
+            }}
+          >
+            Swipe up to close
+          </Box>
+        </Box>
       </Drawer>
 
  <h1 style={{ display: 'none' }}>

@@ -413,26 +413,26 @@ const [drawerOpen, setDrawerOpen] = useState(false);
               switch (label) {
                 case 'Home':
                   return (
-                    <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    <svg {...iconProps} viewBox="0 0 48 48">
+                      <path fill="currentColor" d="M26.394 5.855a3.78 3.78 0 0 0-4.788 0L8.431 16.597A3.91 3.91 0 0 0 7 19.628v19.485C7 41.26 8.713 43 10.825 43h4.35C17.288 43 19 41.26 19 39.113V30.5a2.5 2.5 0 0 1 2.5-2.5h5a2.5 2.5 0 0 1 2.5 2.5v8.613C29 41.26 30.712 43 32.825 43h4.35C39.288 43 41 41.26 41 39.113V19.628a3.91 3.91 0 0 0-1.431-3.031z"/>
                     </svg>
                   );
                 case 'About':
                   return (
                     <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      <path fill="currentColor" fillRule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clipRule="evenodd"/>
                     </svg>
                   );
                 case 'Skills':
                   return (
                     <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H9V5H1v14h22V7z"/>
+                      <path fill="currentColor" d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2m2 4v2h2V7zm4 0v2h2V7zm4 0v2h2V7zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm-8 4v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z"/>
                     </svg>
                   );
                 case 'Experience':
                   return (
                     <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M20 6h-2l-2-2H8L6 6H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                      <path fill="currentColor" d="M4 21q-.825 0-1.412-.587T2 19V8q0-.825.588-1.412T4 6h4V4q0-.825.588-1.412T10 2h4q.825 0 1.413.588T16 4v2h4q.825 0 1.413.588T22 8v11q0 .825-.587 1.413T20 21zm6-15h4V4h-4z"/>
                     </svg>
                   );
                 case 'Projects':
@@ -444,19 +444,19 @@ const [drawerOpen, setDrawerOpen] = useState(false);
                 case 'Certifications':
                   return (
                     <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm2.5-7L7 13h10l-1.5-4h-8z"/>
+                      <path fill="currentColor" d="M2.047 14.667a1 1 0 0 0 .466.607l1.909 1.104v2.199a1 1 0 0 0 1 1h2.199l1.104 1.91a1 1 0 0 0 1.366.366L12 20.75l1.91 1.104a1 1 0 0 0 1.366-.366l1.103-1.909h2.199a1 1 0 0 0 1-1V16.38l1.909-1.104a1 1 0 0 0 .366-1.366L20.75 12l1.104-1.909a1 1 0 0 0-.366-1.366l-1.909-1.104V5.422a1 1 0 0 0-1-1H16.38l-1.103-1.909a1 1 0 0 0-.607-.466a1 1 0 0 0-.759.1L12 3.25l-1.909-1.104a1 1 0 0 0-1.366.365l-1.104 1.91H5.422a1 1 0 0 0-1 1V7.62L2.513 8.725a1 1 0 0 0-.365 1.366L3.251 12l-1.104 1.909a1 1 0 0 0-.1.758"/>
                     </svg>
                   );
                 case 'Achievements':
                   return (
-                    <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    <svg width={37} height={37} fill="currentColor" viewBox="0 0 16 16">
+                      <path fill="currentColor" d="M3.999 3h-.503a1.5 1.5 0 0 0-1.5 1.5v1c0 1.252.922 2.288 2.122 2.471a4 4 0 0 0 3.381 2.998V12h-1.5a2 2 0 0 0-2 2v.504a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V14a2 2 0 0 0-2-2h-1.5v-1.03a4 4 0 0 0 3.381-3A2.5 2.5 0 0 0 14 5.5v-1A1.5 1.5 0 0 0 12.5 3H12a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2m8 1h.5a.5.5 0 0 1 .5.5v1a1.5 1.5 0 0 1-1 1.414zM4 4v2.915A1.5 1.5 0 0 1 2.996 5.5v-1a.5.5 0 0 1 .5-.5z"/>
                     </svg>
                   );
                 case 'Connect':
                   return (
                     <svg {...iconProps} viewBox="0 0 24 24">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                      <path fill="currentColor" d="m13.736 5.853l4.005-4.117l2.325 2.38l-4.2 4.005h5.908v3.305h-5.937l4.229 4.108l-2.325 2.334l-5.74-5.769l-5.741 5.769l-2.325-2.325l4.229-4.108H2.226V8.121h5.909l-4.2-4.004l2.324-2.381l4.005 4.117V0h3.472zm-3.472 10.306h3.472V24h-3.472z"/>
                     </svg>
                   );
                 default:

@@ -3,14 +3,14 @@ export const seoConfig = {
   // Home/About Page
   about: {
     title: "About Jerophin D R | Full-Stack Developer & AI Enthusiast Portfolio",
-    description: "Meet Jerophin D R, a passionate Full-Stack Developer and AI enthusiast from Chennai. Discover my journey, achievements, hackathon wins, and innovative projects in web development, machine learning, and cloud technologies.",
+    description: "Meet Jerophin D R, a passionate Full-Stack Developer and AI enthusiast from Chennai. Discover my journey, achievements, and innovative projects in web development and machine learning.",
     keywords: "Jerophin D R, About, Full Stack Developer, AI Enthusiast, React Developer, Python Developer, Machine Learning, Cloud Computing, Chennai Developer, Portfolio, Hackathon Winner, Web Development, FastAPI, MongoDB, UI/UX Designer, Software Engineer, Tech Professional",
     ogType: "profile",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Jerophin D R",
-      "alternateName": "Jerophin583",
+      "alternateName": "Jero",
       "description": "Full-Stack Developer and AI Enthusiast specializing in React, Python, Machine Learning, and Cloud Technologies",
       "url": "https://jerophin-portfolio.vercel.app/about",
       "image": "https://jerophin-portfolio.vercel.app/profile.jpg",
@@ -40,7 +40,7 @@ export const seoConfig = {
   // Skills Page
   skills: {
     title: "Technical Skills | Jerophin D R - Full-Stack Developer Portfolio",
-    description: "Explore Jerophin D R's comprehensive technical skills in Full-Stack Development, AI, Machine Learning, and Cloud Technologies. Expertise in React, Python, FastAPI, MongoDB, AWS, and modern web development frameworks.",
+    description: "Explore Jerophin D R's technical skills in Full-Stack Development, AI, Machine Learning, and Cloud Technologies. Expertise in React, Python, FastAPI, MongoDB, and AWS.",
     keywords: "Jerophin D R, Skills, Technical Skills, Full Stack Developer, React, JavaScript, Python, FastAPI, MongoDB, Node.js, Machine Learning, AI, Cloud Computing, AWS, Azure, Web Development, Frontend, Backend, Database, UI/UX Design, Chennai Developer",
     ogType: "website",
     structuredData: {
@@ -87,7 +87,7 @@ export const seoConfig = {
   // Experience Page
   experience: {
     title: "Professional Experience | Jerophin D R - Full-Stack Developer",
-    description: "Discover Jerophin D R's professional journey, internships, hackathon achievements, and real-world project experience in AI, Full-Stack Development, and Cloud Technologies. From startup internships to winning hackathons.",
+    description: "Discover Jerophin D R's professional journey, internships, and hackathon achievements in AI, Full-Stack Development, and Cloud Technologies. From startups to winning hackathons.",
     keywords: "Jerophin D R, Experience, Professional Experience, Internships, Hackathons, AI Projects, Full-Stack Development, Cloud Computing, Career Journey, Work Experience, Project Experience, Startup Experience, Tech Industry, Chennai Developer",
     ogType: "website",
     structuredData: {
@@ -116,7 +116,7 @@ export const seoConfig = {
   // Projects Page
   projects: {
     title: "Featured Projects | Jerophin D R - Full-Stack Developer Portfolio",
-    description: "Explore Jerophin D R's innovative projects including AI-driven applications, Full-Stack web solutions, phishing detection systems, waste management platforms, and real-time cloud applications. Live demos and GitHub repositories included.",
+    description: "Explore Jerophin D R's innovative projects including AI-driven applications, Full-Stack web solutions, phishing detection systems, and real-time cloud applications. Live demos included.",
     keywords: "Jerophin D R, Projects, Portfolio Projects, AI Projects, Machine Learning Projects, Full-Stack Projects, React Projects, Python Projects, Web Applications, Cloud Projects, Phishing Detection, Waste Management, Real-time Applications, GitHub Projects, Live Demos, Chennai Developer",
     ogType: "website",
     structuredData: {
@@ -157,7 +157,7 @@ export const seoConfig = {
   // Certifications Page
   certifications: {
     title: "Professional Certifications | Jerophin D R - Full-Stack Developer",
-    description: "Browse Jerophin D R's professional certifications in AI, Cloud Computing, Full-Stack Development, and Cybersecurity. Verified achievements from AWS, Azure, Google Cloud, and leading tech platforms showcasing technical expertise.",
+    description: "Browse Jerophin D R's professional certifications in AI, Cloud Computing, Full-Stack Development, and Cybersecurity. Verified achievements from AWS, Azure, and Google Cloud.",
     keywords: "Jerophin D R, Certifications, Professional Certifications, AI Certifications, Cloud Certifications, AWS Certifications, Azure Certifications, Google Cloud Certifications, Full-Stack Certifications, Cybersecurity Certifications, Tech Certifications, Verified Skills, Professional Development, Chennai Developer",
     ogType: "website",
     structuredData: {
@@ -192,7 +192,7 @@ export const seoConfig = {
   // Achievements Page
   achievements: {
     title: "Achievements & Awards | Jerophin D R - Full-Stack Developer",
-    description: "Discover Jerophin D R's professional achievements, hackathon wins, awards, and recognitions in the tech industry. From winning coding competitions to building innovative solutions that solve real-world problems.",
+    description: "Discover Jerophin D R's professional achievements, hackathon wins, awards, and recognitions in the tech industry. From coding competitions to innovative solutions.",
     keywords: "Jerophin D R, Achievements, Awards, Hackathon Wins, Coding Competitions, Tech Awards, Professional Achievements, Recognition, Innovation Awards, Problem Solving, Tech Industry Achievements, Chennai Developer, Full-Stack Developer Achievements",
     ogType: "website",
     structuredData: {
@@ -217,7 +217,7 @@ export const seoConfig = {
   // Other Profiles Page
   otherprofiles: {
     title: "Connect with Jerophin D R | Social Profiles & Links",
-    description: "Connect with Jerophin D R across multiple platforms. Find my GitHub, LinkedIn, Twitter, and other professional profiles. Your gateway to my developer presence, open-source contributions, and professional network.",
+    description: "Connect with Jerophin D R across multiple platforms. Find my GitHub, LinkedIn, Twitter, and other professional profiles. Your gateway to my developer presence.",
     keywords: "Jerophin D R, Social Profiles, GitHub Profile, LinkedIn Profile, Twitter Profile, Developer Links, Professional Profiles, Social Media, Connect, Developer Presence, Open Source, Professional Network, Chennai Developer, Full-Stack Developer Profiles",
     ogType: "website",
     structuredData: {
@@ -239,59 +239,106 @@ export const updateSEO = (pageKey) => {
   const config = seoConfig[pageKey];
   if (!config) return;
 
-  // Update title
+  // Remove any existing duplicate tags first
+  removeDuplicateTags();
+
+  // Update title - ensure only one title tag exists
   const titleElement = document.getElementById('page-title');
-  if (titleElement) titleElement.textContent = config.title;
+  if (titleElement) {
+    titleElement.textContent = config.title;
+  } else {
+    // Create title if it doesn't exist
+    const title = document.createElement('title');
+    title.id = 'page-title';
+    title.textContent = config.title;
+    document.head.appendChild(title);
+  }
 
-  // Update meta tags
-  const metaTitle = document.getElementById('meta-title');
-  if (metaTitle) metaTitle.setAttribute('content', config.title);
+  // Update meta tags - ensure only one of each type exists
+  updateOrCreateMetaTag('meta-title', 'name', 'title', config.title);
+  updateOrCreateMetaTag('meta-description', 'name', 'description', config.description);
+  updateOrCreateMetaTag('meta-keywords', 'name', 'keywords', config.keywords);
 
-  const metaDescription = document.getElementById('meta-description');
-  if (metaDescription) metaDescription.setAttribute('content', config.description);
-
-  const metaKeywords = document.getElementById('meta-keywords');
-  if (metaKeywords) metaKeywords.setAttribute('content', config.keywords);
-
-  // Update canonical URL
-  const canonicalUrl = document.getElementById('canonical-url');
-  if (canonicalUrl) canonicalUrl.setAttribute('href', `https://jerophin-portfolio.vercel.app/${pageKey === 'about' ? '' : pageKey}`);
+  // Update canonical URL - ensure only one canonical exists
+  updateOrCreateCanonical(`https://jerophin-portfolio.vercel.app/${pageKey === 'about' ? '' : pageKey}`);
 
   // Update Open Graph tags
-  const ogType = document.getElementById('og-type');
-  if (ogType) ogType.setAttribute('content', config.ogType);
-
-  const ogUrl = document.getElementById('og-url');
-  if (ogUrl) ogUrl.setAttribute('content', `https://jerophin-portfolio.vercel.app/${pageKey === 'about' ? '' : pageKey}`);
-
-  const ogTitle = document.getElementById('og-title');
-  if (ogTitle) ogTitle.setAttribute('content', config.title);
-
-  const ogDescription = document.getElementById('og-description');
-  if (ogDescription) ogDescription.setAttribute('content', config.description);
+  updateOrCreateMetaTag('og-type', 'property', 'og:type', config.ogType);
+  updateOrCreateMetaTag('og-url', 'property', 'og:url', `https://jerophin-portfolio.vercel.app/${pageKey === 'about' ? '' : pageKey}`);
+  updateOrCreateMetaTag('og-title', 'property', 'og:title', config.title);
+  updateOrCreateMetaTag('og-description', 'property', 'og:description', config.description);
 
   // Update Twitter tags
-  const twitterUrl = document.getElementById('twitter-url');
-  if (twitterUrl) twitterUrl.setAttribute('content', `https://jerophin-portfolio.vercel.app/${pageKey === 'about' ? '' : pageKey}`);
-
-  const twitterTitle = document.getElementById('twitter-title');
-  if (twitterTitle) twitterTitle.setAttribute('content', config.title);
-
-  const twitterDescription = document.getElementById('twitter-description');
-  if (twitterDescription) twitterDescription.setAttribute('content', config.description);
+  updateOrCreateMetaTag('twitter-url', 'name', 'twitter:url', `https://jerophin-portfolio.vercel.app/${pageKey === 'about' ? '' : pageKey}`);
+  updateOrCreateMetaTag('twitter-title', 'name', 'twitter:title', config.title);
+  updateOrCreateMetaTag('twitter-description', 'name', 'twitter:description', config.description);
 
   // Update structured data
   if (config.structuredData) {
-    const existingScript = document.querySelector('script[type="application/ld+json"]');
-    if (existingScript) {
-      existingScript.textContent = JSON.stringify(config.structuredData, null, 2);
-    } else {
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.textContent = JSON.stringify(config.structuredData, null, 2);
-      document.head.appendChild(script);
-    }
+    updateStructuredData(config.structuredData);
   }
+};
+
+// Helper function to remove duplicate tags
+const removeDuplicateTags = () => {
+  // Remove duplicate title tags
+  const titles = document.querySelectorAll('title');
+  for (let i = 1; i < titles.length; i++) {
+    titles[i].remove();
+  }
+
+  // Remove duplicate meta description tags
+  const descriptions = document.querySelectorAll('meta[name="description"]');
+  for (let i = 1; i < descriptions.length; i++) {
+    descriptions[i].remove();
+  }
+
+  // Remove duplicate canonical tags
+  const canonicals = document.querySelectorAll('link[rel="canonical"]');
+  for (let i = 1; i < canonicals.length; i++) {
+    canonicals[i].remove();
+  }
+};
+
+// Helper function to update or create meta tags
+const updateOrCreateMetaTag = (id, attribute, name, content) => {
+  let element = document.getElementById(id);
+  if (element) {
+    element.setAttribute('content', content);
+  } else {
+    element = document.createElement('meta');
+    element.id = id;
+    element.setAttribute(attribute, name);
+    element.setAttribute('content', content);
+    document.head.appendChild(element);
+  }
+};
+
+// Helper function to update or create canonical link
+const updateOrCreateCanonical = (href) => {
+  let element = document.getElementById('canonical-url');
+  if (element) {
+    element.setAttribute('href', href);
+  } else {
+    element = document.createElement('link');
+    element.id = 'canonical-url';
+    element.setAttribute('rel', 'canonical');
+    element.setAttribute('href', href);
+    document.head.appendChild(element);
+  }
+};
+
+// Helper function to update structured data
+const updateStructuredData = (structuredData) => {
+  // Remove existing structured data scripts
+  const existingScripts = document.querySelectorAll('script[type="application/ld+json"]');
+  existingScripts.forEach(script => script.remove());
+
+  // Add new structured data
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(structuredData, null, 2);
+  document.head.appendChild(script);
 };
 
 // Function to get page key from current URL

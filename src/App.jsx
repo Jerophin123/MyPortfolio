@@ -2382,7 +2382,7 @@ const [drawerOpen, setDrawerOpen] = useState(false);
 
     {/* LeetCode */}
     <a
-      href="https://leetcode.com/u/Jerophinstanley/"
+      href="https://leetcode.com/u/codecrackerX08/"
       target="_blank"
       rel="noreferrer"
       style={{ color: '#4db8ff' }}

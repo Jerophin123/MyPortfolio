@@ -23,13 +23,6 @@
     <!-- Verification -->
     <meta name="msvalidate.01" content="C63DE252D84E4F2847C50CE603ADB4B6" />
     <meta name="google-site-verification" content="your-google-verification-code" />
-    
-    <!-- Bing Webmaster Tools -->
-    <meta name="bingbot" content="index, follow" />
-    <meta name="msnbot" content="index, follow" />
-    <meta name="distribution" content="global" />
-    <meta name="rating" content="general" />
-    <meta name="classification" content="Portfolio, Developer, Technology" />
 
     <!-- Dynamic Open Graph / Facebook -->
     <meta id="og-type" property="og:type" content="website">
@@ -155,9 +148,7 @@
       function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'G-2R9DJ8V1K2', {
-        allow_google_signals: true,
-        anonymize_ip: true,
-        cookie_flags: 'SameSite=None;Secure'
+        allow_google_signals: true
       });
     </script>
     <script type="text/javascript">
@@ -166,65 +157,6 @@
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "s42lyzhke3");
-    </script>
-
-    <!-- Enhanced Analytics Tracking -->
-    <script>
-      // Track page views and user interactions
-      document.addEventListener('DOMContentLoaded', function() {
-        // Google Analytics page view tracking
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'page_view', {
-            page_title: document.title,
-            page_location: window.location.href,
-            page_path: window.location.pathname
-          });
-        }
-
-        // Microsoft Clarity custom events
-        if (typeof clarity !== 'undefined') {
-          clarity('set', 'Portfolio', 'Jerophin D R');
-          clarity('set', 'PageType', 'Portfolio');
-        }
-
-        // Track navigation clicks
-        document.addEventListener('click', function(e) {
-          if (e.target.matches('a[href]')) {
-            const linkText = e.target.textContent.trim();
-            const linkUrl = e.target.href;
-            
-            // Google Analytics link tracking
-            if (typeof gtag !== 'undefined') {
-              gtag('event', 'click', {
-                event_category: 'Navigation',
-                event_label: linkText,
-                value: linkUrl
-              });
-            }
-
-            // Microsoft Clarity custom event
-            if (typeof clarity !== 'undefined') {
-              clarity('event', 'navigation_click');
-            }
-          }
-        });
-
-        // Track scroll depth
-        let maxScroll = 0;
-        window.addEventListener('scroll', function() {
-          const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-          if (scrollPercent > maxScroll && scrollPercent % 25 === 0) {
-            maxScroll = scrollPercent;
-            if (typeof gtag !== 'undefined') {
-              gtag('event', 'scroll', {
-                event_category: 'Engagement',
-                event_label: scrollPercent + '%',
-                value: scrollPercent
-              });
-            }
-          }
-        });
-      });
     </script>
     <!-- Add this to your <head> or just before </body> -->
 <!-- Load the Device Detector Library -->
@@ -312,7 +244,6 @@
     
     <!-- Sitemap reference -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-    <link rel="sitemap" type="application/xml" title="Bing Sitemap" href="/bingsitemap.xml" />
     
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

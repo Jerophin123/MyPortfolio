@@ -277,6 +277,9 @@ export const updateSEO = (pageKey) => {
   if (config.structuredData) {
     updateStructuredData(config.structuredData);
   }
+
+  // Track page view in analytics
+  trackPageView(config.title, pageKey);
 };
 
 // Helper function to remove duplicate tags
@@ -339,6 +342,25 @@ const updateStructuredData = (structuredData) => {
   script.type = 'application/ld+json';
   script.textContent = JSON.stringify(structuredData, null, 2);
   document.head.appendChild(script);
+};
+
+// Function to track page views in analytics
+const trackPageView = (pageTitle, pageKey) => {
+  // Google Analytics tracking
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'page_view', {
+      page_title: pageTitle,
+      page_location: window.location.href,
+      page_path: window.location.pathname,
+      custom_parameter_1: pageKey
+    });
+  }
+
+  // Microsoft Clarity tracking
+  if (typeof clarity !== 'undefined') {
+    clarity('set', 'CurrentPage', pageKey);
+    clarity('event', 'page_view');
+  }
 };
 
 // Function to get page key from current URL

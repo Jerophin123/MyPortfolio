@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppBar, Toolbar, Fade, Typography, Button, Box, Grid, Card, CardContent, Avatar, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -10,9 +10,22 @@ import profileImage from './assets/profile.jpg';
 import Appbar from './Appbar'; // adjust the path if it's in a different folder
 import AnimatedBackground from './components/AnimatedBackground';
 import { keyframes } from '@emotion/react';
+import { updateSEO, getCurrentPageKey } from './seoConfig';
 
 
 const roles = ['Full Stack Developer', 'UI UX Designer'];
+
+// SEO Update Component
+function SEOUpdater() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    const pageKey = getCurrentPageKey();
+    updateSEO(pageKey);
+  }, [location]);
+
+  return null;
+}
 
 function App() {
 
@@ -335,6 +348,7 @@ const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <Router>
+      <SEOUpdater />
       <Box
         sx={{
           fontFamily: '"Poppins", sans-serif',

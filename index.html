@@ -23,6 +23,13 @@
     <!-- Verification -->
     <meta name="msvalidate.01" content="C63DE252D84E4F2847C50CE603ADB4B6" />
     <meta name="google-site-verification" content="your-google-verification-code" />
+    
+    <!-- Bing Webmaster Tools -->
+    <meta name="bingbot" content="index, follow" />
+    <meta name="msnbot" content="index, follow" />
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
+    <meta name="classification" content="Portfolio, Developer, Technology" />
 
     <!-- Dynamic Open Graph / Facebook -->
     <meta id="og-type" property="og:type" content="website">
@@ -148,7 +155,16 @@
       function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'G-2R9DJ8V1K2', {
-        allow_google_signals: true
+        allow_google_signals: true,
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+      
+      // Ensure page view is tracked immediately
+      gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: window.location.pathname
       });
     </script>
     <script type="text/javascript">
@@ -157,6 +173,50 @@
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
         })(window, document, "clarity", "script", "s42lyzhke3");
+    </script>
+
+    <!-- Essential Analytics Tracking for User Activity -->
+    <script>
+      // Track user activity to maintain active user status
+      document.addEventListener('DOMContentLoaded', function() {
+        // Microsoft Clarity setup
+        if (typeof clarity !== 'undefined') {
+          clarity('set', 'Portfolio', 'Jerophin D R');
+          clarity('set', 'PageType', 'Portfolio');
+        }
+
+        // Track user interactions to maintain active status
+        let lastActivity = Date.now();
+        
+        // Track clicks, scrolls, and other interactions
+        ['click', 'scroll', 'keydown', 'mousemove'].forEach(eventType => {
+          document.addEventListener(eventType, function() {
+            lastActivity = Date.now();
+            
+            // Send activity event to Google Analytics
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'user_activity', {
+                event_category: 'Engagement',
+                event_label: eventType,
+                value: 1
+              });
+            }
+          }, { passive: true });
+        });
+
+        // Send periodic activity pings to maintain active user status
+        setInterval(function() {
+          if (Date.now() - lastActivity < 30000) { // If user was active in last 30 seconds
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'active_user_ping', {
+                event_category: 'Engagement',
+                event_label: 'keep_alive',
+                value: 1
+              });
+            }
+          }
+        }, 10000); // Every 10 seconds
+      });
     </script>
     <!-- Add this to your <head> or just before </body> -->
 <!-- Load the Device Detector Library -->
@@ -244,6 +304,7 @@
     
     <!-- Sitemap reference -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <link rel="sitemap" type="application/xml" title="Bing Sitemap" href="/bingsitemap.xml" />
     
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>

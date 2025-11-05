@@ -1665,7 +1665,7 @@ const [drawerOpen, setDrawerOpen] = useState(false);
       {/* 🔗 Logo */}
       <Box
         component="a"
-        href="https://delphin-associates.odoo.com/"
+        href="https://delphinassociates.vercel.app"
         target="_blank"
         rel="noopener noreferrer"
         sx={{

@@ -1,26 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /_next/
-Disallow: /admin/
-Disallow: /private/
 
-# Sitemaps
 Sitemap: https://jerophin-portfolio.vercel.app/sitemap.xml
-Sitemap: https://jerophin-portfolio.vercel.app/bingsitemap.xml
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-# Additional directives for better SEO
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Slurp
-Allow: /
-Crawl-delay: 2

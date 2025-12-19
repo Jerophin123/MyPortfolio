@@ -1,12 +1,16 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://jerophin-portfolio.vercel.app/</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/about</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/skills</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/experience</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/projects</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/certifications</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/achievements</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/otherprofiles</loc></url>
-  <url><loc>https://jerophin-portfolio.vercel.app/connect</loc></url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://jerophin-portfolio.vercel.app/</loc>
+  <lastmod>2025-06-09T17:17:25+00:00</lastmod>
+</url>
+
+
 </urlset>

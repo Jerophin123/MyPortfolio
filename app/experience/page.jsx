@@ -281,7 +281,7 @@ export default function ExperiencePage() {
       {/* 🔗 Logo */}
       <Box
         component="a"
-        href="https://delphin-associates.odoo.com/"
+        href="https://www.delphinassociates.com/"
         target="_blank"
         rel="noopener noreferrer"
         sx={{

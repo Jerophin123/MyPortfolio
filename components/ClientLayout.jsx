@@ -694,7 +694,7 @@ export default function ClientLayout({ children }) {
             {/* LeetCode */}
             <Box
               component="a"
-              href="https://leetcode.com/u/Jerophinstanley/"
+              href="https://leetcode.com/u/codecrackerX08/"
               target="_blank"
               rel="noreferrer"
               sx={{

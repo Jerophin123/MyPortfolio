@@ -4,5 +4,6 @@ const nextConfig = {
     emotion: true,
   },
 };
+
 export default nextConfig;
 

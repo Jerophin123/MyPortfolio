@@ -90,7 +90,7 @@ export default function RootLayout({ children }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){ dataLayer.push(arguments); }
             gtag('js', new Date());
-            gtag('config', 'G-2R9DJ8V1K2', {
+            gtag('config', 'G-2R9DJ8V1K2',  {
               allow_google_signals: true
             });
           `}

@@ -84,11 +84,11 @@ const AnimatedBackground = () => {
         inset: 0,
         zIndex: 0,
         overflow: 'hidden',
-        // Optimized gradient background
+        // Optimized gradient background - adapts to theme
         background: `
-          radial-gradient(ellipse at top, #0a0a0a 0%, #000000 50%),
-          radial-gradient(ellipse at bottom, #1a1a1a 0%, #000000 50%),
-          linear-gradient(135deg, #000000 0%, #0f0f0f 50%, #000000 100%)
+          radial-gradient(ellipse at top, var(--bg-secondary) 0%, var(--bg-primary) 50%),
+          radial-gradient(ellipse at bottom, var(--bg-tertiary) 0%, var(--bg-primary) 50%),
+          linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%)
         `,
         backgroundSize: '100% 100%, 100% 100%, 200% 200%',
         backgroundPosition: 'center top, center bottom, 0% 50%',
@@ -102,9 +102,9 @@ const AnimatedBackground = () => {
           right: 0,
           bottom: 0,
           background: `
-            radial-gradient(circle at 20% 80%, rgba(77, 184, 255, 0.06) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
-            radial-gradient(circle at 50% 50%, rgba(77, 184, 255, 0.05) 0%, transparent 60%)
+            radial-gradient(circle at 20% 80%, var(--particle-accent-very-light) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, var(--particle-white-very-light) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, var(--particle-accent-very-light) 0%, transparent 60%)
           `,
           animation: `${gradientShift} 35s ease infinite reverse`,
           willChange: 'background-position',
@@ -122,7 +122,7 @@ const AnimatedBackground = () => {
           background: `
             linear-gradient(45deg, 
               transparent 30%, 
-              rgba(77, 184, 255, 0.03) 50%, 
+              var(--particle-accent-very-light) 50%, 
               transparent 70%
             )
           `,
@@ -140,7 +140,7 @@ const AnimatedBackground = () => {
             position: 'absolute',
             width: { xs: '3px', sm: '5px', md: '6px' },
             height: { xs: '3px', sm: '5px', md: '6px' },
-            background: 'rgba(77, 184, 255, 0.25)',
+            background: 'var(--particle-accent)',
             borderRadius: '50%',
             left: `${12 + i * 10}%`,
             top: `${20 + (i % 3) * 25}%`,
@@ -161,7 +161,7 @@ const AnimatedBackground = () => {
             position: 'absolute',
             width: '2px',
             height: '2px',
-            background: 'rgba(255, 255, 255, 0.15)',
+            background: 'var(--particle-white)',
             borderRadius: '50%',
             left: `${25 + i * 12}%`,
             top: `${25 + (i % 2) * 30}%`,
@@ -181,7 +181,7 @@ const AnimatedBackground = () => {
             position: 'absolute',
             width: { xs: '120px', sm: '180px', md: '240px' },
             height: { xs: '120px', sm: '180px', md: '240px' },
-            background: `radial-gradient(circle, rgba(77, 184, 255, 0.05) 0%, transparent 70%)`,
+            background: `radial-gradient(circle, var(--particle-accent-very-light) 0%, transparent 70%)`,
             borderRadius: '50%',
             left: `${25 + i * 50}%`,
             top: `${15 + i * 35}%`,
@@ -201,7 +201,7 @@ const AnimatedBackground = () => {
             position: 'absolute',
             width: { xs: '60px', sm: '100px', md: '120px' },
             height: { xs: '60px', sm: '100px', md: '120px' },
-            background: `radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%)`,
+            background: `radial-gradient(circle, var(--particle-white-very-light) 0%, transparent 70%)`,
             borderRadius: '50%',
             left: `${20 + i * 60}%`,
             top: `${50 + i * 25}%`,
@@ -224,7 +224,7 @@ const AnimatedBackground = () => {
             height: '120px',
             background: `linear-gradient(to bottom, 
               transparent 0%, 
-              rgba(77, 184, 255, 0.12) 50%, 
+              var(--particle-accent-light) 50%, 
               transparent 100%
             )`,
             left: `${30 + i * 40}%`,
@@ -248,7 +248,7 @@ const AnimatedBackground = () => {
             height: '1px',
             background: `linear-gradient(to right, 
               transparent 0%, 
-              rgba(255, 255, 255, 0.08) 50%, 
+              var(--particle-white) 50%, 
               transparent 100%
             )`,
             left: `${25 + i * 50}%`,
@@ -270,13 +270,13 @@ const AnimatedBackground = () => {
             position: 'absolute',
             width: '3px',
             height: '3px',
-            background: 'rgba(255, 255, 255, 0.3)',
+            background: 'var(--particle-white-light)',
             borderRadius: '50%',
             left: `${20 + i * 20}%`,
             top: `${30 + (i % 2) * 35}%`,
             animation: `${pulse} ${4 + i * 0.8}s ease-in-out infinite`,
             animationDelay: `${i * 0.6}s`,
-            boxShadow: '0 0 6px rgba(77, 184, 255, 0.25)',
+            boxShadow: '0 0 6px var(--particle-glow)',
             willChange: 'transform',
             pointerEvents: 'none',
           }}
@@ -293,7 +293,7 @@ const AnimatedBackground = () => {
             height: '1px',
             background: `linear-gradient(90deg, 
               transparent 0%, 
-              rgba(77, 184, 255, 0.15) 50%, 
+              var(--particle-accent-light) 50%, 
               transparent 100%
             )`,
             left: `${15 + i * 70}%`,

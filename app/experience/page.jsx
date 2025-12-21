@@ -18,7 +18,7 @@ export default function ExperiencePage() {
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2))',
+            background: 'var(--overlay)',
             zIndex: 1
           }}
         />
@@ -34,12 +34,12 @@ export default function ExperiencePage() {
     ml: { xs: '-7px', sm: 'auto' },
     mr: { xs: '10px', sm: 'auto' },
     marginTop: { xs: '20px', sm: '30px', md: '40px' },
-    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
-    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-    border: '1px solid rgba(255, 255, 255, 0.18)',
+    background: 'var(--glass-bg)',
+    backdropFilter: 'var(--backdrop-blur-light)',
+    WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+    border: '1px solid var(--glass-border-light)',
     borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+    boxShadow: 'var(--glass-shadow)',
     px: { xs: 2.5, sm: 3.5, md: 4 },
     py: { xs: 3, sm: 3.5, md: 4 },
     transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -53,13 +53,13 @@ export default function ExperiencePage() {
       left: 0,
       right: 0,
       height: '1px',
-      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+      background: 'var(--glass-shine)',
       zIndex: 1
     },
     '&:hover': {
       transform: { xs: 'none', sm: 'translateY(-8px) scale(1.02)' },
-      borderColor: { xs: 'rgba(255, 255, 255, 0.18)', sm: 'rgba(77, 184, 255, 0.25)' },
-      boxShadow: { xs: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)', sm: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)' }
+      borderColor: { xs: 'var(--glass-border-light)', sm: 'var(--glass-border-hover)' },
+      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
     },
     '&:active': {
       transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
@@ -81,7 +81,7 @@ export default function ExperiencePage() {
         <Typography
           variant="h5"
           sx={{
-            color: '#4db8ff',
+            color: 'var(--accent)',
             fontWeight: 700,
             fontFamily: '"Poppins", sans-serif',
             fontSize: { xs: '1.15rem', sm: '1.3rem', md: '1.4rem' },
@@ -96,7 +96,7 @@ export default function ExperiencePage() {
         <Typography
           variant="subtitle2"
           sx={{
-            color: '#bbbbbb',
+            color: 'var(--text-muted)',
             fontStyle: 'italic',
             fontSize: { xs: '0.875rem', sm: '0.95rem', md: '1rem' },
             mb: { xs: 2, sm: 2.5, md: 3 },
@@ -114,7 +114,7 @@ export default function ExperiencePage() {
             listStyle: 'none',
             paddingLeft: 0,
             fontSize: { xs: '0.875rem', sm: '0.9rem', md: '0.95rem' },
-            color: '#d0d0d0',
+            color: 'var(--text-light)',
             lineHeight: { xs: 1.6, sm: 1.7, md: 1.8 },
             fontFamily: '"Poppins", sans-serif',
             textAlign: { xs: 'left', md: 'left' },
@@ -148,7 +148,7 @@ export default function ExperiencePage() {
           width: { xs: '110px', sm: '115px', md: '100px' },
           alignSelf: { xs: 'center', md: 'flex-start' },
           borderRadius: { xs: '10px', sm: '11px', md: '12px' },
-          border: '2px solid #4db8ff',
+          border: '2px solid var(--accent)',
           overflow: 'hidden',
           flexShrink: 0,
           mt: { xs: 0.5, md: 0 }
@@ -171,13 +171,13 @@ export default function ExperiencePage() {
     maxWidth: { xs: 'calc(100% - 10px)', sm: '800px' },
     ml: { xs: '-7px', sm: 'auto' },
     mr: { xs: '10px', sm: 'auto' },
-    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
-    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-    border: '1px solid rgba(255, 255, 255, 0.18)',
+    background: 'var(--glass-bg)',
+    backdropFilter: 'var(--backdrop-blur-light)',
+    WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+    border: '1px solid var(--glass-border-light)',
     borderRadius: { xs: '20px', sm: '24px', md: '28px' },
     marginTop: { xs: '20px', sm: '25px', md: '30px' },
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+    boxShadow: 'var(--glass-shadow)',
     px: { xs: 2.5, sm: 3.5, md: 4 },
     py: { xs: 3, sm: 3.5, md: 4 },
     transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -191,13 +191,13 @@ export default function ExperiencePage() {
       left: 0,
       right: 0,
       height: '1px',
-      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+      background: 'var(--glass-shine)',
       zIndex: 1
     },
     '&:hover': {
       transform: { xs: 'none', sm: 'translateY(-8px) scale(1.02)' },
-      borderColor: { xs: 'rgba(255, 255, 255, 0.18)', sm: 'rgba(77, 184, 255, 0.25)' },
-      boxShadow: { xs: '0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)', sm: '0 15px 50px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)' }
+      borderColor: { xs: 'var(--glass-border-light)', sm: 'var(--glass-border-hover)' },
+      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
     },
     '&:active': {
       transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
@@ -219,7 +219,7 @@ export default function ExperiencePage() {
         <Typography
           variant="h5"
           sx={{
-            color: '#4db8ff',
+            color: 'var(--accent)',
             fontWeight: 700,
             fontFamily: '"Poppins", sans-serif',
             fontSize: { xs: '1.15rem', sm: '1.3rem', md: '1.4rem' },
@@ -234,7 +234,7 @@ export default function ExperiencePage() {
         <Typography
           variant="subtitle2"
           sx={{
-            color: '#bbbbbb',
+            color: 'var(--text-muted)',
             fontStyle: 'italic',
             fontSize: { xs: '0.875rem', sm: '0.95rem', md: '1rem' },
             mb: { xs: 2, sm: 2.5, md: 3 },
@@ -252,7 +252,7 @@ export default function ExperiencePage() {
             listStyle: 'none',
             paddingLeft: 0,
             fontSize: { xs: '0.875rem', sm: '0.9rem', md: '0.95rem' },
-            color: '#d0d0d0',
+            color: 'var(--text-light)',
             lineHeight: { xs: 1.6, sm: 1.7, md: 1.8 },
             fontFamily: '"Poppins", sans-serif',
             textAlign: { xs: 'left', md: 'left' },
@@ -288,7 +288,7 @@ export default function ExperiencePage() {
           width: { xs: '110px', sm: '115px', md: '100px' },
           alignSelf: { xs: 'center', md: 'flex-start' },
           borderRadius: { xs: '10px', sm: '11px', md: '12px' },
-          border: '2px solid #4db8ff',
+          border: '2px solid var(--accent)',
           overflow: 'hidden',
           flexShrink: 0,
           mt: { xs: 0.5, md: 0 }

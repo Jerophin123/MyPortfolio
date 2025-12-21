@@ -106,12 +106,11 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
         position="fixed"
         elevation={0}
         sx={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.005) 100%)',
-          backdropFilter: 'blur(30px) saturate(200%) brightness(105%)',
-          WebkitBackdropFilter: 'blur(30px) saturate(200%) brightness(105%)',
-          boxShadow: 'none',
-          border: 'none',
+          background: 'transparent',
+          backdropFilter: 'var(--backdrop-blur-nav)',
+          WebkitBackdropFilter: 'var(--backdrop-blur-nav)',
           borderBottom: 'none',
+          boxShadow: 'none',
           zIndex: 1300,
           transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }}
@@ -168,20 +167,21 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
               height: { xs: 40, sm: 44, md: 48 },
               width: { xs: 40, sm: 44, md: 48 },
               objectFit: 'contain',
-              border: '1px solid rgba(77, 184, 255, 0.1)',
+              objectPosition: { xs: '45% center', sm: 'center', md: 'center' },
+              border: '1px solid var(--glass-border-hover)',
               borderRadius: '50%',
               padding: '6px',
-              background: 'rgba(77, 184, 255, 0.03)',
-              backdropFilter: 'blur(6px) saturate(110%)',
-              WebkitBackdropFilter: 'blur(6px) saturate(110%)',
-              boxShadow: '0 4px 12px rgba(77, 184, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              background: 'var(--glass-bg)',
+              backdropFilter: 'var(--backdrop-blur-light)',
+              WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+              boxShadow: 'var(--glass-shadow)',
               transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
               '&:hover': {
                 transform: 'scale(1.05)',
-                background: 'rgba(77, 184, 255, 0.08)',
-                boxShadow: '0 8px 20px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px) saturate(130%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(130%)'
+                background: 'var(--glass-bg-hover)',
+                boxShadow: 'var(--glass-shadow-hover)',
+                backdropFilter: 'var(--backdrop-blur-light)',
+                WebkitBackdropFilter: 'var(--backdrop-blur-light)'
               }
             }}
           />
@@ -192,26 +192,18 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
               fontFamily: '"Poppins", sans-serif',
               fontWeight: 700,
               fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' },
-              // Use CSS to handle mobile vs desktop, avoiding isMobile to prevent hydration mismatch
-              opacity: { 
-                xs: showText ? 1 : 0, 
-                md: 0 
-              },
+              display: { xs: 'none', md: 'block' },
               whiteSpace: 'nowrap',
-              transition: 'all 0.4s ease-in-out',
-              transform: { 
-                xs: showText ? 'translateX(10px)' : 'translateX(0)',
-                md: 'translateX(0)'
-              }
+              transition: 'all 0.4s ease-in-out'
             }}
           >
-            <Box component="span" sx={{ color: '#4db8ff' }}>
+            <Box component="span" sx={{ color: 'var(--accent)' }}>
               Jerophin D R
             </Box>{' '}
             <Box
               component="span"
               sx={{
-                background: 'linear-gradient(90deg, #4db8ff, #ffffff)',
+                background: 'linear-gradient(90deg, var(--accent), var(--text-secondary))',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 mx: 0.5 // margin to balance spacing
@@ -219,7 +211,7 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
             >
               |
             </Box>{' '}
-            <Box component="span" sx={{ color: '#ffffff' }}>
+            <Box component="span" sx={{ color: 'var(--text-secondary)' }}>
               Portfolio
             </Box>
           </Typography>
@@ -237,7 +229,7 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                 href={link.path}
                 sx={{
                   position: 'relative',
-                  color: 'rgba(255, 255, 255, 0.85)',
+                  color: 'var(--text-primary)',
                   fontFamily: '"Poppins", sans-serif',
                   fontWeight: 600,
                   fontSize: '0.95rem',
@@ -245,11 +237,11 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                   px: 2.5,
                   py: 1.2,
                   borderRadius: '20px',
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%)',
-                  backdropFilter: 'blur(12px) saturate(150%)',
-                  WebkitBackdropFilter: 'blur(12px) saturate(150%)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+                  background: 'var(--glass-bg)',
+                  backdropFilter: 'var(--backdrop-blur-light)',
+                  WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                  border: '1px solid var(--glass-border-light)',
+                  boxShadow: 'var(--glass-shadow)',
                   transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                   overflow: 'hidden',
                   display: 'flex',
@@ -262,19 +254,19 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                     left: 0,
                     right: 0,
                     height: '1px',
-                    background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%)',
+                    background: 'var(--glass-shine)',
                     zIndex: 1
                   },
                   '&:hover': {
-                    background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.12) 0%, rgba(77, 184, 255, 0.08) 100%)',
-                    color: '#4db8ff',
+                    background: 'var(--glass-bg-hover)',
+                    color: 'var(--accent)',
                     transform: 'translateY(-3px) scale(1.02)',
-                    boxShadow: '0 12px 32px rgba(77, 184, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-                    borderColor: 'rgba(77, 184, 255, 0.2)',
-                    backdropFilter: 'blur(16px) saturate(160%)',
-                    WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+                    boxShadow: 'var(--glass-shadow-hover)',
+                    borderColor: 'var(--glass-border-hover)',
+                    backdropFilter: 'var(--backdrop-blur-light)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur-light)',
                     '& svg': {
-                      color: '#4db8ff'
+                      color: 'var(--accent)'
                     }
                   },
                   '& svg': {
@@ -292,7 +284,7 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
             <Button
               onClick={handleMoreOpen}
               sx={{
-                color: 'rgba(255, 255, 255, 0.85)',
+                    color: 'var(--text-primary)',
                 fontFamily: '"Poppins", sans-serif',
                 fontWeight: 600,
                 fontSize: '0.95rem',
@@ -300,11 +292,11 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                 px: 2.5,
                 py: 1.2,
                 borderRadius: '20px',
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%)',
-                backdropFilter: 'blur(12px) saturate(150%)',
-                WebkitBackdropFilter: 'blur(12px) saturate(150%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--backdrop-blur-light)',
+                WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                border: '1px solid var(--glass-border-light)',
+                boxShadow: 'var(--glass-shadow)',
                 transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                 position: 'relative',
                 overflow: 'hidden',
@@ -318,19 +310,19 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                   left: 0,
                   right: 0,
                   height: '1px',
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%)',
+                  background: 'var(--glass-shine)',
                   zIndex: 1
                 },
                 '&:hover': {
-                  background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.12) 0%, rgba(77, 184, 255, 0.08) 100%)',
-                  color: '#4db8ff',
+                  background: 'var(--glass-bg-hover)',
+                  color: 'var(--accent)',
                   transform: 'translateY(-3px) scale(1.02)',
-                  boxShadow: '0 12px 32px rgba(77, 184, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-                  borderColor: 'rgba(77, 184, 255, 0.2)',
-                  backdropFilter: 'blur(16px) saturate(160%)',
-                  WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+                  boxShadow: 'var(--glass-shadow-hover)',
+                  borderColor: 'var(--glass-border-hover)',
+                  backdropFilter: 'var(--backdrop-blur-light)',
+                  WebkitBackdropFilter: 'var(--backdrop-blur-light)',
                   '& svg': {
-                    color: '#4db8ff'
+                    color: 'var(--accent)'
                   }
                 },
                 '& svg': {
@@ -362,12 +354,12 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                 paper: {
                   sx: {
                     mt: 1,
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'var(--backdrop-blur)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur)',
+                    border: '1px solid var(--glass-border)',
                     borderRadius: '20px',
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                    boxShadow: 'var(--glass-shadow)',
                     overflow: 'hidden'
                   }
                 }
@@ -380,7 +372,7 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                   href={link.path}
                   onClick={handleMoreClose}
                   sx={{
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: 'var(--text-primary)',
                     fontFamily: '"Poppins", sans-serif',
                     fontSize: '0.9rem',
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -392,15 +384,15 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
                     alignItems: 'center',
                     gap: 1.5,
                     '&:hover': {
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.1) 100%)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg-hover)',
+                      color: 'var(--accent)',
                       transform: 'translateX(4px)',
-                      backdropFilter: 'blur(12px) saturate(160%)',
-                      WebkitBackdropFilter: 'blur(12px) saturate(160%)',
-                      boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 8px rgba(77, 184, 255, 0.1)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      boxShadow: 'var(--glass-shadow-hover)',
                       borderRadius: '12px',
                       '& svg': {
-                        color: '#4db8ff'
+                        color: 'var(--accent)'
                       }
                     },
                     '& svg': {
@@ -424,7 +416,7 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
     disableElevation
     onClick={() => setDrawerOpen(prev => !prev)}
     sx={{
-      color: '#4db8ff',
+      color: 'var(--accent)',
       px: 2.5,
       py: 1.2,
       textTransform: 'none',
@@ -432,11 +424,11 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
       height: 48,
       minWidth: 48,
       borderRadius: '20px',
-      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.06) 0%, rgba(77, 184, 255, 0.03) 100%)',
-      backdropFilter: 'blur(12px) saturate(150%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(150%)',
-      border: '1px solid rgba(77, 184, 255, 0.15)',
-      boxShadow: '0 4px 16px rgba(77, 184, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+      background: 'var(--glass-bg)',
+      backdropFilter: 'var(--backdrop-blur-light)',
+      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+      border: '1px solid var(--glass-border-hover)',
+      boxShadow: 'var(--glass-shadow)',
       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
       position: 'relative',
       overflow: 'hidden',
@@ -447,16 +439,16 @@ const Appbar = ({ handleClick, showText, setDrawerOpen, drawerOpen }) => {
         left: 0,
         right: 0,
         height: '1px',
-        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
+                  background: 'var(--glass-shine)',
         zIndex: 1
       },
       '&:hover': {
-        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.12) 0%, rgba(77, 184, 255, 0.08) 100%)',
+        background: 'var(--glass-bg-hover)',
         transform: 'translateY(-3px) scale(1.02)',
-        boxShadow: '0 12px 32px rgba(77, 184, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
-        borderColor: 'rgba(77, 184, 255, 0.25)',
-        backdropFilter: 'blur(16px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(16px) saturate(160%)'
+        boxShadow: 'var(--glass-shadow-hover)',
+        borderColor: 'var(--glass-border-hover)',
+        backdropFilter: 'var(--backdrop-blur-light)',
+        WebkitBackdropFilter: 'var(--backdrop-blur-light)'
       }
     }}
   >

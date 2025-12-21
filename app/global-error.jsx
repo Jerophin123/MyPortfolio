@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Typography, Button, Box } from '@mui/material';
-import Link from 'next/link';
 
 export default function GlobalError({ error, reset }) {
   useEffect(() => {
@@ -18,7 +17,7 @@ export default function GlobalError({ error, reset }) {
           margin: 0,
           padding: 0,
           minHeight: '100vh',
-          background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1629 100%)',
+          background: 'var(--bg-primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -40,12 +39,12 @@ export default function GlobalError({ error, reset }) {
           >
             <Box
               sx={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--backdrop-blur)',
+                WebkitBackdropFilter: 'var(--backdrop-blur)',
+                border: '1px solid var(--glass-border)',
                 borderRadius: '32px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                boxShadow: 'var(--glass-shadow)',
                 position: 'relative',
                 overflow: 'hidden',
                 p: { xs: 4, sm: 5, md: 6 },
@@ -57,7 +56,7 @@ export default function GlobalError({ error, reset }) {
                   left: 0,
                   right: 0,
                   height: '1px',
-                  background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                  background: 'var(--glass-shine)',
                   zIndex: 1
                 }
               }}
@@ -67,13 +66,13 @@ export default function GlobalError({ error, reset }) {
                 initial={{ scale: 0.8, opacity: 0, rotate: -180 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                style={{ display: 'flex', justifyContent: 'center', mb: 3 }}
+                style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}
               >
                 <Box
                   sx={{
                     width: { xs: '100px', sm: '120px' },
                     height: { xs: '100px', sm: '120px' },
-                    color: 'rgba(255, 87, 87, 0.9)',
+                    color: 'var(--accent)',
                     opacity: 0.9
                   }}
                 >
@@ -94,7 +93,7 @@ export default function GlobalError({ error, reset }) {
                   sx={{
                     fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
                     fontWeight: 700,
-                    color: 'rgba(255, 255, 255, 0.95)',
+                    color: 'var(--text-primary)',
                     fontFamily: '"Poppins", sans-serif',
                     mb: 2
                   }}
@@ -105,7 +104,7 @@ export default function GlobalError({ error, reset }) {
                   variant="body1"
                   sx={{
                     fontSize: { xs: '0.95rem', sm: '1.1rem' },
-                    color: 'rgba(255, 255, 255, 0.75)',
+                    color: 'var(--text-secondary)',
                     fontFamily: '"Poppins", sans-serif',
                     mb: 3,
                     lineHeight: 1.6
@@ -116,8 +115,8 @@ export default function GlobalError({ error, reset }) {
                 {error?.message && (
                   <Box
                     sx={{
-                      background: 'rgba(255, 87, 87, 0.1)',
-                      border: '1px solid rgba(255, 87, 87, 0.2)',
+                      background: 'var(--glass-bg)',
+                      border: '1px solid var(--glass-border)',
                       borderRadius: '16px',
                       p: 2,
                       mb: 3,
@@ -128,7 +127,7 @@ export default function GlobalError({ error, reset }) {
                       variant="body2"
                       sx={{
                         fontSize: { xs: '0.85rem', sm: '0.9rem' },
-                        color: 'rgba(255, 87, 87, 0.9)',
+                        color: 'var(--accent)',
                         fontFamily: '"Poppins", sans-serif',
                         wordBreak: 'break-word'
                       }}
@@ -149,19 +148,19 @@ export default function GlobalError({ error, reset }) {
                 <Button
                   onClick={reset}
                   sx={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
-                    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                    border: '1px solid rgba(255, 255, 255, 0.18)',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'var(--backdrop-blur-light)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                    border: '1px solid var(--glass-border)',
                     borderRadius: '24px',
                     px: { xs: 3, sm: 4 },
                     py: { xs: 1.2, sm: 1.5 },
-                    color: 'rgba(255, 255, 255, 0.9)',
+                    color: 'var(--text-primary)',
                     fontFamily: '"Poppins", sans-serif',
                     fontWeight: 600,
                     fontSize: { xs: '0.9rem', sm: '1rem' },
                     textTransform: 'none',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+                    boxShadow: 'var(--glass-shadow)',
                     position: 'relative',
                     overflow: 'hidden',
                     transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -172,15 +171,15 @@ export default function GlobalError({ error, reset }) {
                       left: 0,
                       right: 0,
                       height: '1px',
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      background: 'var(--glass-shine)',
                       zIndex: 1
                     },
                     '&:hover': {
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.14) 100%)',
+                      background: 'var(--glass-bg-hover)',
                       transform: 'translateY(-3px) scale(1.02)',
-                      boxShadow: '0 15px 40px rgba(77, 184, 255, 0.2), 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                      borderColor: 'rgba(77, 184, 255, 0.25)',
-                      color: '#4db8ff'
+                      boxShadow: 'var(--glass-shadow-hover)',
+                      borderColor: 'var(--glass-border-hover)',
+                      color: 'var(--accent)'
                     },
                     '&:active': {
                       transform: 'translateY(-1px) scale(0.98)'
@@ -192,19 +191,19 @@ export default function GlobalError({ error, reset }) {
                 <Button
                   onClick={() => window.location.href = '/'}
                   sx={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.07) 100%)',
-                    backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                    WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'var(--backdrop-blur-light)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                    border: '1px solid var(--glass-border)',
                     borderRadius: '24px',
                     px: { xs: 3, sm: 4 },
                     py: { xs: 1.2, sm: 1.5 },
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    color: 'var(--text-secondary)',
                     fontFamily: '"Poppins", sans-serif',
                     fontWeight: 600,
                     fontSize: { xs: '0.9rem', sm: '1rem' },
                     textTransform: 'none',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                    boxShadow: 'var(--glass-shadow)',
                     position: 'relative',
                     overflow: 'hidden',
                     transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -215,15 +214,15 @@ export default function GlobalError({ error, reset }) {
                       left: 0,
                       right: 0,
                       height: '1px',
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
+                      background: 'var(--glass-shine)',
                       zIndex: 1
                     },
                     '&:hover': {
-                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
+                      background: 'var(--glass-bg-hover)',
                       transform: 'translateY(-3px) scale(1.02)',
-                      boxShadow: '0 15px 40px rgba(0, 0, 0, 0.15), 0 2px 0 rgba(255, 255, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.28)',
-                      borderColor: 'rgba(255, 255, 255, 0.2)',
-                      color: 'rgba(255, 255, 255, 0.95)'
+                      boxShadow: 'var(--glass-shadow-hover)',
+                      borderColor: 'var(--glass-border-hover)',
+                      color: 'var(--accent)'
                     },
                     '&:active': {
                       transform: 'translateY(-1px) scale(0.98)'

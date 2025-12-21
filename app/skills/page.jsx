@@ -17,7 +17,7 @@ export default function SkillsPage() {
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2))',
+            background: 'var(--overlay)',
             zIndex: 1
           }}
         />
@@ -108,13 +108,13 @@ export default function SkillsPage() {
                 <Card
                   sx={{
                     height: '100%',
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                    backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                    WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'var(--backdrop-blur)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur)',
+                    border: '1px solid var(--glass-border)',
                     marginTop: { xs: '10px', sm: '15px', md: '20px' },
                     borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                    boxShadow: 'var(--glass-shadow)',
                     transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                     position: 'relative',
                     overflow: 'hidden',
@@ -128,14 +128,14 @@ export default function SkillsPage() {
                       left: 0,
                       right: 0,
                       height: '1px',
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      background: 'var(--glass-shine)',
                       zIndex: 1
                     },
                     '&:hover': {
                       transform: { xs: 'none', sm: 'translateY(-12px) scale(1.03)' },
-                      boxShadow: { xs: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)', sm: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)' },
-                      borderColor: { xs: 'rgba(255, 255, 255, 0.15)', sm: 'rgba(77, 184, 255, 0.3)' },
-                      background: { xs: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)', sm: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)' }
+                      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
+                      borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' },
+                      background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' }
                     }
                   }}
                 >
@@ -158,7 +158,7 @@ export default function SkillsPage() {
                     <Typography
                       variant="h6"
                       sx={{
-                        color: '#4db8ff',
+                        color: 'var(--accent)',
                         fontFamily: '"Poppins", sans-serif',
                         fontSize: { xs: '1rem', sm: '1.1rem', md: '1.15rem' },
                         fontWeight: 700,
@@ -201,12 +201,12 @@ export default function SkillsPage() {
                             sx={{
                               px: { xs: 1.25, sm: 1.5, md: 2 },
                               py: { xs: 0.5, sm: 0.75, md: 1 },
-                              background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                              backdropFilter: 'blur(20px) saturate(180%) brightness(110%) contrast(120%)',
-                              WebkitBackdropFilter: 'blur(20px) saturate(180%) brightness(110%) contrast(120%)',
-                              border: '1px solid rgba(77, 184, 255, 0.2)',
+                              background: 'var(--glass-bg)',
+                              backdropFilter: 'var(--backdrop-blur-light)',
+                              WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                              border: '1px solid var(--glass-border-hover)',
                               borderRadius: { xs: '16px', sm: '18px', md: '20px' },
-                              boxShadow: '0 4px 16px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05)',
+                              boxShadow: 'var(--glass-shadow)',
                               transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                               position: 'relative',
                               overflow: 'hidden',
@@ -219,14 +219,14 @@ export default function SkillsPage() {
                                 left: 0,
                                 right: 0,
                                 height: '1px',
-                                background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
+                                background: 'var(--glass-shine)',
                                 zIndex: 1
                               },
                               '&:hover': {
                                 transform: { xs: 'none', sm: 'translateY(-2px) scale(1.05)' },
-                                background: { xs: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)', sm: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)' },
-                                borderColor: { xs: 'rgba(77, 184, 255, 0.2)', sm: 'rgba(77, 184, 255, 0.35)' },
-                                boxShadow: { xs: '0 4px 16px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05)', sm: '0 6px 20px rgba(77, 184, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1)' }
+                                background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' },
+                                borderColor: { xs: 'var(--glass-border-hover)', sm: 'var(--glass-border-hover)' },
+                                boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
                               },
                               '&:active': {
                                 transform: { xs: 'scale(0.98)', sm: 'translateY(-1px) scale(1.03)' }
@@ -235,7 +235,7 @@ export default function SkillsPage() {
                           >
                             <Typography
                               sx={{
-                                color: '#4db8ff',
+                                color: 'var(--accent)',
                                 fontFamily: '"Poppins", sans-serif',
                                 fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.85rem' },
                                 fontWeight: 500,

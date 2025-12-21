@@ -162,12 +162,12 @@ export default function Home() {
                     fontWeight: 900,
                     lineHeight: { xs: 1.2, sm: 1.1 },
                     letterSpacing: { xs: '-0.02em', sm: '-0.03em' },
-                    background: 'linear-gradient(135deg, #ffffff 0%, #4db8ff 50%, #ffffff 100%)',
+                    background: 'var(--hero-text-gradient-1)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    textShadow: '0 4px 20px rgba(77, 184, 255, 0.4)',
-                    filter: 'drop-shadow(0 2px 10px rgba(77, 184, 255, 0.3))',
+                    textShadow: 'var(--text-glow-primary)',
+                    filter: 'drop-shadow(var(--text-shadow-accent))',
                     mb: { xs: 0.5, sm: 1 },
                     px: { xs: 1, sm: 0 }
                   }}
@@ -224,12 +224,12 @@ export default function Home() {
                           fontWeight: 900,
                           lineHeight: { xs: 1.3, sm: 1.2, md: 1.1 },
                           letterSpacing: { xs: '-0.02em', sm: '-0.03em' },
-                          background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                          background: 'var(--hero-text-gradient-2)',
                           backgroundClip: 'text',
                           WebkitBackgroundClip: 'text',
                           WebkitTextFillColor: 'transparent',
-                          textShadow: '0 4px 20px rgba(77, 184, 255, 0.5)',
-                          filter: 'drop-shadow(0 4px 12px rgba(77, 184, 255, 0.4))',
+                          textShadow: 'var(--text-glow-primary)',
+                          filter: 'drop-shadow(var(--text-shadow-accent))',
                           px: { xs: 1, sm: 0 },
                           pb: { xs: 0.25, sm: 0.25, md: 0.25 },
                           display: 'block'
@@ -250,7 +250,7 @@ export default function Home() {
                 <Typography
                   variant="h6"
                   sx={{
-                    color: 'rgba(255, 255, 255, 0.75)',
+                    color: 'var(--text-secondary)',
                     fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.4rem' },
                     maxWidth: '800px',
                     mx: 'auto',
@@ -290,17 +290,17 @@ export default function Home() {
                       fontFamily: '"Poppins", sans-serif',
                       fontSize: { xs: '0.9rem', sm: '1rem' },
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
                       textTransform: 'uppercase',
                       fontWeight: 700,
                       letterSpacing: '0.05em',
                       minWidth: { xs: '100%', sm: 200 },
                       width: { xs: '100%', sm: 'auto' },
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
@@ -311,14 +311,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -338,16 +338,16 @@ export default function Home() {
                       fontFamily: '"Poppins", sans-serif',
                       fontSize: { xs: '0.9rem', sm: '1rem' },
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.1) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(255, 255, 255, 0.18)',
-                      color: 'rgba(255, 255, 255, 0.95)',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-light)',
+                      color: 'var(--text-primary)',
                       fontWeight: 700,
                       letterSpacing: '0.05em',
                       minWidth: { xs: '100%', sm: 200 },
                       width: { xs: '100%', sm: 'auto' },
-                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                        boxShadow: 'var(--glass-shadow)',
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
@@ -358,15 +358,15 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.15) 100%)',
-                        borderColor: 'rgba(77, 184, 255, 0.3)',
-                        color: '#4db8ff',
+                        background: 'var(--glass-bg-hover)',
+                        borderColor: 'var(--glass-border-hover)',
+                        color: 'var(--accent)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)'
+                        boxShadow: 'var(--glass-shadow-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -413,7 +413,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -429,12 +429,12 @@ export default function Home() {
                   <motion.div variants={cardVariants} style={{ width: '100%', display: 'flex' }}>
                     <Card
                       sx={{
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                        backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                        WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        background: 'var(--glass-bg)',
+                        backdropFilter: 'var(--backdrop-blur)',
+                        WebkitBackdropFilter: 'var(--backdrop-blur)',
+                        border: '1px solid var(--glass-border)',
                         borderRadius: { xs: '24px', sm: '28px', md: '32px' },
-                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                        boxShadow: 'var(--glass-shadow)',
                         p: { xs: 3, sm: 4, md: 5 },
                         transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         height: '100%',
@@ -453,14 +453,14 @@ export default function Home() {
                           left: 0,
                           right: 0,
                           height: '1px',
-                          background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                          background: 'var(--glass-shine)',
                           zIndex: 1
                         },
                         '&:hover': {
                           transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                          borderColor: 'rgba(77, 184, 255, 0.25)',
-                          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                          borderColor: 'var(--glass-border-hover)',
+                          boxShadow: 'var(--glass-shadow-hover)',
+                          background: 'var(--glass-bg-hover)'
                         },
                         '&:active': {
                           transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -470,14 +470,14 @@ export default function Home() {
                       <Typography
                         variant="body1"
                         sx={{
-                          color: 'rgba(255, 255, 255, 0.8)',
+                          color: 'var(--text-secondary)',
                           fontSize: { xs: '1rem', md: '1.1rem' },
                           lineHeight: 1.8,
                           mb: 3
                         }}
                       >
-                        I'm a dedicated <strong style={{ color: '#4db8ff' }}>Full Stack Developer</strong> and{' '}
-                        <strong style={{ color: '#4db8ff' }}>UI/UX Designer</strong> with a focus on building scalable,
+                        I'm a dedicated                         <strong style={{ color: 'var(--accent)' }}>Full Stack Developer</strong> and{' '}
+                        <strong style={{ color: 'var(--accent)' }}>UI/UX Designer</strong> with a focus on building scalable,
                         responsive web applications. I specialize in modern frameworks like React and FastAPI, and I turn
                         high-fidelity designs from tools like Figma into clean, accessible user interfaces.
                         My work blends engineering precision with intuitive design thinking.
@@ -485,13 +485,13 @@ export default function Home() {
                       <Typography
                         variant="body2"
                         sx={{
-                          color: 'rgba(255, 255, 255, 0.7)',
+                          color: 'var(--text-tertiary)',
                           fontSize: { xs: '0.95rem', md: '1rem' },
                           lineHeight: 1.8,
                           mb: 3
                         }}
                       >
-                        Proficient in <span style={{ color: '#4db8ff' }}>React.js, Next.js, FastAPI, Express.js, Python, Java, SQL, JavaScript</span> and many more, 
+                        Proficient in <span style={{ color: 'var(--accent)' }}>React.js, Next.js, FastAPI, Express.js, Python, Java, SQL, JavaScript</span> and many more, 
                         I apply strong backend and frontend skills to bridge the gap between design and engineering. 
                         I actively participate in hackathons, enjoy building practical, real-world solutions, and am open to
                         relocation for the right opportunity.
@@ -501,16 +501,16 @@ export default function Home() {
                           px: { xs: 1.5, sm: 2 }, 
                           py: { xs: 0.75, sm: 1 }, 
                           borderRadius: { xs: '12px', sm: '16px' },
-                          background: 'rgba(77, 184, 255, 0.1)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
+                          background: 'var(--glass-bg)',
+                          border: '1px solid var(--glass-border-hover)',
                           display: 'flex',
                           alignItems: 'center',
                           gap: 0.75
                         }}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#4db8ff"/>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: 'var(--accent)' }}>
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
                           </svg>
-                          <Typography sx={{ color: '#4db8ff', fontSize: { xs: '0.85rem', sm: '0.9rem' }, fontWeight: 600 }}>
+                          <Typography sx={{ color: 'var(--accent)', fontSize: { xs: '0.85rem', sm: '0.9rem' }, fontWeight: 600 }}>
                             Chennai, India
                           </Typography>
                         </Box>
@@ -518,16 +518,16 @@ export default function Home() {
                           px: { xs: 1.5, sm: 2 }, 
                           py: { xs: 0.75, sm: 1 }, 
                           borderRadius: { xs: '12px', sm: '16px' },
-                          background: 'rgba(77, 184, 255, 0.1)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
+                          background: 'var(--glass-bg)',
+                          border: '1px solid var(--glass-border-hover)',
                           display: 'flex',
                           alignItems: 'center',
                           gap: 0.75
                         }}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="#4db8ff"/>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: 'var(--accent)' }}>
+                            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" fill="currentColor"/>
                           </svg>
-                          <Typography sx={{ color: '#4db8ff', fontSize: { xs: '0.85rem', sm: '0.9rem' }, fontWeight: 600 }}>
+                          <Typography sx={{ color: 'var(--accent)', fontSize: { xs: '0.85rem', sm: '0.9rem' }, fontWeight: 600 }}>
                             BE Computer Science (CGPA: 8.4)
                           </Typography>
                         </Box>
@@ -537,11 +537,11 @@ export default function Home() {
                         href="/about"
                         sx={{
                           borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                          background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                          backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
-                          color: '#4db8ff',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur-light)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                          border: '1px solid var(--glass-border-hover)',
+                          color: 'var(--accent)',
                           fontWeight: 600,
                           px: { xs: 3, sm: 4 },
                           py: { xs: 1.25, sm: 1.5 },
@@ -549,7 +549,7 @@ export default function Home() {
                           transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                           position: 'relative',
                           overflow: 'hidden',
-                          boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                          boxShadow: 'var(--glass-shadow)',
                           '&::before': {
                             content: '""',
                             position: 'absolute',
@@ -557,14 +557,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
-                            background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                            background: 'var(--glass-bg-hover)',
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                            boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                            borderColor: 'rgba(77, 184, 255, 0.35)'
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            borderColor: 'var(--glass-border-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -580,12 +580,12 @@ export default function Home() {
                   <motion.div variants={cardVariants} style={{ width: '100%', display: 'flex' }}>
                     <Card
                       sx={{
-                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                        backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                        WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        background: 'var(--glass-bg)',
+                        backdropFilter: 'var(--backdrop-blur)',
+                        WebkitBackdropFilter: 'var(--backdrop-blur)',
+                        border: '1px solid var(--glass-border)',
                         borderRadius: { xs: '24px', sm: '28px', md: '32px' },
-                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                        boxShadow: 'var(--glass-shadow)',
                         p: { xs: 3, sm: 4, md: 5 },
                         transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                         height: '100%',
@@ -604,14 +604,14 @@ export default function Home() {
                           left: 0,
                           right: 0,
                           height: '1px',
-                          background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                          background: 'var(--glass-shine)',
                           zIndex: 1
                         },
                         '&:hover': {
                           transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                          borderColor: 'rgba(77, 184, 255, 0.25)',
-                          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                          borderColor: 'var(--glass-border-hover)',
+                          boxShadow: 'var(--glass-shadow-hover)',
+                          background: 'var(--glass-bg-hover)'
                         },
                         '&:active': {
                           transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -621,7 +621,7 @@ export default function Home() {
                       <Typography
                         variant="h6"
                         sx={{
-                          color: '#4db8ff',
+                          color: 'var(--accent)',
                           fontWeight: 700,
                           mb: { xs: 2, sm: 3, md: 4 },
                           textAlign: { xs: 'center', md: 'left' },
@@ -634,76 +634,76 @@ export default function Home() {
                         <Box sx={{ 
                           p: { xs: 2, sm: 2.5, md: 3 },
                           borderRadius: { xs: '16px', sm: '20px', md: '24px' },
-                          background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.1) 0%, rgba(77, 184, 255, 0.05) 50%, rgba(77, 184, 255, 0.08) 100%)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
+                          background: 'var(--glass-bg)',
+                          border: '1px solid var(--glass-border-hover)',
                           transition: 'all 0.3s ease',
                           '&:hover': {
                             transform: 'translateY(-2px)',
-                            borderColor: 'rgba(77, 184, 255, 0.3)',
-                            background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            background: 'var(--glass-bg-hover)'
                           }
                         }}>
-                          <Typography sx={{ color: '#4db8ff', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
+                          <Typography sx={{ color: 'var(--accent)', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
                             13+
                           </Typography>
-                          <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
+                          <Typography sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
                             Projects Completed
                           </Typography>
                         </Box>
                         <Box sx={{ 
                           p: { xs: 2, sm: 2.5, md: 3 },
                           borderRadius: { xs: '16px', sm: '20px', md: '24px' },
-                          background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.1) 0%, rgba(77, 184, 255, 0.05) 50%, rgba(77, 184, 255, 0.08) 100%)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
+                          background: 'var(--glass-bg)',
+                          border: '1px solid var(--glass-border-hover)',
                           transition: 'all 0.3s ease',
                           '&:hover': {
                             transform: 'translateY(-2px)',
-                            borderColor: 'rgba(77, 184, 255, 0.3)',
-                            background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            background: 'var(--glass-bg-hover)'
                           }
                         }}>
-                          <Typography sx={{ color: '#4db8ff', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
+                          <Typography sx={{ color: 'var(--accent)', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
                             12+
                           </Typography>
-                          <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
+                          <Typography sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
                             Certifications
                           </Typography>
                         </Box>
                         <Box sx={{ 
                           p: { xs: 2, sm: 2.5, md: 3 },
                           borderRadius: { xs: '16px', sm: '20px', md: '24px' },
-                          background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.1) 0%, rgba(77, 184, 255, 0.05) 50%, rgba(77, 184, 255, 0.08) 100%)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
+                          background: 'var(--glass-bg)',
+                          border: '1px solid var(--glass-border-hover)',
                           transition: 'all 0.3s ease',
                           '&:hover': {
                             transform: 'translateY(-2px)',
-                            borderColor: 'rgba(77, 184, 255, 0.3)',
-                            background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            background: 'var(--glass-bg-hover)'
                           }
                         }}>
-                          <Typography sx={{ color: '#4db8ff', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
+                          <Typography sx={{ color: 'var(--accent)', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
                             8+
                           </Typography>
-                          <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
+                          <Typography sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
                             Achievements
                           </Typography>
                         </Box>
                         <Box sx={{ 
                           p: { xs: 2, sm: 2.5, md: 3 },
                           borderRadius: { xs: '16px', sm: '20px', md: '24px' },
-                          background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.1) 0%, rgba(77, 184, 255, 0.05) 50%, rgba(77, 184, 255, 0.08) 100%)',
-                          border: '1px solid rgba(77, 184, 255, 0.2)',
+                          background: 'var(--glass-bg)',
+                          border: '1px solid var(--glass-border-hover)',
                           transition: 'all 0.3s ease',
                           '&:hover': {
                             transform: 'translateY(-2px)',
-                            borderColor: 'rgba(77, 184, 255, 0.3)',
-                            background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            background: 'var(--glass-bg-hover)'
                           }
                         }}>
-                          <Typography sx={{ color: '#4db8ff', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
+                          <Typography sx={{ color: 'var(--accent)', fontWeight: 700, fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, mb: 0.5, lineHeight: 1 }}>
                             2
                           </Typography>
-                          <Typography sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
+                          <Typography sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.9rem', sm: '1rem' }, fontWeight: 500 }}>
                             Years Experience
                           </Typography>
                         </Box>
@@ -732,7 +732,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -787,12 +787,12 @@ export default function Home() {
                     >
                       <Card
                         sx={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                          backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur)',
+                          border: '1px solid var(--glass-border)',
                           borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                          boxShadow: 'var(--glass-shadow)',
                           p: { xs: 2.5, sm: 3 },
                           textAlign: 'center',
                           height: '100%',
@@ -809,14 +809,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                            borderColor: 'rgba(77, 184, 255, 0.25)',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            background: 'var(--glass-bg-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -825,7 +825,7 @@ export default function Home() {
                       >
                         <Typography
                           sx={{
-                            color: '#4db8ff',
+                            color: 'var(--accent)',
                             fontWeight: 700,
                             fontSize: { xs: '1rem', sm: '1.1rem' },
                             mb: { xs: 2, sm: 2.5 }
@@ -851,12 +851,12 @@ export default function Home() {
                                 sx={{
                                   px: { xs: 1.25, sm: 1.5, md: 2 },
                                   py: { xs: 0.5, sm: 0.75, md: 1 },
-                                  background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                                  backdropFilter: 'blur(20px) saturate(180%) brightness(110%) contrast(120%)',
-                                  WebkitBackdropFilter: 'blur(20px) saturate(180%) brightness(110%) contrast(120%)',
-                                  border: '1px solid rgba(77, 184, 255, 0.2)',
+                                  background: 'var(--glass-bg)',
+                                  backdropFilter: 'var(--backdrop-blur-light)',
+                                  WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                                  border: '1px solid var(--glass-border-hover)',
                                   borderRadius: { xs: '16px', sm: '18px', md: '20px' },
-                                  boxShadow: '0 4px 16px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05)',
+                                  boxShadow: 'var(--glass-shadow)',
                                   transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                                   position: 'relative',
                                   overflow: 'hidden',
@@ -869,14 +869,14 @@ export default function Home() {
                                     left: 0,
                                     right: 0,
                                     height: '1px',
-                                    background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
+                                    background: 'var(--glass-shine)',
                                     zIndex: 1
                                   },
                                   '&:hover': {
                                     transform: { xs: 'none', sm: 'translateY(-2px) scale(1.05)' },
-                                    background: { xs: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)', sm: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)' },
-                                    borderColor: { xs: 'rgba(77, 184, 255, 0.2)', sm: 'rgba(77, 184, 255, 0.35)' },
-                                    boxShadow: { xs: '0 4px 16px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05)', sm: '0 6px 20px rgba(77, 184, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1)' }
+                                    background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' },
+                                    borderColor: { xs: 'var(--glass-border-hover)', sm: 'var(--glass-border-hover)' },
+                                    boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
                                   },
                                   '&:active': {
                                     transform: { xs: 'scale(0.98)', sm: 'translateY(-1px) scale(1.03)' }
@@ -885,7 +885,7 @@ export default function Home() {
                               >
                                 <Typography
                                   sx={{
-                                    color: '#4db8ff',
+                                    color: 'var(--accent)',
                                     fontFamily: '"Poppins", sans-serif',
                                     fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.85rem' },
                                     fontWeight: 500,
@@ -917,11 +917,11 @@ export default function Home() {
                     href="/skills"
                     sx={{
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
                       fontWeight: 600,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1.25, sm: 1.5 },
@@ -929,7 +929,7 @@ export default function Home() {
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -937,14 +937,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -975,7 +975,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -1020,12 +1020,12 @@ export default function Home() {
                     >
                       <Card
                         sx={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                          backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur)',
+                          border: '1px solid var(--glass-border)',
                           borderRadius: { xs: '24px', sm: '28px', md: '32px' },
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                          boxShadow: 'var(--glass-shadow)',
                           p: { xs: 3, sm: 4, md: 6 },
                           height: '100%',
                           width: '100%',
@@ -1040,14 +1040,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                            borderColor: 'rgba(77, 184, 255, 0.25)',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            background: 'var(--glass-bg-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -1057,7 +1057,7 @@ export default function Home() {
                         <Typography
                           variant="h5"
                           sx={{
-                            color: '#4db8ff',
+                            color: 'var(--accent)',
                             fontWeight: 700,
                             fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' },
                             mb: { xs: 0.75, sm: 1 }
@@ -1067,7 +1067,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: '#ffffff',
+                            color: 'var(--text-primary)',
                             fontWeight: 600,
                             fontSize: { xs: '1rem', sm: '1.1rem' },
                             mb: { xs: 0.5, sm: 0.5 }
@@ -1077,7 +1077,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(255, 255, 255, 0.6)',
+                            color: 'var(--text-tertiary)',
                             fontSize: { xs: '0.85rem', sm: '0.9rem' },
                             mb: { xs: 2, sm: 3 }
                           }}
@@ -1090,7 +1090,7 @@ export default function Home() {
                               key={i}
                               component="li"
                               sx={{
-                                color: 'rgba(255, 255, 255, 0.8)',
+                                color: 'var(--text-secondary)',
                                 fontSize: { xs: '0.9rem', sm: '0.95rem' },
                                 lineHeight: { xs: 1.6, sm: 1.8 },
                                 mb: { xs: 0.75, sm: 1 }
@@ -1115,11 +1115,11 @@ export default function Home() {
                     href="/experience"
                     sx={{
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
                       fontWeight: 600,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1.25, sm: 1.5 },
@@ -1127,7 +1127,7 @@ export default function Home() {
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -1135,14 +1135,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -1173,7 +1173,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -1226,12 +1226,12 @@ export default function Home() {
                     >
                       <Card
                         sx={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                          backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur)',
+                          border: '1px solid var(--glass-border)',
                           borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                          boxShadow: 'var(--glass-shadow)',
                           p: { xs: 2.5, sm: 3 },
                           height: '100%',
                           width: '100%',
@@ -1246,14 +1246,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                            borderColor: 'rgba(77, 184, 255, 0.25)',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            background: 'var(--glass-bg-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -1262,7 +1262,7 @@ export default function Home() {
                       >
                         <Typography
                           sx={{
-                            color: '#4db8ff',
+                            color: 'var(--accent)',
                             fontWeight: 700,
                             fontSize: { xs: '1rem', sm: '1.1rem' },
                             mb: { xs: 1, sm: 1.5 }
@@ -1272,7 +1272,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
+                            color: 'var(--text-secondary)',
                             fontSize: { xs: '0.9rem', sm: '0.95rem' },
                             lineHeight: { xs: 1.6, sm: 1.7 },
                             mb: { xs: 1.5, sm: 2 }
@@ -1282,7 +1282,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(77, 184, 255, 0.7)',
+                            color: 'var(--text-accent)',
                             fontSize: { xs: '0.8rem', sm: '0.85rem' },
                             fontStyle: 'italic'
                           }}
@@ -1304,11 +1304,11 @@ export default function Home() {
                     href="/projects"
                     sx={{
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
                       fontWeight: 600,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1.25, sm: 1.5 },
@@ -1316,7 +1316,7 @@ export default function Home() {
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -1324,14 +1324,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -1362,7 +1362,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -1415,12 +1415,12 @@ export default function Home() {
                     >
                       <Card
                         sx={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                          backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur)',
+                          border: '1px solid var(--glass-border)',
                           borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                          boxShadow: 'var(--glass-shadow)',
                           p: { xs: 2.5, sm: 3 },
                           height: '100%',
                           width: '100%',
@@ -1435,14 +1435,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                            borderColor: 'rgba(77, 184, 255, 0.25)',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            background: 'var(--glass-bg-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -1451,7 +1451,7 @@ export default function Home() {
                       >
                         <Typography
                           sx={{
-                            color: '#4db8ff',
+                            color: 'var(--accent)',
                             fontWeight: 700,
                             fontSize: { xs: '1rem', sm: '1.1rem' },
                             mb: { xs: 0.5, sm: 0.5 }
@@ -1461,7 +1461,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(255, 255, 255, 0.6)',
+                            color: 'var(--text-tertiary)',
                             fontSize: { xs: '0.8rem', sm: '0.85rem' },
                             mb: { xs: 1, sm: 1.5 }
                           }}
@@ -1470,7 +1470,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
+                            color: 'var(--text-secondary)',
                             fontSize: { xs: '0.85rem', sm: '0.9rem' },
                             lineHeight: { xs: 1.5, sm: 1.6 }
                           }}
@@ -1492,11 +1492,11 @@ export default function Home() {
                     href="/certifications"
                     sx={{
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
                       fontWeight: 600,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1.25, sm: 1.5 },
@@ -1504,7 +1504,7 @@ export default function Home() {
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -1512,14 +1512,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -1550,7 +1550,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -1593,12 +1593,12 @@ export default function Home() {
                     >
                       <Card
                         sx={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                          backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur)',
+                          border: '1px solid var(--glass-border)',
                           borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                          boxShadow: 'var(--glass-shadow)',
                           p: { xs: 2.5, sm: 3 },
                           height: '100%',
                           width: '100%',
@@ -1613,14 +1613,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                            borderColor: 'rgba(77, 184, 255, 0.25)',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            background: 'var(--glass-bg-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -1629,7 +1629,7 @@ export default function Home() {
                       >
                         <Typography
                           sx={{
-                            color: 'rgba(77, 184, 255, 0.6)',
+                            color: 'var(--text-accent)',
                             fontSize: { xs: '0.7rem', sm: '0.75rem' },
                             fontWeight: 600,
                             textTransform: 'uppercase',
@@ -1641,7 +1641,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: '#4db8ff',
+                            color: 'var(--accent)',
                             fontWeight: 700,
                             fontSize: { xs: '0.95rem', sm: '1rem' },
                             mb: { xs: 1, sm: 1.5 },
@@ -1652,7 +1652,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(255, 255, 255, 0.8)',
+                            color: 'var(--text-secondary)',
                             fontSize: { xs: '0.85rem', sm: '0.9rem' },
                             lineHeight: { xs: 1.5, sm: 1.6 }
                           }}
@@ -1674,11 +1674,11 @@ export default function Home() {
                     href="/achievements"
                     sx={{
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#4db8ff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
                       fontWeight: 600,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1.25, sm: 1.5 },
@@ -1686,7 +1686,7 @@ export default function Home() {
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -1694,14 +1694,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }
@@ -1732,7 +1732,7 @@ export default function Home() {
                     fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
                     mb: { xs: 3, sm: 4, md: 5 },
                     textAlign: 'center',
-                    background: 'linear-gradient(135deg, #4db8ff 0%, #66c4ff 50%, #4db8ff 100%)',
+                    background: 'var(--hero-text-gradient-2)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -1750,8 +1750,8 @@ export default function Home() {
                     desc: 'Professional network and career updates',
                     link: 'https://linkedin.com/in/jerophin-d-r-b9a73b257/',
                     icon: (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 128 128" fill="#4db8ff">
-                        <path d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3M39.17 107H21.06V48.73h18.11zm-9-66.21a10.5 10.5 0 1 1 10.49-10.5a10.5 10.5 0 0 1-10.54 10.48zM107 107H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53V48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75z" />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 128 128" style={{ color: 'var(--accent)' }}>
+                        <path d="M116 3H12a8.91 8.91 0 0 0-9 8.8v104.42a8.91 8.91 0 0 0 9 8.78h104a8.93 8.93 0 0 0 9-8.81V11.77A8.93 8.93 0 0 0 116 3M39.17 107H21.06V48.73h18.11zm-9-66.21a10.5 10.5 0 1 1 10.49-10.5a10.5 10.5 0 0 1-10.54 10.48zM107 107H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53V48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75z" fill="currentColor" />
                       </svg>
                     )
                   },
@@ -1760,18 +1760,18 @@ export default function Home() {
                     desc: 'Open source projects and code repositories',
                     link: 'https://github.com/Jerophin123',
                     icon: (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#4db8ff">
-                        <path d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.64 3.64 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2 2 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.1 2.1 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.9 3.9 0 0 1 1.025-2.688a3.6 3.6 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.43 9.43 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.6 3.6 0 0 1 .1 2.65a3.87 3.87 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.562 4.937a2.37 2.37 0 0 1 .674 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247" />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
+                        <path d="M12 2.247a10 10 0 0 0-3.162 19.487c.5.088.687-.212.687-.475c0-.237-.012-1.025-.012-1.862c-2.513.462-3.163-.613-3.363-1.175a3.64 3.64 0 0 0-1.025-1.413c-.35-.187-.85-.65-.013-.662a2 2 0 0 1 1.538 1.025a2.137 2.137 0 0 0 2.912.825a2.1 2.1 0 0 1 .638-1.338c-2.225-.25-4.55-1.112-4.55-4.937a3.9 3.9 0 0 1 1.025-2.688a3.6 3.6 0 0 1 .1-2.65s.837-.262 2.75 1.025a9.43 9.43 0 0 1 5 0c1.912-1.3 2.75-1.025 2.75-1.025a3.6 3.6 0 0 1 .1 2.65a3.87 3.87 0 0 1 1.025 2.688c0 3.837-2.338 4.687-4.562 4.937a2.37 2.37 0 0 1 .674 1.85c0 1.338-.012 2.413-.012 2.75c0 .263.187.575.687.475A10.005 10.005 0 0 0 12 2.247" fill="currentColor" />
                       </svg>
                     )
                   },
                   {
                     platform: 'LeetCode',
                     desc: 'Problem solving and coding challenges',
-                    link: 'https://leetcode.com/u/codecrackerX08/',
+                    link: 'https://leetcode.com/u/Jerophin123/',
                     icon: (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#4db8ff">
-                        <path d="M13.483 0a1.37 1.37 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.3 5.3 0 0 0-1.209 2.104a5 5 0 0 0-.125.513a5.5 5.5 0 0 0 .062 2.362a6 6 0 0 0 .349 1.017a5.9 5.9 0 0 0 1.271 1.818l4.277 4.193l.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.38 1.38 0 0 0-1.951-.003l-2.396 2.392a3.02 3.02 0 0 1-4.205.038l-.02-.019l-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.7 2.7 0 0 1 .066-.523a2.55 2.55 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0m-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382a1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382a1.38 1.38 0 0 0-1.38-1.382z"/>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" style={{ color: 'var(--accent)' }}>
+                        <path d="M13.483 0a1.37 1.37 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.3 5.3 0 0 0-1.209 2.104a5 5 0 0 0-.125.513a5.5 5.5 0 0 0 .062 2.362a6 6 0 0 0 .349 1.017a5.9 5.9 0 0 0 1.271 1.818l4.277 4.193l.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.38 1.38 0 0 0-1.951-.003l-2.396 2.392a3.02 3.02 0 0 1-4.205.038l-.02-.019l-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.7 2.7 0 0 1 .066-.523a2.55 2.55 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0m-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382a1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382a1.38 1.38 0 0 0-1.38-1.382z" fill="currentColor" />
                       </svg>
                     )
                   },
@@ -1780,10 +1780,10 @@ export default function Home() {
                     desc: 'All my links in one place',
                     link: 'https://linktr.ee/Jerophin',
                     icon: (
-                      <svg viewBox="0 0 80 97.7" width="48" height="48" fill="#4db8ff">
+                      <svg viewBox="0 0 80 97.7" width="48" height="48" style={{ color: 'var(--accent)' }}>
                         <g>
                           <path d="M0.2,33.1h24.2L7.1,16.7l9.5-9.6L33,23.8V0h14.2v23.8L63.6,7.1l9.5,9.6L55.8,33H80v13.5H55.7l17.3,16.7
-                            l-9.5,9.4L40,49.1L16.5,72.7L7,63.2l17.3-16.7H0V33.1H0.2z M33.1,65.8h14.2v32H33.1V65.8z">
+                            l-9.5,9.4L40,49.1L16.5,72.7L7,63.2l17.3-16.7H0V33.1H0.2z M33.1,65.8h14.2v32H33.1V65.8z" fill="currentColor">
                           </path>
                         </g>
                       </svg>
@@ -1803,12 +1803,12 @@ export default function Home() {
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{
-                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                          backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          background: 'var(--glass-bg)',
+                          backdropFilter: 'var(--backdrop-blur)',
+                          WebkitBackdropFilter: 'var(--backdrop-blur)',
+                          border: '1px solid var(--glass-border)',
                           borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                          boxShadow: 'var(--glass-shadow)',
                           p: { xs: 2.5, sm: 3 },
                           height: '100%',
                           width: '100%',
@@ -1830,14 +1830,14 @@ export default function Home() {
                             left: 0,
                             right: 0,
                             height: '1px',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                            background: 'var(--glass-shine)',
                             zIndex: 1
                           },
                           '&:hover': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' },
-                            borderColor: 'rgba(77, 184, 255, 0.25)',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)',
-                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)'
+                            borderColor: 'var(--glass-border-hover)',
+                            boxShadow: 'var(--glass-shadow-hover)',
+                            background: 'var(--glass-bg-hover)'
                           },
                           '&:active': {
                             transform: { xs: 'scale(0.98)', sm: 'translateY(-8px) scale(1.02)' }
@@ -1860,7 +1860,7 @@ export default function Home() {
                         </Box>
                         <Typography
                           sx={{
-                            color: '#4db8ff',
+                            color: 'var(--accent)',
                             fontWeight: 700,
                             fontSize: { xs: '1rem', sm: '1.1rem' },
                             mb: { xs: 0.75, sm: 1 },
@@ -1871,7 +1871,7 @@ export default function Home() {
                         </Typography>
                         <Typography
                           sx={{
-                            color: 'rgba(255, 255, 255, 0.7)',
+                            color: 'var(--text-tertiary)',
                             fontSize: { xs: '0.85rem', sm: '0.9rem' },
                             lineHeight: { xs: 1.5, sm: 1.6 },
                             fontFamily: '"Poppins", sans-serif'
@@ -1894,11 +1894,11 @@ export default function Home() {
                     href="/otherprofiles"
                     sx={{
                       borderRadius: { xs: '20px', sm: '24px', md: '28px' },
-                      background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                      backdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      WebkitBackdropFilter: 'blur(40px) saturate(180%) brightness(110%) contrast(120%)',
-                      border: '1px solid rgba(77, 184, 255, 0.2)',
-                      color: '#ffffff',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--text-primary)',
                       fontWeight: 600,
                       px: { xs: 3, sm: 4 },
                       py: { xs: 1.25, sm: 1.5 },
@@ -1908,7 +1908,7 @@ export default function Home() {
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      boxShadow: '0 8px 32px rgba(77, 184, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.1), inset -1px 0 0 rgba(255, 255, 255, 0.1)',
+                      boxShadow: 'var(--glass-shadow)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -1916,14 +1916,14 @@ export default function Home() {
                         left: 0,
                         right: 0,
                         height: '1px',
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                        background: 'var(--glass-shine)',
                         zIndex: 1
                       },
                       '&:hover': {
-                        background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.25) 0%, rgba(77, 184, 255, 0.15) 50%, rgba(77, 184, 255, 0.2) 100%)',
+                        background: 'var(--glass-bg-hover)',
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-4px) scale(1.03)' },
-                        boxShadow: '0 20px 50px rgba(77, 184, 255, 0.35), 0 2px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 rgba(255, 255, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1), inset 1px 0 0 rgba(255, 255, 255, 0.15), inset -1px 0 0 rgba(255, 255, 255, 0.15)',
-                        borderColor: 'rgba(77, 184, 255, 0.35)'
+                        boxShadow: 'var(--glass-shadow-hover)',
+                        borderColor: 'var(--glass-border-hover)'
                       },
                       '&:active': {
                         transform: { xs: 'scale(0.98)', sm: 'translateY(-2px) scale(1.01)' }

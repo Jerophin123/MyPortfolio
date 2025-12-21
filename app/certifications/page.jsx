@@ -22,7 +22,7 @@ export default function CertificationsPage() {
         sx={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2))',
+          background: 'var(--overlay)',
           zIndex: 1
         }}
       />
@@ -100,12 +100,12 @@ export default function CertificationsPage() {
                 >
                 <Card
                   sx={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                    backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                    WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'var(--backdrop-blur)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur)',
+                    border: '1px solid var(--glass-border)',
                     borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                    boxShadow: 'var(--glass-shadow)',
                     height: '100%',
                     transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                     position: 'relative',
@@ -120,14 +120,14 @@ export default function CertificationsPage() {
                       left: 0,
                       right: 0,
                       height: '1px',
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      background: 'var(--glass-shine)',
                       zIndex: 1
                     },
                     '&:hover': {
                       transform: { xs: 'scale(0.98)', sm: 'translateY(-12px) scale(1.03)' },
-                      boxShadow: { xs: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)', sm: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)' },
-                      borderColor: { xs: 'rgba(255, 255, 255, 0.15)', sm: 'rgba(77, 184, 255, 0.3)' },
-                      background: { xs: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)', sm: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)' },
+                      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
+                      borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' },
+                      background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' },
                     },
                     '&:active': {
                       transform: { xs: 'scale(0.98)', sm: 'translateY(-12px) scale(1.03)' },
@@ -144,6 +144,12 @@ export default function CertificationsPage() {
                         '& svg': {
                           width: { xs: '80px', sm: '90px', md: '100px' },
                           height: { xs: '80px', sm: '90px', md: '100px' },
+                          // Make white portions dark in light mode for Udemy and PwC
+                          ...(title.includes('Udemy') || title.includes('PwC') ? {
+                            '@media (prefers-color-scheme: light)': {
+                              filter: 'brightness(0)',
+                            }
+                          } : {})
                         }
                       }}
                       dangerouslySetInnerHTML={{ __html: svg }}
@@ -151,7 +157,7 @@ export default function CertificationsPage() {
                     <Typography
                       variant="h6"
                       sx={{
-                        color: '#4db8ff',
+                        color: 'var(--accent)',
                         fontWeight: 600,
                         fontSize: { xs: '1rem', sm: '1.1rem', md: '1.15rem' },
                         fontFamily: '"Poppins", sans-serif',
@@ -165,7 +171,7 @@ export default function CertificationsPage() {
                     <Typography
                       variant="body2"
                       sx={{
-                        color: '#c0c0c0',
+                        color: 'var(--text-secondary)',
                         fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
                         fontFamily: '"Poppins", sans-serif',
                         lineHeight: { xs: 1.5, sm: 1.55, md: 1.6 },

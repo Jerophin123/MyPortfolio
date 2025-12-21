@@ -26,7 +26,7 @@ export default function ProjectsPage() {
           sx={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2))',
+            background: 'var(--overlay)',
             zIndex: 1,
           }}
         />
@@ -67,13 +67,13 @@ export default function ProjectsPage() {
                 <Card
                   sx={{
                     height: '100%',
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)',
-                    backdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                    WebkitBackdropFilter: 'blur(60px) saturate(180%) brightness(110%) contrast(120%)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'var(--backdrop-blur)',
+                    WebkitBackdropFilter: 'var(--backdrop-blur)',
+                    border: '1px solid var(--glass-border)',
                     marginTop: { xs: '20px', sm: '25px', md: '30px' },
                     borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)',
+                    boxShadow: 'var(--glass-shadow)',
                     transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                     position: 'relative',
                     overflow: 'hidden',
@@ -87,14 +87,14 @@ export default function ProjectsPage() {
                       left: 0,
                       right: 0,
                       height: '1px',
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+                      background: 'var(--glass-shine)',
                       zIndex: 1
                     },
                     '&:hover': {
                       transform: { xs: 'scale(0.98)', sm: 'translateY(-12px) scale(1.03)' },
-                      borderColor: { xs: 'rgba(255, 255, 255, 0.15)', sm: 'rgba(77, 184, 255, 0.3)' },
-                      boxShadow: { xs: '0 8px 32px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 0 rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.03), inset 1px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.08)', sm: '0 20px 60px rgba(0, 0, 0, 0.3), 0 2px 0 rgba(255, 255, 255, 0.3), 0 -2px 0 rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 0 rgba(255, 255, 255, 0.12)' },
-                      background: { xs: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.08) 100%)', sm: 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.12) 100%)' },
+                      borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' },
+                      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
+                      background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' },
                     },
                     '&:active': {
                       transform: { xs: 'scale(0.98)', sm: 'translateY(-12px) scale(1.03)' },
@@ -120,7 +120,7 @@ export default function ProjectsPage() {
                     <Typography
                       variant="h6"
                       sx={{
-                        color: '#4db8ff',
+                        color: 'var(--accent)',
                         fontWeight: 600,
                         fontFamily: '"Poppins", sans-serif',
                         mb: { xs: 1.5, sm: 2 },
@@ -137,7 +137,7 @@ export default function ProjectsPage() {
                         key={i}
                         variant="body2"
                         sx={{
-                          color: '#c0c0c0',
+                          color: 'var(--text-light)',
                           fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' },
                           fontFamily: '"Poppins", sans-serif',
                           lineHeight: { xs: 1.5, sm: 1.55, md: 1.6 },
@@ -170,12 +170,12 @@ export default function ProjectsPage() {
                             sx={{
                               px: { xs: 1, sm: 1.25, md: 1.5 },
                               py: { xs: 0.4, sm: 0.5, md: 0.6 },
-                              background: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)',
-                              backdropFilter: 'blur(20px) saturate(180%) brightness(110%) contrast(120%)',
-                              WebkitBackdropFilter: 'blur(20px) saturate(180%) brightness(110%) contrast(120%)',
-                              border: '1px solid rgba(77, 184, 255, 0.2)',
+                              background: 'var(--glass-bg)',
+                              backdropFilter: 'var(--backdrop-blur-light)',
+                              WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                              border: '1px solid var(--glass-border-hover)',
                               borderRadius: { xs: '14px', sm: '16px', md: '18px' },
-                              boxShadow: '0 4px 16px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05)',
+                              boxShadow: 'var(--glass-shadow)',
                               transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                               position: 'relative',
                               overflow: 'hidden',
@@ -188,14 +188,14 @@ export default function ProjectsPage() {
                                 left: 0,
                                 right: 0,
                                 height: '1px',
-                                background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%)',
+                                background: 'var(--glass-shine)',
                                 zIndex: 1
                               },
                               '&:hover': {
                                 transform: { xs: 'none', sm: 'translateY(-2px) scale(1.05)' },
-                                background: { xs: 'linear-gradient(135deg, rgba(77, 184, 255, 0.15) 0%, rgba(77, 184, 255, 0.08) 50%, rgba(77, 184, 255, 0.12) 100%)', sm: 'linear-gradient(135deg, rgba(77, 184, 255, 0.2) 0%, rgba(77, 184, 255, 0.12) 50%, rgba(77, 184, 255, 0.18) 100%)' },
-                                borderColor: { xs: 'rgba(77, 184, 255, 0.2)', sm: 'rgba(77, 184, 255, 0.35)' },
-                                boxShadow: { xs: '0 4px 16px rgba(77, 184, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(255, 255, 255, 0.05)', sm: '0 6px 20px rgba(77, 184, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.1)' }
+                                background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' },
+                                borderColor: { xs: 'var(--glass-border-hover)', sm: 'var(--glass-border-hover)' },
+                                boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
                               },
                               '&:active': {
                                 transform: { xs: 'scale(0.98)', sm: 'translateY(-1px) scale(1.03)' }
@@ -204,7 +204,7 @@ export default function ProjectsPage() {
                           >
                             <Typography
                               sx={{
-                                color: '#4db8ff',
+                                color: 'var(--accent)',
                                 fontFamily: '"Poppins", sans-serif',
                                 fontSize: { xs: '0.65rem', sm: '0.7rem', md: '0.75rem' },
                                 fontWeight: 500,

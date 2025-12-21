@@ -68,7 +68,7 @@ export default function RootLayout({ children }) {
               "sameAs": [
                 "https://github.com/Jerophin123",
                 "https://linkedin.com/in/jerophin-d-r-b9a73b257/",
-                "https://leetcode.com/u/codecrackerX08/"
+                "https://leetcode.com/u/Jerophinstanley/"
               ]
             }),
           }}

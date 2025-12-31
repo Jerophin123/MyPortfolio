@@ -708,7 +708,7 @@ export default function ClientLayout({ children }) {
             {/* LeetCode */}
             <Box
               component="a"
-              href="https://leetcode.com/u/Jerophinstanley/"
+              href="https://leetcode.com/u/codecrackerX08/"
               target="_blank"
               rel="noreferrer"
               sx={{
@@ -842,7 +842,7 @@ export default function ClientLayout({ children }) {
                 fontFamily: '"Poppins", sans-serif'
               }}
             >
-              &copy; 2025 JEROPHIN D R | All Rights Reserved
+              &copy; 2026 JEROPHIN D R | All Rights Reserved
             </Typography>
             <Typography 
               sx={{ 

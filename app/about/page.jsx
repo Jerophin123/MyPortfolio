@@ -168,7 +168,7 @@ export default function AboutPage() {
                     <Button
                       variant="contained"
                       component="a"
-                      href="https://drive.google.com/file/d/1BoebZhCMfeiN5B37gbJ9pbEjr8PT1gR_/view?usp=sharing"
+                      href="https://drive.google.com/file/d/1mb5bSif0O8dJnU2BegeAtoKtaHJFCRiJ/view?usp=sharing"
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{

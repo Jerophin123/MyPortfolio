@@ -1199,22 +1199,22 @@ export default function Home() {
                   { 
                     title: 'Welinzo', 
                     desc: 'Modern e-commerce platform with liquid glass design, featuring seamless shopping experience and real-time inventory management.',
-                    tech: 'Next.js, Node.js, MongoDB, Stripe'
+                    tech: 'Next.js, Fakestore API'
                   },
                   { 
-                    title: 'Portfolio Website', 
-                    desc: 'Responsive portfolio website showcasing projects, skills, and achievements with modern glassmorphism design.',
-                    tech: 'Next.js, React, Material-UI, Framer Motion'
+                    title: 'Delphin Associates Website', 
+                    desc: 'An Enterprise Website created for Delphin Associates',
+                    tech: 'Next.js, Node, Firestore(Firebase), Framer Motion'
                   },
                   { 
-                    title: 'Task Management App', 
-                    desc: 'Collaborative task management application with real-time updates, team collaboration, and project tracking features.',
-                    tech: 'React, Node.js, Socket.IO, PostgreSQL'
+                    title: 'Intelligent Real-Time Human Activity Monitoring & Unsafe Behaviour Detection System', 
+                    desc: 'Real-time Al system for human activity monitoring and unsafe-behaviour detection using YOLOv8 and deep learning.',
+                    tech: 'Python ,React, TensorFlow, DeepFace, YOLOv8, SQLite'
                   },
                   { 
-                    title: 'Weather Dashboard', 
+                    title: 'Now Weather', 
                     desc: 'Interactive weather dashboard with location-based forecasts, weather maps, and detailed meteorological data visualization.',
-                    tech: 'React, Chart.js, OpenWeather API, Tailwind CSS'
+                    tech: 'React, Openweather API'
                   }
                 ].map((project, idx) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
@@ -1376,6 +1376,16 @@ export default function Home() {
               <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: { xs: 3, sm: 4 }, width: '100%', maxWidth: '100%' }}>
                 {[
                   { 
+                    title: 'Cloud Infrastructure 2025 AI Foundations Associate - Oracle', 
+                    issuer: 'Oracle University',
+                    desc: 'Certified as a Cloud Infrastructure 2025 AI Foundations Associate, with proven understanding of Al concepts and cloud-based intelligence.'
+                  },
+                  { 
+                    title: 'Technology Job Simulation', 
+                    issuer: 'Deloitte',
+                    desc: 'Completed the Deloitte Technology Job Simulation, gaining hands-on experience in coding and development.'
+                  },
+                  { 
                     title: 'Linguaskill', 
                     issuer: 'Cambridge Assessment English',
                     desc: 'Comprehensive English language proficiency assessment covering reading, writing, listening, and speaking skills.'
@@ -1394,17 +1404,8 @@ export default function Home() {
                     title: 'Cisco CCNA – Introduction to Networks', 
                     issuer: 'Cisco',
                     desc: 'Fundamentals of networking, IP addressing, subnetting, routing protocols, and network infrastructure design.'
-                  },
-                  { 
-                    title: 'AWS Cloud Practitioner', 
-                    issuer: 'Amazon Web Services',
-                    desc: 'Cloud computing fundamentals, AWS services overview, and best practices for cloud architecture and security.'
-                  },
-                  { 
-                    title: 'React Development', 
-                    issuer: 'Meta (Facebook)',
-                    desc: 'Advanced React concepts including hooks, context API, performance optimization, and modern React patterns.'
                   }
+                  
                 ].map((cert, idx) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4 }} key={idx}>
                     <motion.div

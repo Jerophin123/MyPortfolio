@@ -1186,6 +1186,11 @@ export default function Home() {
               </motion.div>
               <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: { xs: 3, sm: 4 }, width: '100%', maxWidth: '100%' }}>
                 {[
+                  {
+                    title: 'MediPOS – Medical Store Management System',
+                    desc: 'A full-stack medical store point-of-sale system for secure billing, inventory and batch management, user role control, and sales reporting.',
+                    tech: 'Java, Spring Boot, Spring Security, JWT, Angular, PostgreSQL'
+                  },                  
                   { 
                     title: 'Waste Management System', 
                     desc: 'AI-based smart waste classification system using deep learning for automated sorting and recycling optimization.',
@@ -1195,11 +1200,6 @@ export default function Home() {
                     title: 'RV Diagnose', 
                     desc: 'Plant disease detection application using Deep Learning and computer vision to help farmers identify crop issues early.',
                     tech: 'Python, PyTorch, OpenCV, Flask'
-                  },
-                  { 
-                    title: 'Welinzo', 
-                    desc: 'Modern e-commerce platform with liquid glass design, featuring seamless shopping experience and real-time inventory management.',
-                    tech: 'Next.js, Fakestore API'
                   },
                   { 
                     title: 'Delphin Associates Website', 
@@ -1280,15 +1280,79 @@ export default function Home() {
                         >
                           {project.desc}
                         </Typography>
-                        <Typography
-                          sx={{
-                            color: 'var(--text-accent)',
-                            fontSize: { xs: '0.8rem', sm: '0.85rem' },
-                            fontStyle: 'italic'
-                          }}
-                        >
-                          {project.tech}
-                        </Typography>
+                        {/* Tech Stack Pills */}
+                        {project.tech && (
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              gap: { xs: 0.75, sm: 1, md: 1.25 },
+                              justifyContent: 'flex-start',
+                              alignItems: 'center',
+                              width: '100%',
+                              mt: { xs: 1.5, sm: 2 }
+                            }}
+                          >
+                            {project.tech.split(',').map((tech, techIndex) => {
+                              const trimmedTech = tech.trim();
+                              return trimmedTech ? (
+                                <Box
+                                  key={techIndex}
+                                  sx={{
+                                    px: { xs: 1, sm: 1.25, md: 1.5 },
+                                    py: { xs: 0.4, sm: 0.5, md: 0.6 },
+                                    background: 'var(--glass-bg)',
+                                    backdropFilter: 'var(--backdrop-blur-light)',
+                                    WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                                    border: '1px solid var(--glass-border-hover)',
+                                    borderRadius: { xs: '14px', sm: '16px', md: '18px' },
+                                    boxShadow: 'var(--glass-shadow)',
+                                    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    maxWidth: '100%',
+                                    boxSizing: 'border-box',
+                                    '&::before': {
+                                      content: '""',
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      right: 0,
+                                      height: '1px',
+                                      background: 'var(--glass-shine)',
+                                      zIndex: 1
+                                    },
+                                    '&:hover': {
+                                      transform: { xs: 'none', sm: 'translateY(-2px) scale(1.05)' },
+                                      background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' },
+                                      borderColor: { xs: 'var(--glass-border-hover)', sm: 'var(--glass-border-hover)' },
+                                      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
+                                    },
+                                    '&:active': {
+                                      transform: { xs: 'scale(0.98)', sm: 'translateY(-1px) scale(1.03)' }
+                                    }
+                                  }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      color: 'var(--accent)',
+                                      fontFamily: '"Poppins", sans-serif',
+                                      fontSize: { xs: '0.65rem', sm: '0.7rem', md: '0.75rem' },
+                                      fontWeight: 500,
+                                      whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                                      wordBreak: { xs: 'break-word', sm: 'normal' },
+                                      position: 'relative',
+                                      zIndex: 2,
+                                      lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 }
+                                    }}
+                                  >
+                                    {trimmedTech}
+                                  </Typography>
+                                </Box>
+                              ) : null;
+                            })}
+                          </Box>
+                        )}
                       </Card>
                     </motion.div>
                   </Grid>

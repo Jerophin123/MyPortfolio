@@ -5,6 +5,8 @@ import { Box, Typography, Card, CardContent, Grid, Button } from '@mui/material'
 import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
+import { otherProfiles } from '@/app/data/otherprofiles';
+import Link from 'next/link';
 
 export default function OtherProfilesPage() {
   return (
@@ -42,13 +44,13 @@ export default function OtherProfilesPage() {
               width: '100%'
             }}
           >
-            <a
-              href="https://linktr.ee/Jerophin"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'none', width: '100%', display: 'flex', justifyContent: 'center' }}
-            >
-              <Card
+            {otherProfiles.map((profile) => (
+              <Link
+                key={profile.slug}
+                href={`/otherprofiles/${profile.slug}`}
+                style={{ textDecoration: 'none', width: '100%', display: 'flex', justifyContent: 'center' }}
+              >
+                <Card
                 sx={{
                   width: { xs: '280px', sm: '100%' },
                   maxWidth: { xs: '280px', sm: 400 },
@@ -118,7 +120,7 @@ export default function OtherProfilesPage() {
                       mb: { xs: 0.5, sm: 1 }
                     }}
                   >
-                    Linktree
+                    {profile.title}
                   </Typography>
                   <Typography
                     variant="body1"
@@ -130,7 +132,7 @@ export default function OtherProfilesPage() {
                       textAlign: 'center'
                     }}
                   >
-                    Connect with me on all platforms
+                    {profile.description.split('. ')[0]}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -142,11 +144,12 @@ export default function OtherProfilesPage() {
                       lineHeight: 1.4
                     }}
                   >
-                    Click to access all my social links, contact info, and more
+                    {profile.description.split('. ').slice(1).join('. ')}
                   </Typography>
                 </CardContent>
               </Card>
-            </a>
+              </Link>
+            ))}
           </Box>
         </Section>
       </Box>

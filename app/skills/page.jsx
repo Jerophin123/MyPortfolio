@@ -4,6 +4,8 @@ import { Box, Typography, Card, CardContent, Grid } from '@mui/material';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
+import { skills } from '@/app/data/skills';
+import Link from 'next/link';
 
 export default function SkillsPage() {
   return (
@@ -103,42 +105,47 @@ export default function SkillsPage() {
                 'Microsoft Excel, Word, PowerPoint\n' + 
                 'Jira, Trello, Notion, Git, GitHub, Gradle'
                 ]
-            ].map(([iconSVG, title, desc], index) => (
+            ].map(([iconSVG, title, desc], index) => {
+              const skillData = skills.find(s => s.title === title);
+              const slug = skillData?.slug || '';
+              
+              return (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex', width: '100%' }}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    background: 'var(--glass-bg)',
-                    backdropFilter: 'var(--backdrop-blur)',
-                    WebkitBackdropFilter: 'var(--backdrop-blur)',
-                    border: '1px solid var(--glass-border)',
-                    marginTop: { xs: '10px', sm: '15px', md: '20px' },
-                    borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                    boxShadow: 'var(--glass-shadow)',
-                    transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '1px',
-                      background: 'var(--glass-shine)',
-                      zIndex: 1
-                    },
-                    '&:hover': {
-                      transform: { xs: 'none', sm: 'translateY(-12px) scale(1.03)' },
-                      boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
-                      borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' },
-                      background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' }
-                    }
-                  }}
-                >
+                <Link href={slug ? `/skills/${slug}` : '#'} style={{ textDecoration: 'none', width: '100%' }}>
+                  <Card
+                    sx={{
+                      height: '100%',
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur)',
+                      border: '1px solid var(--glass-border)',
+                      marginTop: { xs: '10px', sm: '15px', md: '20px' },
+                      borderRadius: { xs: '20px', sm: '24px', md: '32px' },
+                      boxShadow: 'var(--glass-shadow)',
+                      transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      width: '100%',
+                      boxSizing: 'border-box',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'var(--glass-shine)',
+                        zIndex: 1
+                      },
+                      '&:hover': {
+                        transform: { xs: 'none', sm: 'translateY(-12px) scale(1.03)' },
+                        boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
+                        borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' },
+                        background: { xs: 'var(--glass-bg)', sm: 'var(--glass-bg-hover)' }
+                      }
+                    }}
+                  >
                  <CardContent sx={{ px: { xs: 2, sm: 2.5, md: 3 }, py: { xs: 2.5, sm: 3, md: 4 }, textAlign: 'center' }}>
 
                      {/* SVG Icon */}
@@ -254,8 +261,10 @@ export default function SkillsPage() {
                     </Box>
                   </CardContent>
                 </Card>
+                </Link>
               </Grid>
-            ))}
+            );
+            })}
           </Grid>
         </Section>
       </Box>

@@ -6,7 +6,6 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
 import { otherProfiles } from '@/app/data/otherprofiles';
-import Link from 'next/link';
 
 export default function OtherProfilesPage() {
   return (
@@ -45,10 +44,18 @@ export default function OtherProfilesPage() {
             }}
           >
             {otherProfiles.map((profile) => (
-              <Link
+              <Box
                 key={profile.slug}
-                href={`/otherprofiles/${profile.slug}`}
-                style={{ textDecoration: 'none', width: '100%', display: 'flex', justifyContent: 'center' }}
+                component="a"
+                href={profile.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  textDecoration: 'none',
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'center'
+                }}
               >
                 <Card
                 sx={{
@@ -148,7 +155,7 @@ export default function OtherProfilesPage() {
                   </Typography>
                 </CardContent>
               </Card>
-              </Link>
+              </Box>
             ))}
           </Box>
         </Section>

@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const profile = getProfileBySlug(params.slug);
+  const { slug } = await params;
+  const profile = getProfileBySlug(slug);
   
   if (!profile) {
     return {
@@ -43,8 +44,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function ProfilePage({ params }) {
-  const profile = getProfileBySlug(params.slug);
+export default async function ProfilePage({ params }) {
+  const { slug } = await params;
+  const profile = getProfileBySlug(slug);
 
   if (!profile) {
     notFound();

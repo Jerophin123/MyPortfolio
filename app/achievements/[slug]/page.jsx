@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const achievement = getAchievementBySlug(params.slug);
+  const { slug } = await params;
+  const achievement = getAchievementBySlug(slug);
   
   if (!achievement) {
     return {
@@ -43,8 +44,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function AchievementPage({ params }) {
-  const achievement = getAchievementBySlug(params.slug);
+export default async function AchievementPage({ params }) {
+  const { slug } = await params;
+  const achievement = getAchievementBySlug(slug);
 
   if (!achievement) {
     notFound();

@@ -15,7 +15,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const education = getEducationBySlug(params.slug);
+  const { slug } = await params;
+  const education = getEducationBySlug(slug);
   
   if (!education) {
     return {
@@ -44,8 +45,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function EducationPage({ params }) {
-  const education = getEducationBySlug(params.slug);
+export default async function EducationPage({ params }) {
+  const { slug } = await params;
+  const education = getEducationBySlug(slug);
 
   if (!education) {
     notFound();

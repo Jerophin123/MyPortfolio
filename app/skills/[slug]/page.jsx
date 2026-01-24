@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const skill = getSkillBySlug(params.slug);
+  const { slug } = await params;
+  const skill = getSkillBySlug(slug);
   
   if (!skill) {
     return {
@@ -43,8 +44,9 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function SkillPage({ params }) {
-  const skill = getSkillBySlug(params.slug);
+export default async function SkillPage({ params }) {
+  const { slug } = await params;
+  const skill = getSkillBySlug(slug);
 
   if (!skill) {
     notFound();

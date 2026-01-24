@@ -1187,7 +1187,7 @@ export default function Home() {
               <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: { xs: 3, sm: 4 }, width: '100%', maxWidth: '100%' }}>
                 {[
                   {
-                    title: 'MediPOS – Medical Store Management System',
+                    title: 'MedicPOS – Medical Store Management System',
                     desc: 'A full-stack medical store point-of-sale system for secure billing, inventory and batch management, user role control, and sales reporting.',
                     tech: 'Java, Spring Boot, Spring Security, JWT, Angular, PostgreSQL'
                   },                  

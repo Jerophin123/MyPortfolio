@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { use } from 'react';
+import Script from 'next/script';
 
 export default function ProjectSlugPage({ params }) {
   const { slug } = use(params);
@@ -25,8 +26,36 @@ export default function ProjectSlugPage({ params }) {
     return null;
   }
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": project.title,
+    "description": project.description,
+    "applicationCategory": "WebApplication",
+    "operatingSystem": "Web",
+    ...(project.techStack && project.techStack.length > 0 && {
+      "programmingLanguage": project.techStack,
+      "softwareRequirements": project.techStack.join(", ")
+    }),
+    ...(project.link && {
+      "url": project.link,
+      "codeRepository": project.link.includes('github.com') ? project.link : undefined,
+      "sameAs": project.link
+    }),
+    "author": {
+      "@type": "Person",
+      "name": "Jerophin D R",
+      "url": "https://jerophin-portfolio.vercel.app"
+    }
+  };
+
   return (
     <ClientLayout>
+      <Script
+        id={`project-structured-data-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
         <AnimatedBackground />
         <Section bg="transparent">
@@ -181,7 +210,8 @@ export default function ProjectSlugPage({ params }) {
                         component={Link}
                         href={project.link}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener"
+                        aria-label={`View ${project.title} project at external site`}
                         sx={{
                           px: { xs: 3, sm: 4 },
                           py: { xs: 1.5, sm: 2 },
@@ -203,6 +233,25 @@ export default function ProjectSlugPage({ params }) {
                       >
                         View Project
                       </Button>
+                      <Typography
+                        component="a"
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener"
+                        sx={{
+                          display: 'block',
+                          mt: 2,
+                          color: 'var(--text-light)',
+                          fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                          textDecoration: 'none',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                            color: 'var(--accent)'
+                          }
+                        }}
+                      >
+                        {project.link}
+                      </Typography>
                     </Box>
                   )}
                 </Box>

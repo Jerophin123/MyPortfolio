@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { use } from 'react';
+import Script from 'next/script';
 
 export default function CertificationSlugPage({ params }) {
   const { slug } = use(params);
@@ -25,8 +26,29 @@ export default function CertificationSlugPage({ params }) {
     return null;
   }
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOccupationalCredential",
+    "name": certification.title,
+    "description": certification.description,
+    "credentialCategory": "Professional Certification",
+    "recognizedBy": {
+      "@type": "Organization",
+      "name": certification.title.split('–')[certification.title.split('–').length - 1]?.trim() || "Certification Provider"
+    },
+    ...(certification.link && {
+      "url": certification.link,
+      "sameAs": certification.link
+    })
+  };
+
   return (
     <ClientLayout>
+      <Script
+        id={`certification-structured-data-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
         <AnimatedBackground />
         <Section bg="transparent">
@@ -145,7 +167,8 @@ export default function CertificationSlugPage({ params }) {
                         component={Link}
                         href={certification.link}
                         target="_blank"
-                        rel="noopener noreferrer"
+                        rel="noopener"
+                        aria-label={`View ${certification.title} certificate at external site`}
                         sx={{
                           px: { xs: 3, sm: 4 },
                           py: { xs: 1.5, sm: 2 },
@@ -167,6 +190,25 @@ export default function CertificationSlugPage({ params }) {
                       >
                         View Certificate
                       </Button>
+                      <Typography
+                        component="a"
+                        href={certification.link}
+                        target="_blank"
+                        rel="noopener"
+                        sx={{
+                          display: 'block',
+                          mt: 2,
+                          color: 'var(--text-light)',
+                          fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                          textDecoration: 'none',
+                          '&:hover': {
+                            textDecoration: 'underline',
+                            color: 'var(--accent)'
+                          }
+                        }}
+                      >
+                        {certification.link}
+                      </Typography>
                     </Box>
                   )}
                 </Box>

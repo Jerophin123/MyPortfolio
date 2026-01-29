@@ -59,7 +59,7 @@ export const certifications = [
   {
     slug: generateSlug('Figma Masterclass – Udemy'),
     title: 'Figma Masterclass – Udemy',
-    description: 'Built real-world UI components, responsive design layouts, and interactive prototypes using Figma's advanced features.',
+    description: 'Built real-world UI components, responsive design layouts, and interactive prototypes using Figma\'s advanced features.',
     link: 'https://www.udemy.com/certificate/UC-828f3668-c1df-47fd-914c-de1ed00d0e0d/'
   },
   {
@@ -77,7 +77,7 @@ export const certifications = [
   {
     slug: generateSlug('NCAT 2025 Participation – Naukri Campus All India Career Aptitude Test'),
     title: 'NCAT 2025 Participation – Naukri Campus All India Career Aptitude Test',
-    description: 'Participated in India's largest career aptitude test; scored 28/60 with 100% attempt rate and secured 56.79 percentile in Tamil Nadu, demonstrating verbal and analytical strengths.',
+    description: 'Participated in India\'s largest career aptitude test; scored 28/60 with 100% attempt rate and secured 56.79 percentile in Tamil Nadu, demonstrating verbal and analytical strengths.',
     link: 'https://www.naukri.com/campus/certificates/naukri_campus_ai_ncat_participation_may_2025/v0/683a1d4f6c1aa41e163b9e47?utm_source=certificate&utm_medium=copy&utm_campaign=683a1d4f6c1aa41e163b9e47'
   },
   {
@@ -89,19 +89,19 @@ export const certifications = [
   {
     slug: generateSlug('PwC RDBMS Using Oracle Micro Certification – 2025'),
     title: 'PwC RDBMS Using Oracle Micro Certification – 2025',
-    description: 'Achieved a score of 96/100 in PwC's micro certification on RDBMS. Learned key RDBMS concepts, queries, joins, subqueries, and Oracle database usage.',
+    description: 'Achieved a score of 96/100 in PwC\'s micro certification on RDBMS. Learned key RDBMS concepts, queries, joins, subqueries, and Oracle database usage.',
     link: 'https://pwc.tekstac.com/blocks/tekbadges/badge.php?id=27901'
   },
   {
     slug: generateSlug('PwC Programming Fundamentals – Java Micro Certification – 2025'),
     title: 'PwC Programming Fundamentals – Java Micro Certification – 2025',
-    description: 'Scored 94/100 in PwC's Java micro certification, Covered Java basics, OOP, arrays, strings, and regular expressions.',
+    description: 'Scored 94/100 in PwC\'s Java micro certification, Covered Java basics, OOP, arrays, strings, and regular expressions.',
     link: 'https://pwc.tekstac.com/blocks/tekbadges/badge.php?id=31671'
   },
   {
     slug: generateSlug('PwC DevOps & Cloud Fundamentals Micro Certification – 2025'),
     title: 'PwC DevOps & Cloud Fundamentals Micro Certification – 2025',
-    description: 'Completed PwC's certification with a score of 82/100, Learned core cloud concepts, DevOps, Git, and basics of AWS, Azure, and GCP.',
+    description: 'Completed PwC\'s certification with a score of 82/100, Learned core cloud concepts, DevOps, Git, and basics of AWS, Azure, and GCP.',
     link: 'https://pwc.tekstac.com/blocks/tekbadges/badge.php?id=31671'
   }
 ];

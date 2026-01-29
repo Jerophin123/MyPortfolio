@@ -1,94 +1,126 @@
-import { notFound } from 'next/navigation';
-import { getAchievementBySlug, getAllAchievementSlugs } from '@/app/data/achievements';
+'use client';
+
 import { Box, Typography, Card, CardContent, Button } from '@mui/material';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
+import { getAchievementBySlug } from '@/app/data/achievements';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { use } from 'react';
 
-export async function generateStaticParams() {
-  const slugs = getAllAchievementSlugs();
-  return slugs.map((slug) => ({
-    slug: slug,
-  }));
-}
-
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
+export default function AchievementSlugPage({ params }) {
+  const { slug } = use(params);
   const achievement = getAchievementBySlug(slug);
-  
-  if (!achievement) {
-    return {
-      title: 'Achievement Not Found',
-    };
-  }
+  const router = useRouter();
 
-  return {
-    title: `${achievement.title} | Jerophin D R Portfolio`,
-    description: achievement.description,
-    keywords: `${achievement.title}, Achievement, Portfolio, Jerophin D R`,
-    openGraph: {
-      title: `${achievement.title} | Jerophin D R Portfolio`,
-      description: achievement.description,
-      type: 'website',
-      url: `https://jerophin-portfolio.vercel.app/achievements/${achievement.slug}`,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${achievement.title} | Jerophin D R Portfolio`,
-      description: achievement.description,
-    },
-    alternates: {
-      canonical: `https://jerophin-portfolio.vercel.app/achievements/${achievement.slug}`,
-    },
-  };
-}
-
-export default async function AchievementPage({ params }) {
-  const { slug } = await params;
-  const achievement = getAchievementBySlug(slug);
+  useEffect(() => {
+    if (!achievement) {
+      router.push('/achievements');
+    }
+  }, [achievement, router]);
 
   if (!achievement) {
-    notFound();
+    return null;
   }
 
   return (
     <ClientLayout>
       <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
         <AnimatedBackground />
-        
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            background: 'var(--overlay)',
-            zIndex: 1,
-          }}
-        />
+        <Section bg="transparent">
+          <Box
+            sx={{
+              fontFamily: '"Poppins", sans-serif',
+              maxWidth: '1200px',
+              marginTop: { xs: '60px', sm: '60px', md: '60px' },
+              py: { xs: 3, sm: 6, md: 10 },
+              px: { xs: 1.5, sm: 3, md: 6 },
+              mx: 'auto',
+              zIndex: 1,
+              position: 'relative',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}
+          >
+            <Card
+              sx={{
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--backdrop-blur-light)',
+                WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                border: '1px solid var(--glass-border-light)',
+                borderRadius: { xs: '20px', sm: '24px', md: '32px' },
+                boxShadow: 'var(--glass-shadow)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                overflow: 'hidden',
+                p: { xs: 2.5, sm: 4, md: 6 },
+                position: 'relative',
+                width: '100%',
+                boxSizing: 'border-box',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '1px',
+                  background: 'var(--glass-shine)',
+                  zIndex: 1
+                }
+              }}
+            >
+              <CardContent sx={{ p: 0 }}>
+                <Box sx={{ mb: { xs: 3, sm: 4, md: 5 } }}>
+                  <Button
+                    component={Link}
+                    href="/achievements"
+                    sx={{
+                      mb: { xs: 3, sm: 4 },
+                      px: { xs: 2, sm: 3 },
+                      py: { xs: 1, sm: 1.5 },
+                      fontFamily: '"Poppins", sans-serif',
+                      fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                      borderRadius: { xs: '16px', sm: '20px' },
+                      background: 'var(--glass-bg-hover)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      boxShadow: 'var(--glass-shadow)',
+                      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'var(--glass-shine)',
+                        zIndex: 1
+                      },
+                      '&:hover': {
+                        background: 'var(--glass-bg-hover)',
+                        transform: { xs: 'none', sm: 'translateY(-3px) scale(1.02)' },
+                        boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
+                      }
+                    }}
+                  >
+                    ← Back to Achievements
+                  </Button>
 
-        <Box sx={{ position: 'relative', zIndex: 2, marginTop: { xs: '60px', sm: '60px', md: '60px' }, py: { xs: 4, sm: 6, md: 8 } }}>
-          <Section title={achievement.title} bg="transparent">
-            <Box sx={{ maxWidth: '1200px', mx: 'auto', px: { xs: 2, sm: 3, md: 6 } }}>
-              <Card
-                sx={{
-                  background: 'var(--glass-bg)',
-                  backdropFilter: 'var(--backdrop-blur)',
-                  WebkitBackdropFilter: 'var(--backdrop-blur)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                  boxShadow: 'var(--glass-shadow)',
-                  mb: 4,
-                }}
-              >
-                <CardContent sx={{ px: { xs: 2, sm: 2.5, md: 3 }, py: { xs: 2.5, sm: 3, md: 3.5 } }}>
                   <Typography
                     variant="h4"
                     sx={{
                       color: 'var(--accent)',
                       fontWeight: 700,
-                      fontFamily: '"Poppins", sans-serif',
-                      mb: 2,
-                      textAlign: 'center',
+                      mb: { xs: 2, sm: 3 },
+                      fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
+                      lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 }
                     }}
                   >
                     {achievement.title}
@@ -99,79 +131,17 @@ export default async function AchievementPage({ params }) {
                     sx={{
                       color: 'var(--text-light)',
                       fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
-                      fontFamily: '"Poppins", sans-serif',
-                      lineHeight: 1.8,
-                      mb: 3,
-                      textAlign: 'center',
+                      lineHeight: { xs: 1.7, sm: 1.8, md: 1.9 }
                     }}
                   >
                     {achievement.description}
                   </Typography>
-
-                  {achievement.link && (
-                    <Box sx={{ textAlign: 'center', mt: 4 }}>
-                      <Button
-                        component="a"
-                        href={achievement.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="contained"
-                        sx={{
-                          background: 'var(--accent)',
-                          color: 'var(--bg)',
-                          px: 4,
-                          py: 1.5,
-                          borderRadius: '12px',
-                          fontFamily: '"Poppins", sans-serif',
-                          fontWeight: 600,
-                          '&:hover': {
-                            background: 'var(--accent-hover)',
-                            transform: 'translateY(-2px)',
-                          },
-                        }}
-                      >
-                        View Achievement
-                      </Button>
-                    </Box>
-                  )}
-
-                  <Box sx={{ textAlign: 'center', mt: 3 }}>
-                    <Link href="/achievements" style={{ textDecoration: 'none' }}>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          borderColor: 'var(--glass-border)',
-                          color: 'var(--accent)',
-                          fontFamily: '"Poppins", sans-serif',
-                          '&:hover': {
-                            borderColor: 'var(--glass-border-hover)',
-                            background: 'var(--glass-bg-hover)',
-                          },
-                        }}
-                      >
-                        ← Back to Achievements
-                      </Button>
-                    </Link>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
-          </Section>
-        </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+        </Section>
       </Box>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "AchievementAction",
-            "name": achievement.title,
-            "description": achievement.description,
-            "url": achievement.link || `https://jerophin-portfolio.vercel.app/achievements/${achievement.slug}`,
-          }),
-        }}
-      />
     </ClientLayout>
   );
 }

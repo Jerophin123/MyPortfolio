@@ -5,7 +5,6 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
 import { skills } from '@/app/data/skills';
-import Link from 'next/link';
 
 export default function SkillsPage() {
   return (
@@ -111,7 +110,6 @@ export default function SkillsPage() {
               
               return (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex', width: '100%' }}>
-                <Link href={slug ? `/skills/${slug}` : '#'} style={{ textDecoration: 'none', width: '100%' }}>
                   <Card
                     sx={{
                       height: '100%',
@@ -125,7 +123,6 @@ export default function SkillsPage() {
                       transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                       position: 'relative',
                       overflow: 'hidden',
-                      cursor: 'pointer',
                       width: '100%',
                       boxSizing: 'border-box',
                       '&::before': {
@@ -261,7 +258,6 @@ export default function SkillsPage() {
                     </Box>
                   </CardContent>
                 </Card>
-                </Link>
               </Grid>
             );
             })}

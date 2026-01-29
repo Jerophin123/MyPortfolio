@@ -842,7 +842,7 @@ export default function ClientLayout({ children }) {
                 fontFamily: '"Poppins", sans-serif'
               }}
             >
-              &copy; {new Date().getFullYear()} JEROPHIN D R | All Rights Reserved
+              &copy; 2026 JEROPHIN D R | All Rights Reserved
             </Typography>
             <Typography 
               sx={{ 

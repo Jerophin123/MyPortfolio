@@ -44,20 +44,8 @@ export default function OtherProfilesPage() {
             }}
           >
             {otherProfiles.map((profile) => (
-              <Box
-                key={profile.slug}
-                component="a"
-                href={profile.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  textDecoration: 'none',
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center'
-                }}
-              >
                 <Card
+                key={profile.slug}
                 sx={{
                   width: { xs: '280px', sm: '100%' },
                   maxWidth: { xs: '280px', sm: 400 },
@@ -66,13 +54,12 @@ export default function OtherProfilesPage() {
                   backdropFilter: 'var(--backdrop-blur)',
                   WebkitBackdropFilter: 'var(--backdrop-blur)',
                   border: '1px solid var(--glass-border)',
-                  borderRadius: { xs: '24px', sm: '32px' },
+                  borderRadius: { xs: '20px', sm: '24px', md: '32px' },
                   boxShadow: 'var(--glass-shadow)',
                   display: 'flex',
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                  cursor: 'pointer',
                   '&::before': {
                     content: '""',
                     position: 'absolute',
@@ -155,7 +142,6 @@ export default function OtherProfilesPage() {
                   </Typography>
                 </CardContent>
               </Card>
-              </Box>
             ))}
           </Box>
         </Section>

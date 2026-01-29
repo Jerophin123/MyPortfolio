@@ -5,7 +5,6 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
 import { education } from '@/app/data/about';
-import Link from 'next/link';
 
 export default function AboutPage() {
   return (
@@ -291,12 +290,8 @@ export default function AboutPage() {
                     </Typography>
 
               {education.map(({ slug, title, score, institute, date, logo, link }) => (
-                <Link
-                  key={slug}
-                  href={`/about/${slug}`}
-                  style={{ textDecoration: 'none', width: '100%', display: 'block' }}
-                >
                   <Box
+                    key={slug}
                     sx={{
                       display: 'flex',
                       flexDirection: { xs: 'column', md: 'row' },
@@ -307,7 +302,7 @@ export default function AboutPage() {
                       backdropFilter: 'var(--backdrop-blur-light)',
                       WebkitBackdropFilter: 'var(--backdrop-blur-light)',
                       border: '1px solid var(--glass-border)',
-                      borderRadius: { xs: '16px', sm: '20px' },
+                      borderRadius: { xs: '20px', sm: '24px', md: '32px' },
                       p: { xs: 2, sm: 2.5, md: 3 },
                       boxShadow: 'var(--glass-shadow)',
                       transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -315,7 +310,6 @@ export default function AboutPage() {
                       overflow: 'hidden',
                       width: '100%',
                       boxSizing: 'border-box',
-                      cursor: 'pointer',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -333,78 +327,75 @@ export default function AboutPage() {
                       }
                     }}
                   >
+                  <Box
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(link, '_blank', 'noopener,noreferrer');
+                    }}
+                    sx={{
+                      width: { xs: '80px', sm: '90px', md: '100px' },
+                      flexShrink: 0,
+                      mx: { xs: 'auto', md: 0 },
+                      background: 'var(--glass-bg)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border)',
+                      borderRadius: { xs: '10px', sm: '12px' },
+                      p: { xs: 0.75, sm: 1 },
+                      boxShadow: 'var(--glass-shadow)',
+                      transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'var(--glass-shine)',
+                        zIndex: 1
+                      },
+                      '&:hover': {
+                        transform: { xs: 'none', sm: 'scale(1.05)' },
+                        boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
+                        borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' }
+                      }
+                    }}
+                  >
                     <Box
-                      component="div"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.open(link, '_blank', 'noopener,noreferrer');
+                      component="img"
+                      src={logo}
+                      alt={`${title} Logo`}
+                      sx={{ 
+                        width: '100%', 
+                        height: 'auto', 
+                        borderRadius: { xs: '6px', sm: '8px' },
+                        filter: 'brightness(1.1) contrast(1.05)'
                       }}
-                      sx={{
-                        width: { xs: '80px', sm: '90px', md: '100px' },
-                        flexShrink: 0,
-                        mx: { xs: 'auto', md: 0 },
-                        background: 'var(--glass-bg)',
-                        backdropFilter: 'var(--backdrop-blur-light)',
-                        WebkitBackdropFilter: 'var(--backdrop-blur-light)',
-                        border: '1px solid var(--glass-border)',
-                        borderRadius: { xs: '10px', sm: '12px' },
-                        p: { xs: 0.75, sm: 1 },
-                        boxShadow: 'var(--glass-shadow)',
-                        transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                        position: 'relative',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: '1px',
-                          background: 'var(--glass-shine)',
-                          zIndex: 1
-                        },
-                        '&:hover': {
-                          transform: { xs: 'none', sm: 'scale(1.05)' },
-                          boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' },
-                          borderColor: { xs: 'var(--glass-border)', sm: 'var(--glass-border-hover)' }
-                        }
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        src={logo}
-                        alt={`${title} Logo`}
-                        sx={{ 
-                          width: '100%', 
-                          height: 'auto', 
-                          borderRadius: { xs: '6px', sm: '8px' },
-                          filter: 'brightness(1.1) contrast(1.05)'
-                        }}
-                      />
-                    </Box>
-
-                    <Box sx={{ textAlign: { xs: 'center', md: 'left' }, width: '100%', flex: 1 }}>
-                      <Typography sx={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: { xs: '0.9rem', sm: '1rem' }, mb: { xs: 0.5, sm: 0.75 } }}>
-                        {title} <span style={{ color: 'var(--accent)' }}>({score})</span>
-                      </Typography>
-                      <Typography sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' }, mb: { xs: 0.5, sm: 0.75 }, lineHeight: { xs: 1.4, sm: 1.5 } }}>
-                        {institute}
-                      </Typography>
-                      <Typography sx={{ color: 'var(--text-tertiary)', fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.85rem' }, mt: { xs: 0.25, sm: 0.5 }, lineHeight: { xs: 1.4, sm: 1.5 } }}>
-                        {date.includes(':') ? (
-                          <>
-                            {date.split(':')[0]}:{' '}
-                            <span style={{ color: 'var(--accent)' }}>{date.split(':')[1]}</span>
-                          </>
-                        ) : (
-                          date
-                        )}
-                      </Typography>
-                    </Box>
+                    />
                   </Box>
-                </Link>
+
+                  <Box sx={{ textAlign: { xs: 'center', md: 'left' }, width: '100%' }}>
+                    <Typography sx={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: { xs: '0.9rem', sm: '1rem' }, mb: { xs: 0.5, sm: 0.75 } }}>
+                      {title} <span style={{ color: 'var(--accent)' }}>({score})</span>
+                    </Typography>
+                    <Typography sx={{ color: 'var(--text-secondary)', fontSize: { xs: '0.85rem', sm: '0.9rem', md: '0.95rem' }, mb: { xs: 0.5, sm: 0.75 }, lineHeight: { xs: 1.4, sm: 1.5 } }}>
+                      {institute}
+                    </Typography>
+                    <Typography sx={{ color: 'var(--text-tertiary)', fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.85rem' }, mt: { xs: 0.25, sm: 0.5 }, lineHeight: { xs: 1.4, sm: 1.5 } }}>
+                      {date.includes(':') ? (
+                        <>
+                          {date.split(':')[0]}:{' '}
+                          <span style={{ color: 'var(--accent)' }}>{date.split(':')[1]}</span>
+                        </>
+                      ) : (
+                        date
+                      )}
+                    </Typography>
+                  </Box>
+                  </Box>
               ))}
                   </Box>
                 </Grid>

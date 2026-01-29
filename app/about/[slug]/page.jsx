@@ -1,245 +1,204 @@
-import { notFound } from 'next/navigation';
-import { getEducationBySlug, getAllEducationSlugs } from '@/app/data/about';
+'use client';
+
 import { Box, Typography, Card, CardContent, Button } from '@mui/material';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
+import { getEducationBySlug } from '@/app/data/about';
 import Link from 'next/link';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { use } from 'react';
 
-export async function generateStaticParams() {
-  const slugs = getAllEducationSlugs();
-  return slugs.map((slug) => ({
-    slug: slug,
-  }));
-}
-
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
+export default function AboutSlugPage({ params }) {
+  const { slug } = use(params);
   const education = getEducationBySlug(slug);
-  
-  if (!education) {
-    return {
-      title: 'Education Not Found',
-    };
-  }
+  const router = useRouter();
 
-  return {
-    title: `${education.title} | Jerophin D R Portfolio`,
-    description: `${education.title} at ${education.institute}. ${education.score}. ${education.date}`,
-    keywords: `${education.title}, ${education.institute}, Education, Portfolio, Jerophin D R`,
-    openGraph: {
-      title: `${education.title} | Jerophin D R Portfolio`,
-      description: `${education.title} at ${education.institute}. ${education.score}. ${education.date}`,
-      type: 'website',
-      url: `https://jerophin-portfolio.vercel.app/about/${education.slug}`,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: `${education.title} | Jerophin D R Portfolio`,
-      description: `${education.title} at ${education.institute}. ${education.score}. ${education.date}`,
-    },
-    alternates: {
-      canonical: `https://jerophin-portfolio.vercel.app/about/${education.slug}`,
-    },
-  };
-}
-
-export default async function EducationPage({ params }) {
-  const { slug } = await params;
-  const education = getEducationBySlug(slug);
+  useEffect(() => {
+    if (!education) {
+      router.push('/about');
+    }
+  }, [education, router]);
 
   if (!education) {
-    notFound();
+    return null;
   }
 
   return (
     <ClientLayout>
       <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
         <AnimatedBackground />
-        
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            background: 'var(--overlay)',
-            zIndex: 1,
-          }}
-        />
-
-        <Box sx={{ position: 'relative', zIndex: 2, marginTop: { xs: '60px', sm: '60px', md: '60px' }, py: { xs: 4, sm: 6, md: 8 } }}>
-          <Section title={education.title} bg="transparent">
-            <Box sx={{ maxWidth: '1200px', mx: 'auto', px: { xs: 2, sm: 3, md: 6 } }}>
-              <Card
-                sx={{
-                  background: 'var(--glass-bg)',
-                  backdropFilter: 'var(--backdrop-blur)',
-                  WebkitBackdropFilter: 'var(--backdrop-blur)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                  boxShadow: 'var(--glass-shadow)',
-                  mb: 4,
-                }}
-              >
-                <CardContent sx={{ px: { xs: 2, sm: 2.5, md: 3 }, py: { xs: 2.5, sm: 3, md: 3.5 } }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-                    <Box
-                      sx={{
-                        width: { xs: '100px', sm: '120px', md: '150px' },
-                        height: { xs: '100px', sm: '120px', md: '150px' },
-                        background: 'var(--glass-bg)',
-                        backdropFilter: 'var(--backdrop-blur-light)',
-                        border: '1px solid var(--glass-border)',
-                        borderRadius: { xs: '12px', sm: '16px' },
-                        p: { xs: 1, sm: 1.5 },
-                        boxShadow: 'var(--glass-shadow)',
-                      }}
-                    >
-                      <Image
-                        src={education.logo}
-                        alt={`${education.title} Logo`}
-                        width={150}
-                        height={150}
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          borderRadius: '8px',
-                        }}
-                      />
-                    </Box>
-                  </Box>
+        <Section bg="transparent">
+          <Box
+            sx={{
+              fontFamily: '"Poppins", sans-serif',
+              maxWidth: '1200px',
+              marginTop: { xs: '60px', sm: '60px', md: '60px' },
+              py: { xs: 3, sm: 6, md: 10 },
+              px: { xs: 1.5, sm: 3, md: 6 },
+              mx: 'auto',
+              zIndex: 1,
+              position: 'relative',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}
+          >
+            <Card
+              sx={{
+                background: 'var(--glass-bg)',
+                backdropFilter: 'var(--backdrop-blur-light)',
+                WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                border: '1px solid var(--glass-border-light)',
+                borderRadius: { xs: '20px', sm: '24px', md: '32px' },
+                boxShadow: 'var(--glass-shadow)',
+                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                overflow: 'hidden',
+                p: { xs: 2.5, sm: 4, md: 6 },
+                position: 'relative',
+                width: '100%',
+                boxSizing: 'border-box',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '1px',
+                  background: 'var(--glass-shine)',
+                  zIndex: 1
+                }
+              }}
+            >
+              <CardContent sx={{ p: 0 }}>
+                <Box sx={{ mb: { xs: 3, sm: 4, md: 5 } }}>
+                  <Button
+                    component={Link}
+                    href="/about"
+                    sx={{
+                      mb: { xs: 3, sm: 4 },
+                      px: { xs: 2, sm: 3 },
+                      py: { xs: 1, sm: 1.5 },
+                      fontFamily: '"Poppins", sans-serif',
+                      fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                      borderRadius: { xs: '16px', sm: '20px' },
+                      background: 'var(--glass-bg-hover)',
+                      backdropFilter: 'var(--backdrop-blur-light)',
+                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
+                      border: '1px solid var(--glass-border-hover)',
+                      color: 'var(--accent)',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      boxShadow: 'var(--glass-shadow)',
+                      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '1px',
+                        background: 'var(--glass-shine)',
+                        zIndex: 1
+                      },
+                      '&:hover': {
+                        background: 'var(--glass-bg-hover)',
+                        transform: { xs: 'none', sm: 'translateY(-3px) scale(1.02)' },
+                        boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
+                      }
+                    }}
+                  >
+                    ← Back to About
+                  </Button>
 
                   <Typography
                     variant="h4"
                     sx={{
                       color: 'var(--accent)',
                       fontWeight: 700,
-                      fontFamily: '"Poppins", sans-serif',
-                      mb: 2,
-                      textAlign: 'center',
+                      mb: { xs: 2, sm: 3 },
+                      fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
+                      lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 }
                     }}
                   >
                     {education.title}
                   </Typography>
 
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: 'var(--accent)',
-                      fontWeight: 600,
-                      fontFamily: '"Poppins", sans-serif',
-                      mb: 1,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {education.score}
-                  </Typography>
-
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'var(--text-light)',
-                      fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
-                      fontFamily: '"Poppins", sans-serif',
-                      lineHeight: 1.8,
-                      mb: 2,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {education.institute}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: 'var(--text-light)',
-                      fontSize: { xs: '0.9rem', sm: '1rem' },
-                      fontFamily: '"Poppins", sans-serif',
-                      mb: 3,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {education.date.includes(':') ? (
-                      <>
-                        {education.date.split(':')[0]}:{' '}
-                        <span style={{ color: 'var(--accent)' }}>{education.date.split(':')[1]}</span>
-                      </>
-                    ) : (
-                      education.date
-                    )}
-                  </Typography>
+                  <Box sx={{ mb: { xs: 2, sm: 3 } }}>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: 'var(--text-light)',
+                        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
+                        lineHeight: { xs: 1.7, sm: 1.8, md: 1.9 },
+                        mb: { xs: 1.5, sm: 2 }
+                      }}
+                    >
+                      <strong>Score:</strong> {education.score}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: 'var(--text-light)',
+                        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
+                        lineHeight: { xs: 1.7, sm: 1.8, md: 1.9 },
+                        mb: { xs: 1.5, sm: 2 }
+                      }}
+                    >
+                      <strong>Institute:</strong> {education.institute}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: 'var(--text-light)',
+                        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
+                        lineHeight: { xs: 1.7, sm: 1.8, md: 1.9 }
+                      }}
+                    >
+                      <strong>Date:</strong> {education.date}
+                    </Typography>
+                  </Box>
 
                   {education.link && (
-                    <Box sx={{ textAlign: 'center', mt: 4 }}>
+                    <Box sx={{ mt: { xs: 3, sm: 4 }, textAlign: 'center' }}>
                       <Button
-                        component="a"
+                        variant="contained"
+                        component={Link}
                         href={education.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        variant="contained"
                         sx={{
-                          background: 'var(--accent)',
-                          color: 'var(--bg)',
-                          px: 4,
-                          py: 1.5,
-                          borderRadius: '12px',
+                          px: { xs: 3, sm: 4 },
+                          py: { xs: 1.5, sm: 2 },
                           fontFamily: '"Poppins", sans-serif',
+                          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+                          borderRadius: { xs: '16px', sm: '20px' },
+                          background: 'var(--button-bg)',
+                          color: 'var(--button-text)',
+                          textTransform: 'none',
                           fontWeight: 600,
+                          boxShadow: 'var(--glass-shadow)',
+                          transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                           '&:hover': {
-                            background: 'var(--accent-hover)',
-                            transform: 'translateY(-2px)',
-                          },
+                            background: 'var(--button-hover-bg)',
+                            transform: { xs: 'none', sm: 'translateY(-3px) scale(1.02)' },
+                            boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
+                          }
                         }}
                       >
-                        Visit Institution
+                        Visit Institute
                       </Button>
                     </Box>
                   )}
-
-                  <Box sx={{ textAlign: 'center', mt: 3 }}>
-                    <Link href="/about" style={{ textDecoration: 'none' }}>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          borderColor: 'var(--glass-border)',
-                          color: 'var(--accent)',
-                          fontFamily: '"Poppins", sans-serif',
-                          '&:hover': {
-                            borderColor: 'var(--glass-border-hover)',
-                            background: 'var(--glass-bg-hover)',
-                          },
-                        }}
-                      >
-                        ← Back to About
-                      </Button>
-                    </Link>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
-          </Section>
-        </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
+        </Section>
       </Box>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "EducationalOccupationalCredential",
-            "name": education.title,
-            "description": `${education.title} at ${education.institute}`,
-            "credentialCategory": "Educational",
-            "educationalLevel": education.title,
-            "recognizedBy": {
-              "@type": "Organization",
-              "name": education.institute,
-              "url": education.link
-            },
-            "url": education.link || `https://jerophin-portfolio.vercel.app/about/${education.slug}`,
-          }),
-        }}
-      />
     </ClientLayout>
   );
 }
+

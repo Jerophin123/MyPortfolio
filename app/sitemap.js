@@ -1,6 +1,5 @@
 import { getAllProjectSlugs } from '@/app/data/projects';
 import { getAllCertificationSlugs } from '@/app/data/certifications';
-import { getAllAchievementSlugs } from '@/app/data/achievements';
 import { getAllSkillSlugs } from '@/app/data/skills';
 import { getAllEducationSlugs } from '@/app/data/about';
 import { getAllProfileSlugs } from '@/app/data/otherprofiles';
@@ -10,8 +9,8 @@ const baseUrl = 'https://jerophin-portfolio.vercel.app';
 export default function sitemap() {
   const currentDate = new Date().toISOString();
 
-  // Static pages
-  const staticPages = [
+  // Main pages
+  const routes = [
     {
       url: baseUrl,
       lastModified: currentDate,
@@ -25,10 +24,22 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/skills`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/projects`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/experience`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/certifications`,
@@ -43,18 +54,6 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/skills`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/experience`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
       url: `${baseUrl}/otherprofiles`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
@@ -63,47 +62,39 @@ export default function sitemap() {
   ];
 
   // Dynamic project pages
-  const projectPages = getAllProjectSlugs().map((slug) => ({
+  const projectRoutes = getAllProjectSlugs().map((slug) => ({
     url: `${baseUrl}/projects/${slug}`,
     lastModified: currentDate,
     changeFrequency: 'monthly',
-    priority: 0.8,
-  }));
-
-  // Dynamic certification pages
-  const certificationPages = getAllCertificationSlugs().map((slug) => ({
-    url: `${baseUrl}/certifications/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
-
-  // Dynamic achievement pages
-  const achievementPages = getAllAchievementSlugs().map((slug) => ({
-    url: `${baseUrl}/achievements/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
-
-  // Dynamic skill pages
-  const skillPages = getAllSkillSlugs().map((slug) => ({
-    url: `${baseUrl}/skills/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
-
-  // Dynamic education/about pages
-  const educationPages = getAllEducationSlugs().map((slug) => ({
-    url: `${baseUrl}/about/${slug}`,
-    lastModified: currentDate,
-    changeFrequency: 'yearly',
     priority: 0.6,
   }));
 
-  // Dynamic profile pages
-  const profilePages = getAllProfileSlugs().map((slug) => ({
+  // Dynamic certification pages
+  const certificationRoutes = getAllCertificationSlugs().map((slug) => ({
+    url: `${baseUrl}/certifications/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  // Dynamic skill pages
+  const skillRoutes = getAllSkillSlugs().map((slug) => ({
+    url: `${baseUrl}/skills/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  // Dynamic about/education pages
+  const educationRoutes = getAllEducationSlugs().map((slug) => ({
+    url: `${baseUrl}/about/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  // Dynamic otherprofiles pages
+  const profileRoutes = getAllProfileSlugs().map((slug) => ({
     url: `${baseUrl}/otherprofiles/${slug}`,
     lastModified: currentDate,
     changeFrequency: 'monthly',
@@ -111,13 +102,12 @@ export default function sitemap() {
   }));
 
   return [
-    ...staticPages,
-    ...projectPages,
-    ...certificationPages,
-    ...achievementPages,
-    ...skillPages,
-    ...educationPages,
-    ...profilePages,
+    ...routes,
+    ...projectRoutes,
+    ...certificationRoutes,
+    ...skillRoutes,
+    ...educationRoutes,
+    ...profileRoutes,
   ];
 }
 

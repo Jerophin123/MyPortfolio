@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import Script from 'next/script';
 import VisitorTracking from '@/components/VisitorTracking';
+import ClarityScript from '@/components/ClarityScript';
 import './globals.css';
 
 export const metadata = {
@@ -68,8 +69,25 @@ export default function RootLayout({ children }) {
               "sameAs": [
                 "https://github.com/Jerophin123",
                 "https://linkedin.com/in/jerophin-d-r-b9a73b257/",
-                "https://leetcode.com/u/Jerophinstanley/"
-              ]
+                "https://leetcode.com/u/codecrackerX08/",
+                "https://linktr.ee/Jerophin"
+              ],
+              "knowsAbout": [
+                "Full-Stack Development",
+                "React",
+                "Next.js",
+                "FastAPI",
+                "MongoDB",
+                "UI/UX Design",
+                "Python",
+                "JavaScript",
+                "Machine Learning",
+                "Cloud Computing"
+              ],
+              "alumniOf": {
+                "@type": "EducationalOrganization",
+                "name": "St. Joseph's Institute of Technology"
+              }
             }),
           }}
         />
@@ -96,16 +114,8 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* Microsoft Clarity */}
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`
-            (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "s42lyzhke3");
-          `}
-        </Script>
+        {/* Microsoft Clarity - loaded via client component with error handling */}
+        <ClarityScript />
 
         <Analytics />
         <SpeedInsights />

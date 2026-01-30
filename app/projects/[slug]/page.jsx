@@ -1,266 +1,67 @@
-'use client';
+import { getProjectBySlug, getAllProjectSlugs } from '@/app/data/projects';
+import ProjectSlugClient from './ProjectSlugClient';
 
-import { Box, Typography, Card, CardContent, Button, Chip } from '@mui/material';
-import AnimatedBackground from '@/components/AnimatedBackground';
-import ClientLayout from '@/components/ClientLayout';
-import Section from '@/components/Section';
-import { getProjectBySlug } from '@/app/data/projects';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { use } from 'react';
-import Script from 'next/script';
+export async function generateStaticParams() {
+  const slugs = getAllProjectSlugs();
+  return slugs.map((slug) => ({
+    slug: slug,
+  }));
+}
 
-export default function ProjectSlugPage({ params }) {
-  const { slug } = use(params);
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
   const project = getProjectBySlug(slug);
-  const router = useRouter();
 
-  useEffect(() => {
-    if (!project) {
-      router.push('/projects');
-    }
-  }, [project, router]);
+  if (!project) {
+    return {
+      title: 'Project Not Found | Jerophin D R Portfolio',
+      description: 'The requested project could not be found.',
+    };
+  }
+
+  const techStackStr = project.techStack ? project.techStack.join(', ') : '';
+  const fullDescription = `${project.description} ${techStackStr ? `Technologies: ${techStackStr}.` : ''}`;
+
+  return {
+    title: `${project.title} | Jerophin D R Portfolio`,
+    description: fullDescription,
+    keywords: `${project.title}, ${techStackStr}, Portfolio Project, Jerophin D R, Full Stack Developer`,
+    robots: 'index, follow',
+    alternates: {
+      canonical: `https://jerophin-portfolio.vercel.app/projects/${slug}`,
+    },
+    openGraph: {
+      type: 'website',
+      url: `https://jerophin-portfolio.vercel.app/projects/${slug}`,
+      title: `${project.title} | Jerophin D R Portfolio`,
+      description: project.description,
+      images: [
+        {
+          url: 'https://jerophin-portfolio.vercel.app/preview.png',
+          type: 'image/png',
+          width: 1200,
+          height: 630,
+          alt: `${project.title} - Portfolio Project`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${project.title} | Jerophin D R Portfolio`,
+      description: project.description,
+      images: ['https://jerophin-portfolio.vercel.app/preview.png'],
+    },
+  };
+}
+
+export default async function ProjectSlugPage({ params }) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
 
   if (!project) {
     return null;
   }
 
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": project.title,
-    "description": project.description,
-    "applicationCategory": "WebApplication",
-    "operatingSystem": "Web",
-    ...(project.techStack && project.techStack.length > 0 && {
-      "programmingLanguage": project.techStack,
-      "softwareRequirements": project.techStack.join(", ")
-    }),
-    ...(project.link && {
-      "url": project.link,
-      "codeRepository": project.link.includes('github.com') ? project.link : undefined,
-      "sameAs": project.link
-    }),
-    "author": {
-      "@type": "Person",
-      "name": "Jerophin D R",
-      "url": "https://jerophin-portfolio.vercel.app"
-    }
-  };
-
-  return (
-    <ClientLayout>
-      <Script
-        id={`project-structured-data-${slug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <Box sx={{ position: 'relative', width: '100%', minHeight: '100vh', overflow: 'hidden' }}>
-        <AnimatedBackground />
-        <Section bg="transparent">
-          <Box
-            sx={{
-              fontFamily: '"Poppins", sans-serif',
-              maxWidth: '1200px',
-              marginTop: { xs: '60px', sm: '60px', md: '60px' },
-              py: { xs: 3, sm: 6, md: 10 },
-              px: { xs: 1.5, sm: 3, md: 6 },
-              mx: 'auto',
-              zIndex: 1,
-              position: 'relative',
-              width: '100%',
-              boxSizing: 'border-box'
-            }}
-          >
-            <Card
-              sx={{
-                background: 'var(--glass-bg)',
-                backdropFilter: 'var(--backdrop-blur-light)',
-                WebkitBackdropFilter: 'var(--backdrop-blur-light)',
-                border: '1px solid var(--glass-border-light)',
-                borderRadius: { xs: '20px', sm: '24px', md: '32px' },
-                boxShadow: 'var(--glass-shadow)',
-                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                overflow: 'hidden',
-                p: { xs: 2.5, sm: 4, md: 6 },
-                position: 'relative',
-                width: '100%',
-                boxSizing: 'border-box',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '1px',
-                  background: 'var(--glass-shine)',
-                  zIndex: 1
-                }
-              }}
-            >
-              <CardContent sx={{ p: 0 }}>
-                <Box sx={{ mb: { xs: 3, sm: 4, md: 5 } }}>
-                  <Button
-                    component={Link}
-                    href="/projects"
-                    sx={{
-                      mb: { xs: 3, sm: 4 },
-                      px: { xs: 2, sm: 3 },
-                      py: { xs: 1, sm: 1.5 },
-                      fontFamily: '"Poppins", sans-serif',
-                      fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
-                      borderRadius: { xs: '16px', sm: '20px' },
-                      background: 'var(--glass-bg-hover)',
-                      backdropFilter: 'var(--backdrop-blur-light)',
-                      WebkitBackdropFilter: 'var(--backdrop-blur-light)',
-                      border: '1px solid var(--glass-border-hover)',
-                      color: 'var(--accent)',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      boxShadow: 'var(--glass-shadow)',
-                      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '1px',
-                        background: 'var(--glass-shine)',
-                        zIndex: 1
-                      },
-                      '&:hover': {
-                        background: 'var(--glass-bg-hover)',
-                        transform: { xs: 'none', sm: 'translateY(-3px) scale(1.02)' },
-                        boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
-                      }
-                    }}
-                  >
-                    ← Back to Projects
-                  </Button>
-
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      color: 'var(--accent)',
-                      fontWeight: 700,
-                      mb: { xs: 2, sm: 3 },
-                      fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' },
-                      lineHeight: { xs: 1.3, sm: 1.4, md: 1.5 }
-                    }}
-                  >
-                    {project.title}
-                  </Typography>
-
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color: 'var(--text-light)',
-                      fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
-                      lineHeight: { xs: 1.7, sm: 1.8, md: 1.9 },
-                      mb: { xs: 3, sm: 4 }
-                    }}
-                  >
-                    {project.description}
-                  </Typography>
-
-                  {project.techStack && project.techStack.length > 0 && (
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: { xs: 1, sm: 1.25, md: 1.5 },
-                        mt: { xs: 3, sm: 4 }
-                      }}
-                    >
-                      {project.techStack.map((tech, index) => (
-                        <Chip
-                          key={index}
-                          label={tech}
-                          sx={{
-                            background: 'var(--glass-bg)',
-                            backdropFilter: 'var(--backdrop-blur-light)',
-                            WebkitBackdropFilter: 'var(--backdrop-blur-light)',
-                            border: '1px solid var(--glass-border-hover)',
-                            borderRadius: { xs: '16px', sm: '18px', md: '20px' },
-                            color: 'var(--accent)',
-                            fontFamily: '"Poppins", sans-serif',
-                            fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
-                            fontWeight: 500,
-                            boxShadow: 'var(--glass-shadow)',
-                            transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                            '&:hover': {
-                              transform: { xs: 'none', sm: 'translateY(-2px) scale(1.05)' },
-                              background: 'var(--glass-bg-hover)',
-                              boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
-                            }
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  )}
-
-                  {project.link && (
-                    <Box sx={{ mt: { xs: 3, sm: 4 }, textAlign: 'center' }}>
-                      <Button
-                        variant="contained"
-                        component={Link}
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener"
-                        aria-label={`View ${project.title} project at external site`}
-                        sx={{
-                          px: { xs: 3, sm: 4 },
-                          py: { xs: 1.5, sm: 2 },
-                          fontFamily: '"Poppins", sans-serif',
-                          fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-                          borderRadius: { xs: '16px', sm: '20px' },
-                          background: 'var(--button-bg)',
-                          color: 'var(--button-text)',
-                          textTransform: 'none',
-                          fontWeight: 600,
-                          boxShadow: 'var(--glass-shadow)',
-                          transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                          '&:hover': {
-                            background: 'var(--button-hover-bg)',
-                            transform: { xs: 'none', sm: 'translateY(-3px) scale(1.02)' },
-                            boxShadow: { xs: 'var(--glass-shadow)', sm: 'var(--glass-shadow-hover)' }
-                          }
-                        }}
-                      >
-                        View Project
-                      </Button>
-                      <Typography
-                        component="a"
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener"
-                        sx={{
-                          display: 'block',
-                          mt: 2,
-                          color: 'var(--text-light)',
-                          fontSize: { xs: '0.85rem', sm: '0.9rem' },
-                          textDecoration: 'none',
-                          '&:hover': {
-                            textDecoration: 'underline',
-                            color: 'var(--accent)'
-                          }
-                        }}
-                      >
-                        {project.link}
-                      </Typography>
-                    </Box>
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Box>
-        </Section>
-      </Box>
-    </ClientLayout>
-  );
+  return <ProjectSlugClient project={project} />;
 }
 

@@ -6,6 +6,7 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 import ClientLayout from '@/components/ClientLayout';
 import Section from '@/components/Section';
 import { otherProfiles } from '@/app/data/otherprofiles';
+import Link from 'next/link';
 
 export default function OtherProfilesPage() {
   return (
@@ -46,6 +47,10 @@ export default function OtherProfilesPage() {
             {otherProfiles.map((profile) => (
                 <Card
                 key={profile.slug}
+                component={Link}
+                href={profile.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 sx={{
                   width: { xs: '280px', sm: '100%' },
                   maxWidth: { xs: '280px', sm: 400 },
@@ -60,6 +65,8 @@ export default function OtherProfilesPage() {
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                  cursor: 'pointer',
+                  textDecoration: 'none',
                   '&::before': {
                     content: '""',
                     position: 'absolute',

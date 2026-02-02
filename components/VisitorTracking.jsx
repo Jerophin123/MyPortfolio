@@ -54,187 +54,30 @@ export default function VisitorTracking() {
     };
   }, []);
 
-  // Enhanced location detection using browser geolocation + reverse geocoding (shopsavvyy approach)
-  // Falls back to IP-based geolocation if browser geolocation fails
+  // Enhanced location detection using IP-based geolocation only (no permission required)
+  // Uses multiple IP geolocation services for better accuracy
   const getEnhancedLocation = async () => {
-    // Step 1: Try browser geolocation first (most accurate, but requires permission)
-    const browserLocation = await new Promise((resolve) => {
-      if (!navigator.geolocation) {
-        resolve(null);
-        return;
-      }
+    // Advanced IP-based geolocation with weighted averaging and cross-validation
+    // No permission required, works silently - best possible accuracy without GPS
+    
+    // Service reliability weights (higher = more reliable/accurate)
+    const serviceWeights = {
+      'ipapi': 1.0,        // Most reliable
+      'ipapico': 0.9,      // Very reliable
+      'ipinfo': 0.85,      // Good reliability
+      'ipgeolocation': 0.8, // Good reliability
+      'ipapi_full': 0.75,  // Alternative endpoint
+      'ipwhois': 0.7,      // Additional service
+      'ipify': 0.65        // Additional service
+    };
 
-      const options = {
-        enableHighAccuracy: true, // High accuracy for precise location
-        timeout: 10000, // 10 second timeout
-        maximumAge: 0 // No cache, always get fresh location
-      };
-
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-          const accuracy = position.coords.accuracy;
-
-          // Step 2: Use reverse geocoding to get detailed address (bigdatacloud.net)
-          let city = '';
-          let region = '';
-          let country = '';
-          let postal = '';
-          let address = '';
-          let timezone = '';
-
-          try {
-            const reverseGeoResponse = await fetch(
-              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-            );
-            const reverseGeoData = await reverseGeoResponse.json();
-            
-            city = reverseGeoData.city || reverseGeoData.locality || '';
-            region = reverseGeoData.principalSubdivision || reverseGeoData.localityInfo?.administrative?.[0]?.name || '';
-            country = reverseGeoData.countryName || '';
-            postal = reverseGeoData.postcode || '';
-            address = reverseGeoData.localityInfo?.administrative?.[0]?.name || '';
-            timezone = reverseGeoData.timezone?.name || '';
-          } catch (error) {
-            // Silent failure - continue with coordinates only
-          }
-
-          // Get IP and ISP info
-          let ip = 'Unknown';
-          let isp = 'Unavailable';
-          try {
-            const ipResponse = await fetch("https://ipinfo.io/json?token=4dbd09d944c7db");
-            const ipData = await ipResponse.json();
-            ip = ipData.ip || 'Unknown';
-            isp = ipData.org || 'Unavailable';
-            if (!timezone) timezone = ipData.timezone || '';
-            if (!country) country = ipData.country || '';
-            if (!city) city = ipData.city || '';
-            if (!region) region = ipData.region || '';
-            if (!postal) postal = ipData.postal || '';
-          } catch (error) {
-            // Silent failure
-          }
-
-          resolve({
-            source: 'browser_geolocation',
-            ip: ip,
-            city: city,
-            region: region,
-            country: country,
-            postal: postal,
-            timezone: timezone,
-            isp: isp,
-            loc: [latitude.toString(), longitude.toString()],
-            accuracy: `GPS (${Math.round(accuracy)}m)`,
-            address: address
-          });
-        },
-        () => {
-          // Browser geolocation failed - try fallback with lower accuracy
-          const fallbackOptions = {
-            enableHighAccuracy: false,
-            timeout: 5000,
-            maximumAge: 300000 // 5 minutes cache
-          };
-
-          navigator.geolocation.getCurrentPosition(
-            async (position) => {
-              const latitude = position.coords.latitude;
-              const longitude = position.coords.longitude;
-              const accuracy = position.coords.accuracy;
-
-              // Get reverse geocoding data
-              let city = '';
-              let region = '';
-              let country = '';
-              let postal = '';
-              let address = '';
-              let timezone = '';
-
-              try {
-                const reverseGeoResponse = await fetch(
-                  `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-                );
-                const reverseGeoData = await reverseGeoResponse.json();
-                city = reverseGeoData.city || reverseGeoData.locality || '';
-                region = reverseGeoData.principalSubdivision || '';
-                country = reverseGeoData.countryName || '';
-                postal = reverseGeoData.postcode || '';
-                address = reverseGeoData.localityInfo?.administrative?.[0]?.name || '';
-                timezone = reverseGeoData.timezone?.name || '';
-              } catch (error) {
-                // Silent failure
-              }
-
-              // Get IP info
-              let ip = 'Unknown';
-              let isp = 'Unavailable';
-              try {
-                const ipResponse = await fetch("https://ipinfo.io/json?token=4dbd09d944c7db");
-                const ipData = await ipResponse.json();
-                ip = ipData.ip || 'Unknown';
-                isp = ipData.org || 'Unavailable';
-                if (!timezone) timezone = ipData.timezone || '';
-              } catch (error) {
-                // Silent failure
-              }
-
-              resolve({
-                source: 'browser_geolocation_fallback',
-                ip: ip,
-                city: city,
-                region: region,
-                country: country,
-                postal: postal,
-                timezone: timezone,
-                isp: isp,
-                loc: [latitude.toString(), longitude.toString()],
-                accuracy: `GPS (${Math.round(accuracy)}m)`,
-                address: address
-              });
-            },
-            () => {
-              // Both browser geolocation attempts failed - fall through to IP-based
-              resolve(null);
-            },
-            fallbackOptions
-          );
-        },
-        options
-      );
-    });
-
-    // If browser geolocation succeeded, return it
-    if (browserLocation) {
-      return browserLocation;
-    }
-
-    // Step 3: Fallback to IP-based geolocation (multiple services)
     const ipServices = [
-      // Service 1: ipinfo.io
-      fetch("https://ipinfo.io/json?token=4dbd09d944c7db")
-        .then(res => res.json())
-        .then(data => ({
-          source: 'ipinfo',
-          ip: data.ip,
-          city: data.city || '',
-          region: data.region || '',
-          country: data.country || '',
-          postal: data.postal || '',
-          timezone: data.timezone || '',
-          isp: data.org || 'Unavailable',
-          loc: data.loc ? data.loc.split(',') : null,
-          accuracy: 'IP-based (city level)'
-        }))
-        .catch(() => null),
-      
-      // Service 2: ip-api.com
+      // Service 1: ip-api.com (highest weight - most accurate)
       fetch("https://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,query")
         .then(res => res.json())
         .then(data => data.status === 'success' ? {
           source: 'ipapi',
+          weight: serviceWeights.ipapi,
           ip: data.query,
           city: data.city || '',
           region: data.regionName || '',
@@ -243,15 +86,16 @@ export default function VisitorTracking() {
           timezone: data.timezone || '',
           isp: data.isp || 'Unavailable',
           loc: data.lat && data.lon ? [data.lat.toString(), data.lon.toString()] : null,
-          accuracy: 'IP-based (city level)'
+          accuracy: 'IP-based'
         } : null)
         .catch(() => null),
       
-      // Service 3: ipapi.co
+      // Service 2: ipapi.co (high weight - very accurate)
       fetch("https://ipapi.co/json/")
         .then(res => res.json())
         .then(data => data.ip && !data.error ? {
           source: 'ipapico',
+          weight: serviceWeights.ipapico,
           ip: data.ip,
           city: data.city || '',
           region: data.region || '',
@@ -260,7 +104,79 @@ export default function VisitorTracking() {
           timezone: data.timezone || '',
           isp: data.org || 'Unavailable',
           loc: data.latitude && data.longitude ? [data.latitude.toString(), data.longitude.toString()] : null,
-          accuracy: 'IP-based (city level)'
+          accuracy: 'IP-based'
+        } : null)
+        .catch(() => null),
+      
+      // Service 3: ipinfo.io (good weight)
+      fetch("https://ipinfo.io/json?token=4dbd09d944c7db")
+        .then(res => res.json())
+        .then(data => ({
+          source: 'ipinfo',
+          weight: serviceWeights.ipinfo,
+          ip: data.ip,
+          city: data.city || '',
+          region: data.region || '',
+          country: data.country || '',
+          postal: data.postal || '',
+          timezone: data.timezone || '',
+          isp: data.org || 'Unavailable',
+          loc: data.loc ? data.loc.split(',') : null,
+          accuracy: 'IP-based'
+        }))
+        .catch(() => null),
+      
+      // Service 4: ip-api.com full endpoint
+      fetch("https://ip-api.com/json/")
+        .then(res => res.json())
+        .then(data => data.status === 'success' ? {
+          source: 'ipapi_full',
+          weight: serviceWeights.ipapi_full,
+          ip: data.query,
+          city: data.city || '',
+          region: data.regionName || '',
+          country: data.countryCode || '',
+          postal: data.zip || '',
+          timezone: data.timezone || '',
+          isp: data.isp || 'Unavailable',
+          loc: data.lat && data.lon ? [data.lat.toString(), data.lon.toString()] : null,
+          accuracy: 'IP-based'
+        } : null)
+        .catch(() => null),
+      
+      // Service 5: ipwhois.app (additional service)
+      fetch("https://ipwhois.app/json/")
+        .then(res => res.json())
+        .then(data => data.success ? {
+          source: 'ipwhois',
+          weight: serviceWeights.ipwhois,
+          ip: data.ip || '',
+          city: data.city || '',
+          region: data.region || '',
+          country: data.country_code || '',
+          postal: data.postal || '',
+          timezone: data.timezone?.name || '',
+          isp: data.isp || 'Unavailable',
+          loc: data.latitude && data.longitude ? [data.latitude.toString(), data.longitude.toString()] : null,
+          accuracy: 'IP-based'
+        } : null)
+        .catch(() => null),
+      
+      // Service 6: ip-api.com batch (alternative)
+      fetch("https://ip-api.com/json/?fields=query,status,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp")
+        .then(res => res.json())
+        .then(data => data.status === 'success' ? {
+          source: 'ipapi_alt',
+          weight: serviceWeights.ipapi * 0.9,
+          ip: data.query,
+          city: data.city || '',
+          region: data.regionName || '',
+          country: data.countryCode || '',
+          postal: data.zip || '',
+          timezone: data.timezone || '',
+          isp: data.isp || 'Unavailable',
+          loc: data.lat && data.lon ? [data.lat.toString(), data.lon.toString()] : null,
+          accuracy: 'IP-based'
         } : null)
         .catch(() => null)
     ];
@@ -269,31 +185,149 @@ export default function VisitorTracking() {
     const ipResults = await Promise.allSettled(ipServices);
     const validIpResults = ipResults
       .map(r => r.status === 'fulfilled' ? r.value : null)
-      .filter(r => r !== null);
+      .filter(r => r !== null && r.loc !== null); // Only results with coordinates
 
-    if (validIpResults.length === 0) return null;
-
-    // Select the best IP-based result
-    const bestIpResult = validIpResults.reduce((best, current) => {
-      if (!best) return current;
-      
-      // Prefer results with coordinates
-      if (current.loc && !best.loc) return current;
-      if (best.loc && !current.loc) return best;
-      
-      // If both have coordinates, prefer ip-api or ipapico
-      if (current.loc && best.loc) {
-        if (current.source === 'ipapi' || current.source === 'ipapico') return current;
-        if (best.source === 'ipapi' || best.source === 'ipapico') return best;
+    if (validIpResults.length === 0) {
+      // Fallback: try to get at least one result without coordinates
+      const anyResults = ipResults
+        .map(r => r.status === 'fulfilled' ? r.value : null)
+        .filter(r => r !== null);
+      if (anyResults.length > 0) {
+        return anyResults[0];
       }
+      return null;
+    }
+
+    // Get browser timezone for cross-validation
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    // Filter and validate results using timezone cross-validation
+    const validatedResults = validIpResults.filter(result => {
+      // Prefer results that match browser timezone (more likely accurate)
+      if (result.timezone && browserTimezone) {
+        return result.timezone === browserTimezone || 
+               result.timezone.toLowerCase().includes(browserTimezone.toLowerCase().split('/')[1] || '');
+      }
+      return true; // Include if timezone not available
+    });
+
+    const resultsToUse = validatedResults.length > 0 ? validatedResults : validIpResults;
+
+    // Extract coordinates with weights
+    const weightedCoordinates = resultsToUse
+      .map(r => ({
+        lat: parseFloat(r.loc[0]),
+        lon: parseFloat(r.loc[1]),
+        weight: r.weight || 0.5
+      }))
+      .filter(coord => !isNaN(coord.lat) && !isNaN(coord.lon));
+
+    if (weightedCoordinates.length === 0) {
+      return validIpResults[0]; // Fallback to first result
+    }
+
+    // Remove outliers using IQR (Interquartile Range) method
+    const removeOutliers = (values, weights) => {
+      if (values.length < 3) return { values, weights };
       
-      // Prefer results with more complete data
-      const currentCompleteness = [current.city, current.region, current.postal, current.timezone].filter(Boolean).length;
-      const bestCompleteness = [best.city, best.region, best.postal, best.timezone].filter(Boolean).length;
-      return currentCompleteness > bestCompleteness ? current : best;
+      const sorted = values.map((v, i) => ({ value: v, weight: weights[i] }))
+        .sort((a, b) => a.value - b.value);
+      
+      const q1Index = Math.floor(sorted.length * 0.25);
+      const q3Index = Math.floor(sorted.length * 0.75);
+      const q1 = sorted[q1Index].value;
+      const q3 = sorted[q3Index].value;
+      const iqr = q3 - q1;
+      const lowerBound = q1 - 1.5 * iqr;
+      const upperBound = q3 + 1.5 * iqr;
+      
+      const filtered = sorted.filter(item => 
+        item.value >= lowerBound && item.value <= upperBound
+      );
+      
+      return {
+        values: filtered.map(item => item.value),
+        weights: filtered.map(item => item.weight)
+      };
+    };
+
+    const latData = removeOutliers(
+      weightedCoordinates.map(c => c.lat),
+      weightedCoordinates.map(c => c.weight)
+    );
+    const lonData = removeOutliers(
+      weightedCoordinates.map(c => c.lon),
+      weightedCoordinates.map(c => c.weight)
+    );
+
+    // Calculate weighted average (more reliable services have more influence)
+    const calculateWeightedAverage = (values, weights) => {
+      const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+      if (totalWeight === 0) {
+        return values.reduce((sum, v) => sum + v, 0) / values.length;
+      }
+      return values.reduce((sum, v, i) => sum + v * weights[i], 0) / totalWeight;
+    };
+
+    let finalLat = calculateWeightedAverage(latData.values, latData.weights);
+    let finalLon = calculateWeightedAverage(lonData.values, lonData.weights);
+
+    // Refine coordinates using reverse geocoding validation
+    try {
+      const reverseGeoResponse = await fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${finalLat}&longitude=${finalLon}&localityLanguage=en`
+      );
+      const reverseGeoData = await reverseGeoResponse.json();
+      
+      // If reverse geocoding provides better city match, slightly adjust coordinates
+      const bestCityMatch = resultsToUse.find(r => 
+        r.city && reverseGeoData.city && 
+        r.city.toLowerCase() === reverseGeoData.city.toLowerCase()
+      );
+      
+      if (bestCityMatch) {
+        // Blend coordinates: 70% weighted average, 30% best matching service
+        finalLat = finalLat * 0.7 + parseFloat(bestCityMatch.loc[0]) * 0.3;
+        finalLon = finalLon * 0.7 + parseFloat(bestCityMatch.loc[1]) * 0.3;
+      }
+    } catch (error) {
+      // Silent failure - use calculated coordinates
+    }
+
+    // Calculate accuracy estimate
+    const latVariance = latData.values.reduce((sum, lat) => 
+      sum + Math.pow(lat - finalLat, 2), 0) / latData.values.length;
+    const lonVariance = lonData.values.reduce((sum, lon) => 
+      sum + Math.pow(lon - finalLon, 2), 0) / lonData.values.length;
+    const avgVariance = (latVariance + lonVariance) / 2;
+    const accuracyRadius = Math.sqrt(avgVariance) * 111; // Convert degrees to km (approx)
+
+    // Get the best result for other data (city, region, etc.)
+    const bestResult = resultsToUse.reduce((best, current) => {
+      if (!best) return current;
+      const currentScore = (
+        (current.city ? 1 : 0) +
+        (current.region ? 1 : 0) +
+        (current.postal ? 1 : 0) +
+        (current.timezone ? 1 : 0) +
+        (current.timezone === browserTimezone ? 2 : 0) // Bonus for timezone match
+      ) * (current.weight || 0.5);
+      const bestScore = (
+        (best.city ? 1 : 0) +
+        (best.region ? 1 : 0) +
+        (best.postal ? 1 : 0) +
+        (best.timezone ? 1 : 0) +
+        (best.timezone === browserTimezone ? 2 : 0)
+      ) * (best.weight || 0.5);
+      return currentScore > bestScore ? current : best;
     }, null);
 
-    return bestIpResult;
+    // Use refined coordinates with best available data
+    return {
+      ...bestResult,
+      loc: [finalLat.toFixed(6), finalLon.toFixed(6)],
+      accuracy: `IP-based (weighted avg from ${resultsToUse.length} services, ~${Math.round(accuracyRadius)}km radius)`
+    };
   };
 
   // Enhanced device detection from user agent

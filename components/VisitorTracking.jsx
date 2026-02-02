@@ -80,12 +80,31 @@ export default function VisitorTracking() {
       fetch("https://ipinfo.io/json?token=4dbd09d944c7db")
         .then(res => res.json())
         .then(data => {
+          // Parse location coordinates and create Google Maps link
+          const loc = data.loc ? data.loc.split(',') : [null, null];
+          const latitude = loc[0];
+          const longitude = loc[1];
+          const timezone = data.timezone || "Unknown";
+          const postal = data.postal || "Unknown";
+          
+          // Create Google Maps link if coordinates are available
+          let mapLink = "Unknown";
+          if (latitude && longitude) {
+            mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+          } else if (data.city && data.region) {
+            // Fallback to city/region if coordinates unavailable
+            mapLink = `https://www.google.com/maps/search/${encodeURIComponent(data.city + ', ' + data.region + ', ' + data.country)}`;
+          }
+          
           const visitorData = {
             sheet1: {
               ip: data.ip || "Unknown",
               city: data.city || "Unknown",
               region: data.region || "Unknown",
               country: data.country || "Unknown",
+              postalCode: postal,
+              mapLink: mapLink,
+              timezone: timezone,
               isp: data.org || "Unavailable",
               deviceBrand: "Unknown",
               deviceModel: "Unknown",
@@ -166,6 +185,22 @@ export default function VisitorTracking() {
           const screenSize = `${window.innerWidth}x${window.innerHeight}`;
           const deviceType = result.device?.type || "Unknown";
           const isp = data.org || "Unavailable";
+          
+          // Parse location coordinates and create Google Maps link
+          const loc = data.loc ? data.loc.split(',') : [null, null];
+          const latitude = loc[0];
+          const longitude = loc[1];
+          const timezone = data.timezone || "Unknown";
+          const postal = data.postal || "Unknown";
+          
+          // Create Google Maps link if coordinates are available
+          let mapLink = "Unknown";
+          if (latitude && longitude) {
+            mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+          } else if (data.city && data.region) {
+            // Fallback to city/region if coordinates unavailable
+            mapLink = `https://www.google.com/maps/search/${encodeURIComponent(data.city + ', ' + data.region + ', ' + data.country)}`;
+          }
 
           const visitorData = {
             sheet1: {
@@ -173,6 +208,9 @@ export default function VisitorTracking() {
               city: data.city || "Unknown",
               region: data.region || "Unknown",
               country: data.country || "Unknown",
+              postalCode: postal,
+              mapLink: mapLink,
+              timezone: timezone,
               isp: isp,
               deviceBrand: deviceBrand,
               deviceModel: deviceModel,

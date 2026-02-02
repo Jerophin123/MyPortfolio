@@ -431,20 +431,46 @@ export default function VisitorTracking() {
       enhancedData.timezone = browserTimezone || 'Asia/Kolkata';
     }
     
-    // Final fallback for postal code: try to get from any service
+    // Final fallback for postal code: try to get from any service or all results
     if (!enhancedData.postal || enhancedData.postal === 'Unknown' || enhancedData.postal === '') {
-      // Try to get postal code from any result
-      const postalFromAny = resultsToUse.find(r => r.postal && r.postal !== 'Unknown' && r.postal !== '');
+      // Try to get postal code from any result (including those without coordinates)
+      const allResults = ipResults
+        .map(r => r.status === 'fulfilled' ? r.value : null)
+        .filter(r => r !== null);
+      
+      const postalFromAny = allResults.find(r => r.postal && r.postal !== 'Unknown' && r.postal !== '' && r.postal);
       if (postalFromAny) {
         enhancedData.postal = postalFromAny.postal;
       } else if (reverseGeoData?.postal) {
         enhancedData.postal = reverseGeoData.postal;
+      } else {
+        // Try one more reverse geocoding call if we have coordinates
+        try {
+          const finalReverseGeo = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${finalLat}&longitude=${finalLon}&localityLanguage=en`
+          );
+          const finalReverseData = await finalReverseGeo.json();
+          if (finalReverseData.postcode) {
+            enhancedData.postal = finalReverseData.postcode;
+          } else if (finalReverseData.localityInfo?.administrative) {
+            const adminWithPostcode = finalReverseData.localityInfo.administrative.find(a => a.postcode);
+            if (adminWithPostcode) {
+              enhancedData.postal = adminWithPostcode.postcode;
+            }
+          }
+        } catch (error) {
+          // Silent failure
+        }
       }
     }
     
-    // Ensure no "Unknown" strings remain
-    if (enhancedData.postal === 'Unknown') enhancedData.postal = '';
-    if (enhancedData.timezone === 'Unknown') enhancedData.timezone = browserTimezone || 'Asia/Kolkata';
+    // Ensure no "Unknown" strings remain - but keep empty string if truly not available
+    if (enhancedData.postal === 'Unknown') {
+      enhancedData.postal = ''; // Will be sent as empty, not "Unknown"
+    }
+    if (enhancedData.timezone === 'Unknown' || !enhancedData.timezone) {
+      enhancedData.timezone = browserTimezone || 'Asia/Kolkata';
+    }
 
     // Use the most accurate coordinates (reverse geocoding if available, otherwise weighted average)
     const finalCoordinates = reverseGeoCoords || [finalLat.toFixed(6), finalLon.toFixed(6)];
@@ -616,8 +642,8 @@ export default function VisitorTracking() {
       // Parse location coordinates and create Google Maps link
       const latitude = locationData.loc ? locationData.loc[0] : null;
       const longitude = locationData.loc ? locationData.loc[1] : null;
-      const timezone = locationData.timezone || "Unknown";
-      const postal = locationData.postal || "Unknown";
+      const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
+      const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
       
       // Create Google Maps link if coordinates are available
       let mapLink = "Unknown";
@@ -712,11 +738,23 @@ export default function VisitorTracking() {
       let browserVersion = result.client?.version || "";
       let deviceType = result.device?.type || "Unknown";
 
+      // Always use enhanced UA parsing as fallback/validation
+      const uaInfo = detectDeviceFromUA(navigator.userAgent);
+      
       // If DeviceDetector didn't provide device info, use enhanced UA parsing
-      if (deviceBrand === "Unknown" || deviceModel === "Unknown") {
-        const uaInfo = detectDeviceFromUA(navigator.userAgent);
-        if (deviceBrand === "Unknown") deviceBrand = uaInfo.deviceBrand;
-        if (deviceModel === "Unknown") deviceModel = uaInfo.deviceModel;
+      if (deviceBrand === "Unknown" || !deviceBrand || deviceBrand.length < 2) {
+        deviceBrand = uaInfo.deviceBrand;
+      }
+      if (deviceModel === "Unknown" || !deviceModel || deviceModel.length < 2) {
+        deviceModel = uaInfo.deviceModel;
+      }
+      
+      // Ensure device brand/model are not single characters or invalid
+      if (deviceBrand && deviceBrand.length === 1) {
+        deviceBrand = uaInfo.deviceBrand;
+      }
+      if (deviceModel && deviceModel.length === 1) {
+        deviceModel = uaInfo.deviceModel;
       }
 
       // If OS detection is poor (e.g., Android detected as Linux), use UA parsing
@@ -746,8 +784,9 @@ export default function VisitorTracking() {
           // Parse location coordinates and create Google Maps link
           const latitude = locationData.loc ? locationData.loc[0] : null;
           const longitude = locationData.loc ? locationData.loc[1] : null;
-          const timezone = locationData.timezone || "Unknown";
-          const postal = locationData.postal || "Unknown";
+          const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
+          const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
           
           // Create Google Maps link if coordinates are available
           let mapLink = "Unknown";

@@ -272,23 +272,64 @@ export default function VisitorTracking() {
     let finalLat = calculateWeightedAverage(latData.values, latData.weights);
     let finalLon = calculateWeightedAverage(lonData.values, lonData.weights);
 
-    // Refine coordinates using reverse geocoding validation
+    // Use reverse geocoding as PRIMARY source for accurate city and coordinates
+    // Reverse geocoding is more accurate than IP-based services
+    let reverseGeoData = null;
+    let reverseGeoCoords = null;
+    
     try {
-      const reverseGeoResponse = await fetch(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${finalLat}&longitude=${finalLon}&localityLanguage=en`
-      );
-      const reverseGeoData = await reverseGeoResponse.json();
+      // Use multiple reverse geocoding services for better accuracy
+      const reverseGeoServices = await Promise.allSettled([
+        // Service 1: bigdatacloud (most accurate)
+        fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${finalLat}&longitude=${finalLon}&localityLanguage=en`)
+          .then(res => res.json()),
+        // Service 2: OpenStreetMap Nominatim (backup)
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${finalLat}&lon=${finalLon}&zoom=18&addressdetails=1`)
+          .then(res => res.json())
+      ]);
       
-      // If reverse geocoding provides better city match, slightly adjust coordinates
-      const bestCityMatch = resultsToUse.find(r => 
-        r.city && reverseGeoData.city && 
-        r.city.toLowerCase() === reverseGeoData.city.toLowerCase()
-      );
+      // Use the first successful reverse geocoding result
+      for (const result of reverseGeoServices) {
+        if (result.status === 'fulfilled' && result.value) {
+          const data = result.value;
+          
+          // bigdatacloud format
+          if (data.city || data.locality) {
+            reverseGeoData = {
+              city: data.city || data.locality || '',
+              region: data.principalSubdivision || data.region || '',
+              country: data.countryName || data.country || '',
+              postal: data.postcode || '',
+              timezone: data.timezone?.name || data.timezone || '',
+              locality: data.locality || '',
+              coordinates: data.latitude && data.longitude ? 
+                [data.latitude.toString(), data.longitude.toString()] : null
+            };
+            break;
+          }
+          
+          // OpenStreetMap format
+          if (data.address) {
+            reverseGeoData = {
+              city: data.address.city || data.address.town || data.address.village || data.address.municipality || '',
+              region: data.address.state || data.address.region || '',
+              country: data.address.country || '',
+              postal: data.address.postcode || '',
+              timezone: '', // OSM doesn't provide timezone
+              locality: data.address.locality || data.address.suburb || '',
+              coordinates: [data.lat, data.lon]
+            };
+            break;
+          }
+        }
+      }
       
-      if (bestCityMatch) {
-        // Blend coordinates: 70% weighted average, 30% best matching service
-        finalLat = finalLat * 0.7 + parseFloat(bestCityMatch.loc[0]) * 0.3;
-        finalLon = finalLon * 0.7 + parseFloat(bestCityMatch.loc[1]) * 0.3;
+      // If we got coordinates from reverse geocoding, use them (more accurate)
+      if (reverseGeoData?.coordinates) {
+        reverseGeoCoords = reverseGeoData.coordinates;
+        // Use reverse geocoding coordinates as they're more accurate
+        finalLat = parseFloat(reverseGeoCoords[0]);
+        finalLon = parseFloat(reverseGeoCoords[1]);
       }
     } catch (error) {
       // Silent failure - use calculated coordinates
@@ -303,30 +344,120 @@ export default function VisitorTracking() {
     const accuracyRadius = Math.sqrt(avgVariance) * 111; // Convert degrees to km (approx)
 
     // Get the best result for other data (city, region, etc.)
+    // REVERSE GEOCODING TAKES PRIORITY for city name (most accurate)
     const bestResult = resultsToUse.reduce((best, current) => {
       if (!best) return current;
+      
+      // Check if result matches reverse geocoding city (highest priority)
+      const currentMatchesReverse = reverseGeoData && 
+        current.city && reverseGeoData.city &&
+        (current.city.toLowerCase() === reverseGeoData.city.toLowerCase() ||
+         current.city.toLowerCase().includes(reverseGeoData.city.toLowerCase()) ||
+         reverseGeoData.city.toLowerCase().includes(current.city.toLowerCase()));
+      
+      const bestMatchesReverse = reverseGeoData && 
+        best.city && reverseGeoData.city &&
+        (best.city.toLowerCase() === reverseGeoData.city.toLowerCase() ||
+         best.city.toLowerCase().includes(reverseGeoData.city.toLowerCase()) ||
+         reverseGeoData.city.toLowerCase().includes(best.city.toLowerCase()));
+      
+      // Calculate completeness score (postal and timezone are critical)
       const currentScore = (
-        (current.city ? 1 : 0) +
+        (current.city ? 2 : 0) +
         (current.region ? 1 : 0) +
-        (current.postal ? 1 : 0) +
-        (current.timezone ? 1 : 0) +
-        (current.timezone === browserTimezone ? 2 : 0) // Bonus for timezone match
+        (current.postal ? 3 : 0) + // Higher weight for postal code
+        (current.timezone ? 3 : 0) + // Higher weight for timezone
+        (current.timezone === browserTimezone ? 2 : 0) + // Bonus for timezone match
+        (currentMatchesReverse ? 5 : 0) // HIGH bonus if matches reverse geocoding (most accurate)
       ) * (current.weight || 0.5);
+      
       const bestScore = (
-        (best.city ? 1 : 0) +
+        (best.city ? 2 : 0) +
         (best.region ? 1 : 0) +
-        (best.postal ? 1 : 0) +
-        (best.timezone ? 1 : 0) +
-        (best.timezone === browserTimezone ? 2 : 0)
+        (best.postal ? 3 : 0) +
+        (best.timezone ? 3 : 0) +
+        (best.timezone === browserTimezone ? 2 : 0) +
+        (bestMatchesReverse ? 5 : 0) // HIGH bonus if matches reverse geocoding
       ) * (best.weight || 0.5);
+      
       return currentScore > bestScore ? current : best;
     }, null);
 
-    // Use refined coordinates with best available data
+    // Use reverse geocoding as PRIMARY source - it's more accurate than IP services
+    let enhancedData = { ...bestResult };
+    
+    // PRIORITY: Use reverse geocoding data (most accurate)
+    if (reverseGeoData) {
+      // ALWAYS use reverse geocoding city (most accurate)
+      if (reverseGeoData.city) {
+        enhancedData.city = reverseGeoData.city;
+      } else if (reverseGeoData.locality) {
+        enhancedData.city = reverseGeoData.locality;
+      }
+      
+      // Use reverse geocoding region if available
+      if (reverseGeoData.region) {
+        enhancedData.region = reverseGeoData.region;
+      }
+      
+      // Use reverse geocoding postal code (more accurate)
+      if (reverseGeoData.postal) {
+        enhancedData.postal = reverseGeoData.postal;
+      }
+      
+      // Use reverse geocoding timezone if available
+      if (reverseGeoData.timezone) {
+        enhancedData.timezone = reverseGeoData.timezone;
+      }
+    }
+    
+    // Fallback: Fill missing data from IP services
+    if (!enhancedData.postal || enhancedData.postal === 'Unknown' || enhancedData.postal === '') {
+      const postalFromService = resultsToUse.find(r => r.postal && r.postal !== 'Unknown' && r.postal !== '');
+      if (postalFromService) {
+        enhancedData.postal = postalFromService.postal;
+      }
+    }
+    
+    if (!enhancedData.timezone || enhancedData.timezone === 'Unknown' || enhancedData.timezone === '') {
+      const timezoneFromService = resultsToUse.find(r => r.timezone && r.timezone !== 'Unknown' && r.timezone !== '');
+      if (timezoneFromService) {
+        enhancedData.timezone = timezoneFromService.timezone;
+      }
+    }
+    
+    // Final fallback: use browser timezone if still missing
+    if (!enhancedData.timezone || enhancedData.timezone === 'Unknown' || enhancedData.timezone === '') {
+      enhancedData.timezone = browserTimezone || 'Asia/Kolkata';
+    }
+    
+    // Final fallback for postal code: try to get from any service
+    if (!enhancedData.postal || enhancedData.postal === 'Unknown' || enhancedData.postal === '') {
+      // Try to get postal code from any result
+      const postalFromAny = resultsToUse.find(r => r.postal && r.postal !== 'Unknown' && r.postal !== '');
+      if (postalFromAny) {
+        enhancedData.postal = postalFromAny.postal;
+      } else if (reverseGeoData?.postal) {
+        enhancedData.postal = reverseGeoData.postal;
+      }
+    }
+    
+    // Ensure no "Unknown" strings remain
+    if (enhancedData.postal === 'Unknown') enhancedData.postal = '';
+    if (enhancedData.timezone === 'Unknown') enhancedData.timezone = browserTimezone || 'Asia/Kolkata';
+
+    // Use the most accurate coordinates (reverse geocoding if available, otherwise weighted average)
+    const finalCoordinates = reverseGeoCoords || [finalLat.toFixed(6), finalLon.toFixed(6)];
+    
+    // Use refined coordinates with enhanced data
     return {
-      ...bestResult,
-      loc: [finalLat.toFixed(6), finalLon.toFixed(6)],
-      accuracy: `IP-based (weighted avg from ${resultsToUse.length} services, ~${Math.round(accuracyRadius)}km radius)`
+      ...enhancedData,
+      loc: Array.isArray(finalCoordinates) ? 
+        [parseFloat(finalCoordinates[0]).toFixed(6), parseFloat(finalCoordinates[1]).toFixed(6)] :
+        [finalLat.toFixed(6), finalLon.toFixed(6)],
+      accuracy: reverseGeoCoords ? 
+        `Reverse geocoded (most accurate)` :
+        `IP-based (weighted avg from ${resultsToUse.length} services, ~${Math.round(accuracyRadius)}km radius)`
     };
   };
 
@@ -461,7 +592,7 @@ export default function VisitorTracking() {
 
   const initVisitorTrackingFallback = async () => {
     if (typeof window === 'undefined') return;
-
+    
     try {
       // Enhanced device detection from user agent
       const ua = navigator.userAgent;
@@ -496,9 +627,9 @@ export default function VisitorTracking() {
         // Fallback to city/region if coordinates unavailable
         mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
       }
-      
-      const visitorData = {
-        sheet1: {
+
+            const visitorData = {
+              sheet1: {
           ip: locationData.ip || "Unknown",
           city: locationData.city || "Unknown",
           region: locationData.region || "Unknown",
@@ -507,30 +638,30 @@ export default function VisitorTracking() {
           mapLink: mapLink,
           timezone: timezone,
           isp: locationData.isp || "Unavailable",
-          deviceBrand: deviceBrand,
-          deviceModel: deviceModel,
-          os: os,
-          browser: browser,
-          screenSize: screenSize,
-          deviceType: deviceType,
-          referrer: document.referrer || "Direct",
-          pageVisited: window.location.pathname,
-          timestamp: new Date().toLocaleString()
-        }
-      };
+                deviceBrand: deviceBrand,
+                deviceModel: deviceModel,
+                os: os,
+                browser: browser,
+                screenSize: screenSize,
+                deviceType: deviceType,
+                referrer: document.referrer || "Direct",
+                pageVisited: window.location.pathname,
+                timestamp: new Date().toLocaleString()
+              }
+            };
 
-      fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(visitorData)
-      })
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return response.json();
-      })
+            fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              },
+              body: JSON.stringify(visitorData)
+            })
+            .then(response => {
+              if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+              return response.json();
+            })
       .then(data => {
         // Silently log success (optional - can be removed if not needed)
         if (process.env.NODE_ENV === 'development') {
@@ -540,7 +671,7 @@ export default function VisitorTracking() {
       .catch(() => {
         // Silently handle fetch errors
       });
-    } catch (error) {
+      } catch (error) {
       // Silently handle any errors
     }
   };
@@ -556,10 +687,10 @@ export default function VisitorTracking() {
       const checkDeviceDetector = () => {
         attempts++;
         if (typeof DeviceDetector !== 'undefined') {
-          initVisitorTracking();
+      initVisitorTracking();
         } else if (attempts < maxAttempts) {
           setTimeout(checkDeviceDetector, 50);
-        } else {
+    } else {
           // Fallback to basic tracking if DeviceDetector never loads
           initVisitorTrackingFallback();
         }

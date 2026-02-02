@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const certification = getCertificationBySlug(slug);
 
-  if (!certification) {
+    if (!certification) {
     return {
       title: 'Certification Not Found | Jerophin D R Portfolio',
       description: 'The requested certification could not be found.',

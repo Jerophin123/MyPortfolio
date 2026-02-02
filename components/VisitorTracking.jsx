@@ -487,7 +487,7 @@ export default function VisitorTracking() {
     };
   };
 
-  // Enhanced device detection from user agent
+  // Enhanced device detection from user agent and browser APIs
   const detectDeviceFromUA = (ua) => {
     let os = 'Unknown';
     let osVersion = '';
@@ -497,6 +497,11 @@ export default function VisitorTracking() {
     let browser = 'Unknown';
     let browserVersion = '';
 
+    // Get additional browser info for better detection
+    const platform = typeof navigator !== 'undefined' ? navigator.platform : '';
+    const vendor = typeof navigator !== 'undefined' ? navigator.vendor : '';
+    const maxTouchPoints = typeof navigator !== 'undefined' ? navigator.maxTouchPoints : 0;
+
     // OS Detection - Check Android FIRST before Linux (Android UAs contain "Linux")
     if (ua.includes('Android')) {
       os = 'Android';
@@ -504,44 +509,118 @@ export default function VisitorTracking() {
       const androidMatch = ua.match(/Android\s([\d.]+)/);
       if (androidMatch) osVersion = androidMatch[1];
       
-      // Try to extract device brand and model from Android user agent
-      // Format: Mozilla/5.0 (Linux; Android 13; SM-S918B) AppleWebKit/537.36
-      const deviceMatch = ua.match(/\(Linux; Android [^;]+; ([^)]+)\)/);
-      if (deviceMatch) {
-        const deviceInfo = deviceMatch[1];
-        // Common patterns: SM-S918B (Samsung), Pixel 7, Redmi Note 10, etc.
-        if (deviceInfo.includes('SM-') || deviceInfo.includes('Samsung')) {
-          deviceBrand = 'Samsung';
-          deviceModel = deviceInfo.replace(/SM-/, '').trim();
-        } else if (deviceInfo.includes('Pixel')) {
-          deviceBrand = 'Google';
-          deviceModel = deviceInfo.replace('Pixel', '').trim();
-        } else if (deviceInfo.includes('Redmi') || deviceInfo.includes('POCO') || deviceInfo.includes('Mi ')) {
-          deviceBrand = 'Xiaomi';
-          deviceModel = deviceInfo;
-        } else if (deviceInfo.includes('OnePlus')) {
-          deviceBrand = 'OnePlus';
-          deviceModel = deviceInfo.replace('OnePlus', '').trim();
-        } else if (deviceInfo.includes('OPPO')) {
-          deviceBrand = 'OPPO';
-          deviceModel = deviceInfo.replace('OPPO', '').trim();
-        } else if (deviceInfo.includes('Vivo')) {
-          deviceBrand = 'Vivo';
-          deviceModel = deviceInfo.replace('Vivo', '').trim();
-        } else if (deviceInfo.includes('Realme')) {
-          deviceBrand = 'Realme';
-          deviceModel = deviceInfo.replace('Realme', '').trim();
-        } else {
-          // Try to extract brand from device string
-          const brandMatch = deviceInfo.match(/^([A-Za-z]+)/);
-          if (brandMatch) {
-            deviceBrand = brandMatch[1];
-            deviceModel = deviceInfo.replace(brandMatch[1], '').trim();
-          } else {
-            deviceModel = deviceInfo;
-          }
+      // Try multiple patterns to extract device brand and model from Android user agent
+      // Pattern 1: (Linux; Android 13; SM-S918B)
+      // Pattern 2: (Linux; Android 13; wsmn) - some devices use model codes
+      // Pattern 3: Build/... - some UAs have device info in Build string
+      let deviceInfo = null;
+      
+      // Try primary pattern
+      const deviceMatch1 = ua.match(/\(Linux; Android [^;]+; ([^)]+)\)/);
+      if (deviceMatch1) {
+        deviceInfo = deviceMatch1[1];
+      }
+      
+      // Try alternative pattern: (Linux; Android 13; wsmn Build/...)
+      if (!deviceInfo) {
+        const deviceMatch2 = ua.match(/\(Linux; Android [^;]+; ([^)]+?)(?:\s+Build\/|\))/);
+        if (deviceMatch2) {
+          deviceInfo = deviceMatch2[1];
         }
       }
+      
+      // Try Build pattern: Build/... which sometimes contains device model
+      if (!deviceInfo) {
+        const buildMatch = ua.match(/Build\/([^)]+)/);
+        if (buildMatch) {
+          deviceInfo = buildMatch[1].split('/')[0];
+        }
+      }
+      
+      if (deviceInfo) {
+        const cleanDeviceInfo = deviceInfo.trim();
+        
+        // Samsung detection (SM-*, GT-*, SCH-*, SGH-*, etc.)
+        if (cleanDeviceInfo.match(/^(SM-|GT-|SCH-|SGH-|SHV-|SPH-|SAMSUNG)/i)) {
+          deviceBrand = 'Samsung';
+          deviceModel = cleanDeviceInfo.replace(/^(SM-|GT-|SCH-|SGH-|SHV-|SPH-|SAMSUNG)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Google Pixel
+        else if (cleanDeviceInfo.includes('Pixel') || cleanDeviceInfo.match(/^Pixel/i)) {
+          deviceBrand = 'Google';
+          deviceModel = cleanDeviceInfo.replace(/^Pixel/i, '').trim() || 'Pixel';
+        }
+        // Xiaomi/Redmi/POCO
+        else if (cleanDeviceInfo.match(/(Redmi|POCO|Mi\s|Xiaomi|HM\s|MIX)/i)) {
+          deviceBrand = 'Xiaomi';
+          deviceModel = cleanDeviceInfo;
+        }
+        // OnePlus
+        else if (cleanDeviceInfo.match(/^(OnePlus|ONEPLUS|GM)/i)) {
+          deviceBrand = 'OnePlus';
+          deviceModel = cleanDeviceInfo.replace(/^(OnePlus|ONEPLUS|GM)/i, '').trim() || cleanDeviceInfo;
+        }
+        // OPPO
+        else if (cleanDeviceInfo.match(/^(OPPO|CPH|CPH-)/i)) {
+          deviceBrand = 'OPPO';
+          deviceModel = cleanDeviceInfo.replace(/^(OPPO|CPH|CPH-)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Vivo
+        else if (cleanDeviceInfo.match(/^(Vivo|VIVO|V|PD)/i)) {
+          deviceBrand = 'Vivo';
+          deviceModel = cleanDeviceInfo.replace(/^(Vivo|VIVO|V|PD)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Realme
+        else if (cleanDeviceInfo.match(/^(Realme|RMX|RM)/i)) {
+          deviceBrand = 'Realme';
+          deviceModel = cleanDeviceInfo.replace(/^(Realme|RMX|RM)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Motorola
+        else if (cleanDeviceInfo.match(/^(Moto|XT|Motorola)/i)) {
+          deviceBrand = 'Motorola';
+          deviceModel = cleanDeviceInfo.replace(/^(Moto|XT|Motorola)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Huawei
+        else if (cleanDeviceInfo.match(/^(Huawei|HONOR|ELE|VOG|LIO|ANA)/i)) {
+          deviceBrand = 'Huawei';
+          deviceModel = cleanDeviceInfo.replace(/^(Huawei|HONOR|ELE|VOG|LIO|ANA)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Nokia
+        else if (cleanDeviceInfo.match(/^(Nokia|TA-)/i)) {
+          deviceBrand = 'Nokia';
+          deviceModel = cleanDeviceInfo.replace(/^(Nokia|TA-)/i, '').trim() || cleanDeviceInfo;
+        }
+        // LG
+        else if (cleanDeviceInfo.match(/^(LG-|LM-)/i)) {
+          deviceBrand = 'LG';
+          deviceModel = cleanDeviceInfo.replace(/^(LG-|LM-)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Sony
+        else if (cleanDeviceInfo.match(/^(Sony|Xperia|SO-)/i)) {
+          deviceBrand = 'Sony';
+          deviceModel = cleanDeviceInfo.replace(/^(Sony|Xperia|SO-)/i, '').trim() || cleanDeviceInfo;
+        }
+        // Generic brand extraction - try to get brand from first word
+        else {
+          const brandMatch = cleanDeviceInfo.match(/^([A-Za-z]{2,})/);
+          if (brandMatch && brandMatch[1].length >= 2) {
+            deviceBrand = brandMatch[1];
+            deviceModel = cleanDeviceInfo.replace(brandMatch[1], '').trim() || cleanDeviceInfo;
+          } else {
+            // If no clear brand, use the whole string as model
+            deviceModel = cleanDeviceInfo;
+            // Try to infer from platform or other hints
+            if (platform.includes('Linux')) {
+              deviceBrand = 'Android Device';
+            }
+          }
+        }
+      } else {
+        // No device info found in UA, try to infer from platform
+        deviceBrand = 'Android Device';
+        deviceModel = 'Unknown Model';
+      }
+      
       deviceType = 'Mobile';
     } else if (ua.includes('iPhone')) {
       os = 'iOS';
@@ -551,6 +630,7 @@ export default function VisitorTracking() {
       if (iosMatch) osVersion = iosMatch[1].replace(/_/g, '.');
       const modelMatch = ua.match(/iPhone([\d,]+)/);
       if (modelMatch) deviceModel = `iPhone ${modelMatch[1]}`;
+      else deviceModel = 'iPhone';
     } else if (ua.includes('iPad')) {
       os = 'iOS';
       deviceBrand = 'Apple';
@@ -564,6 +644,12 @@ export default function VisitorTracking() {
       deviceType = 'Desktop';
       const macMatch = ua.match(/Mac OS X (\d+[._]\d+)/);
       if (macMatch) osVersion = macMatch[1].replace(/_/g, '.');
+      // Try to detect Mac model from platform
+      if (platform.includes('Mac')) {
+        deviceModel = platform;
+      } else {
+        deviceModel = 'Mac';
+      }
     } else if (ua.includes('Windows')) {
       os = 'Windows';
       deviceType = 'Desktop';
@@ -576,12 +662,23 @@ export default function VisitorTracking() {
         else if (version === '6.1') osVersion = '7';
         else osVersion = version;
       }
+      // Try to detect manufacturer from platform or vendor
+      if (platform) {
+        deviceBrand = platform.includes('Win64') || platform.includes('Win32') ? 'PC' : platform;
+      } else {
+        deviceBrand = 'PC';
+      }
+      deviceModel = 'Desktop';
     } else if (ua.includes('Linux')) {
       os = 'Linux';
       deviceType = 'Desktop';
+      deviceBrand = 'PC';
+      deviceModel = 'Linux Device';
     } else if (ua.includes('CrOS')) {
       os = 'Chrome OS';
       deviceType = 'Desktop';
+      deviceBrand = 'Chrome OS Device';
+      deviceModel = 'Chromebook';
     }
 
     // Browser Detection
@@ -605,6 +702,20 @@ export default function VisitorTracking() {
       browser = 'Opera';
       const operaMatch = ua.match(/(?:Opera|OPR)\/([\d.]+)/);
       if (operaMatch) browserVersion = operaMatch[1];
+    }
+
+    // Final validation - ensure no single character or invalid values
+    if (deviceBrand && (deviceBrand.length === 1 || deviceBrand === 'K' || deviceBrand === 'Unknown')) {
+      // Try to get from platform
+      if (platform && platform.length > 1) {
+        deviceBrand = platform;
+      } else {
+        deviceBrand = deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop';
+      }
+    }
+    
+    if (deviceModel && (deviceModel.length === 1 || deviceModel === 'K' || deviceModel === 'Unknown')) {
+      deviceModel = deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop';
     }
 
     return {
@@ -654,6 +765,15 @@ export default function VisitorTracking() {
         mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
       }
 
+            // Final validation before sending - ensure no invalid device data
+            const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
+              ? deviceBrand 
+              : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
+            
+            const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
+              ? deviceModel 
+              : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
+
             const visitorData = {
               sheet1: {
           ip: locationData.ip || "Unknown",
@@ -664,8 +784,8 @@ export default function VisitorTracking() {
           mapLink: mapLink,
           timezone: timezone,
           isp: locationData.isp || "Unavailable",
-                deviceBrand: deviceBrand,
-                deviceModel: deviceModel,
+                deviceBrand: finalDeviceBrand,
+                deviceModel: finalDeviceModel,
                 os: os,
                 browser: browser,
                 screenSize: screenSize,
@@ -741,20 +861,22 @@ export default function VisitorTracking() {
       // Always use enhanced UA parsing as fallback/validation
       const uaInfo = detectDeviceFromUA(navigator.userAgent);
       
-      // If DeviceDetector didn't provide device info, use enhanced UA parsing
-      if (deviceBrand === "Unknown" || !deviceBrand || deviceBrand.length < 2) {
+      // Validate and fix device brand - use UA parsing if DeviceDetector fails
+      if (!deviceBrand || deviceBrand === "Unknown" || deviceBrand.length < 2 || deviceBrand.length === 1 || deviceBrand === 'K') {
         deviceBrand = uaInfo.deviceBrand;
       }
-      if (deviceModel === "Unknown" || !deviceModel || deviceModel.length < 2) {
+      
+      // Validate and fix device model - use UA parsing if DeviceDetector fails
+      if (!deviceModel || deviceModel === "Unknown" || deviceModel.length < 2 || deviceModel.length === 1 || deviceModel === 'K') {
         deviceModel = uaInfo.deviceModel;
       }
       
-      // Ensure device brand/model are not single characters or invalid
-      if (deviceBrand && deviceBrand.length === 1) {
-        deviceBrand = uaInfo.deviceBrand;
+      // Final validation - ensure we never have invalid values
+      if (!deviceBrand || deviceBrand === "Unknown" || deviceBrand.length < 2) {
+        deviceBrand = uaInfo.deviceBrand || (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
       }
-      if (deviceModel && deviceModel.length === 1) {
-        deviceModel = uaInfo.deviceModel;
+      if (!deviceModel || deviceModel === "Unknown" || deviceModel.length < 2) {
+        deviceModel = uaInfo.deviceModel || (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
       }
 
       // If OS detection is poor (e.g., Android detected as Linux), use UA parsing
@@ -797,6 +919,15 @@ export default function VisitorTracking() {
             mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
           }
 
+          // Final validation before sending - ensure no invalid device data
+          const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
+            ? deviceBrand 
+            : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+          
+          const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
+            ? deviceModel 
+            : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+
           const visitorData = {
             sheet1: {
               ip: locationData.ip || "Unknown",
@@ -807,8 +938,8 @@ export default function VisitorTracking() {
               mapLink: mapLink,
               timezone: timezone,
               isp: locationData.isp || "Unavailable",
-              deviceBrand: deviceBrand,
-              deviceModel: deviceModel,
+              deviceBrand: finalDeviceBrand,
+              deviceModel: finalDeviceModel,
               os: osString,
               browser: browserString,
               screenSize: screenSize,

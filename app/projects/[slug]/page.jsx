@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
 
-  if (!project) {
+    if (!project) {
     return {
       title: 'Project Not Found | Jerophin D R Portfolio',
       description: 'The requested project could not be found.',

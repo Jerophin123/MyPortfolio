@@ -545,13 +545,15 @@ export default function VisitorTracking() {
       const androidMatch = ua.match(/Android\s([\d.]+)/);
       if (androidMatch) osVersion = androidMatch[1];
       
-      // Try multiple patterns to extract device brand and model from Android user agent
+      // Aggressive mobile detection - try multiple patterns to extract device brand and model
       // Pattern 1: (Linux; Android 13; SM-S918B)
       // Pattern 2: (Linux; Android 13; wsmn) - some devices use model codes
       // Pattern 3: Build/... - some UAs have device info in Build string
+      // Pattern 4: Mobile Safari patterns for better mobile detection
+      // Pattern 5: Chrome Mobile patterns
       let deviceInfo = null;
       
-      // Try primary pattern
+      // Try primary pattern - most common
       const deviceMatch1 = ua.match(/\(Linux; Android [^;]+; ([^)]+)\)/);
       if (deviceMatch1) {
         deviceInfo = deviceMatch1[1];
@@ -567,9 +569,25 @@ export default function VisitorTracking() {
       
       // Try Build pattern: Build/... which sometimes contains device model
       if (!deviceInfo) {
-        const buildMatch = ua.match(/Build\/([^)]+)/);
+        const buildMatch = ua.match(/Build\/([^)\s]+)/);
         if (buildMatch) {
-          deviceInfo = buildMatch[1].split('/')[0];
+          deviceInfo = buildMatch[1].split('/')[0].split(';')[0];
+        }
+      }
+      
+      // Try Mobile Safari pattern for iOS devices
+      if (!deviceInfo && ua.includes('Mobile')) {
+        const mobileMatch = ua.match(/Mobile\/([A-Z0-9]+)/);
+        if (mobileMatch) {
+          deviceInfo = mobileMatch[1];
+        }
+      }
+      
+      // Try Chrome Mobile pattern
+      if (!deviceInfo && ua.includes('Mobile')) {
+        const chromeMobileMatch = ua.match(/Chrome\/[\d.]+ Mobile\/([^)]+)/);
+        if (chromeMobileMatch) {
+          deviceInfo = chromeMobileMatch[1];
         }
       }
       
@@ -842,18 +860,33 @@ export default function VisitorTracking() {
         extendedInfo.connectionBandwidth = null;
       }
       
-      // Media Devices (if available) (3+ points)
+      // Media Devices (if available) (3+ points) - Aggressive collection with timeout
       try {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          extendedInfo.audioInputDevices = devices.filter(d => d.kind === 'audioinput').length;
-          extendedInfo.videoInputDevices = devices.filter(d => d.kind === 'videoinput').length;
-          extendedInfo.audioOutputDevices = devices.filter(d => d.kind === 'audiooutput').length;
+          // Use timeout to prevent blocking on mobile devices
+          const devicesPromise = navigator.mediaDevices.enumerateDevices();
+          const devices = await Promise.race([
+            devicesPromise,
+            new Promise((resolve) => setTimeout(() => resolve([]), 2000)) // 2 second timeout
+          ]);
+          if (Array.isArray(devices)) {
+            extendedInfo.audioInputDevices = devices.filter(d => d.kind === 'audioinput').length;
+            extendedInfo.videoInputDevices = devices.filter(d => d.kind === 'videoinput').length;
+            extendedInfo.audioOutputDevices = devices.filter(d => d.kind === 'audiooutput').length;
+          } else {
+            extendedInfo.audioInputDevices = 0;
+            extendedInfo.videoInputDevices = 0;
+            extendedInfo.audioOutputDevices = 0;
+          }
+        } else {
+          extendedInfo.audioInputDevices = 0;
+          extendedInfo.videoInputDevices = 0;
+          extendedInfo.audioOutputDevices = 0;
         }
       } catch (e) {
-        extendedInfo.audioInputDevices = null;
-        extendedInfo.videoInputDevices = null;
-        extendedInfo.audioOutputDevices = null;
+        extendedInfo.audioInputDevices = 0;
+        extendedInfo.videoInputDevices = 0;
+        extendedInfo.audioOutputDevices = 0;
       }
       
       // Plugins Information (5+ points)
@@ -972,15 +1005,24 @@ export default function VisitorTracking() {
         extendedInfo.fontsCount = null;
       }
       
-      // Battery API (if available) (4+ points)
+      // Battery API (if available) (4+ points) - Aggressive collection with timeout
       try {
         if (navigator.getBattery) {
-          const battery = await navigator.getBattery();
-          extendedInfo.batterySupported = 'Yes';
-          extendedInfo.batteryLevel = battery.level !== null ? (battery.level * 100).toFixed(0) + '%' : null;
-          extendedInfo.batteryCharging = battery.charging ? 'Yes' : 'No';
-          extendedInfo.batteryChargingTime = battery.chargingTime !== Infinity ? battery.chargingTime + 's' : 'Unknown';
-          extendedInfo.batteryDischargingTime = battery.dischargingTime !== Infinity ? battery.dischargingTime + 's' : 'Unknown';
+          // Use timeout to prevent blocking on mobile devices
+          const batteryPromise = navigator.getBattery();
+          const battery = await Promise.race([
+            batteryPromise,
+            new Promise((resolve) => setTimeout(() => resolve(null), 2000)) // 2 second timeout
+          ]);
+          if (battery) {
+            extendedInfo.batterySupported = 'Yes';
+            extendedInfo.batteryLevel = battery.level !== null ? (battery.level * 100).toFixed(0) + '%' : null;
+            extendedInfo.batteryCharging = battery.charging ? 'Yes' : 'No';
+            extendedInfo.batteryChargingTime = battery.chargingTime !== Infinity ? battery.chargingTime + 's' : 'Unknown';
+            extendedInfo.batteryDischargingTime = battery.dischargingTime !== Infinity ? battery.dischargingTime + 's' : 'Unknown';
+          } else {
+            extendedInfo.batterySupported = 'Timeout';
+          }
         } else {
           extendedInfo.batterySupported = 'No';
         }
@@ -1049,6 +1091,7 @@ export default function VisitorTracking() {
     if (typeof window === 'undefined') return;
     
     try {
+      // Aggressive data collection - collect immediately, don't wait for async
       // Enhanced device detection from user agent
       const ua = navigator.userAgent;
       const screenSize = `${window.innerWidth}x${window.innerHeight}`;
@@ -1060,16 +1103,101 @@ export default function VisitorTracking() {
       const deviceModel = deviceInfo.deviceModel;
       const deviceType = deviceInfo.deviceType || (/Mobile|Android|iPhone|iPad/.test(ua) ? "Mobile" : "Desktop");
 
-      // Get enhanced location from multiple services
-      const locationData = await getEnhancedLocation();
-      
-      if (!locationData) {
-        // If all services fail, silently skip tracking
-        return;
-      }
-
-      // Collect extended device information (50+ data points)
+      // Collect extended device information IMMEDIATELY (synchronous parts first)
+      // This ensures we get data even if location services fail
       const extendedInfo = await collectExtendedDeviceInfo();
+
+      // Get enhanced location from multiple services - but don't block on it
+      // Start location fetch in parallel, but proceed with tracking even if it fails
+      const locationPromise = getEnhancedLocation().catch(() => null);
+      
+      // Wait for location with timeout - don't wait forever
+      const locationData = await Promise.race([
+        locationPromise,
+        new Promise(resolve => setTimeout(() => resolve(null), 5000)) // 5 second timeout
+      ]);
+      
+      // If location fails, use basic fallback data - still track the visitor
+      if (!locationData) {
+        // Use basic location data from browser timezone
+        const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const fallbackLocation = {
+          ip: 'Unknown',
+          city: 'Unknown',
+          region: 'Unknown',
+          country: 'Unknown',
+          postalCode: '',
+          timezone: browserTimezone || 'Asia/Kolkata',
+          isp: 'Unavailable',
+          loc: null
+        };
+        
+        // Continue with fallback - aggressive tracking means we track even without location
+        const latitude = null;
+        const longitude = null;
+        const timezone = browserTimezone || 'Asia/Kolkata';
+        const postal = '';
+        const mapLink = "Unknown";
+        
+        // Final validation before sending - ensure no invalid device data
+        const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
+          ? deviceBrand 
+          : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
+        
+        const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
+          ? deviceModel 
+          : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
+
+        const visitorData = {
+          sheet1: {
+            // Existing fields (unchanged)
+            ip: 'Unknown',
+            city: 'Unknown',
+            region: 'Unknown',
+            country: 'Unknown',
+            postalCode: postal,
+            mapLink: mapLink,
+            timezone: timezone,
+            isp: 'Unavailable',
+            deviceBrand: finalDeviceBrand,
+            deviceModel: finalDeviceModel,
+            os: os,
+            browser: browser,
+            screenSize: screenSize,
+            deviceType: deviceType,
+            referrer: document.referrer || "Direct",
+            pageVisited: window.location.pathname,
+            timestamp: new Date().toLocaleString(),
+            // Extended information (50+ additional fields)
+            ...extendedInfo
+          }
+        };
+
+        // Silent network request - no user interaction required
+        fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(visitorData),
+          keepalive: true,
+          mode: 'cors',
+          credentials: 'omit'
+        })
+        .then(response => {
+          if (!response.ok) return null;
+          return response.json().catch(() => null);
+        })
+        .then(() => {
+          // Silent success - no logging
+        })
+        .catch(() => {
+          // Silent error handling
+        });
+        
+        return; // Exit early with fallback data
+      }
 
       // Parse location coordinates and create Google Maps link
       const latitude = locationData.loc ? locationData.loc[0] : null;
@@ -1229,93 +1357,186 @@ export default function VisitorTracking() {
         deviceType = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? "Mobile" : "Desktop";
       }
 
-      // Get enhanced location from multiple services
-      getEnhancedLocation()
-        .then(async (locationData) => {
-          if (!locationData) {
-            // If all services fail, silently skip tracking
-            return;
+      // Aggressive tracking - collect data immediately, don't wait for location
+      // Collect extended device information FIRST (synchronous parts)
+      // This ensures we get data even if location services fail
+      const extendedInfoPromise = collectExtendedDeviceInfo();
+      
+      // Get enhanced location from multiple services - but don't block on it
+      // Start both in parallel for faster collection
+      const locationPromise = getEnhancedLocation().catch(() => null);
+      
+      // Wait for both with timeout - don't wait forever (aggressive: 5 second max)
+      Promise.all([
+        Promise.race([
+          locationPromise,
+          new Promise(resolve => setTimeout(() => resolve(null), 5000)) // 5 second timeout
+        ]),
+        extendedInfoPromise
+      ]).then(([locationData, extendedInfo]) => {
+        // If location fails, use basic fallback data - still track the visitor
+      if (!locationData) {
+        // Use basic location data from browser timezone
+        const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const fallbackLocation = {
+          ip: 'Unknown',
+          city: 'Unknown',
+          region: 'Unknown',
+          country: 'Unknown',
+          postalCode: '',
+          timezone: browserTimezone || 'Asia/Kolkata',
+          isp: 'Unavailable',
+          loc: null
+        };
+        
+        // Continue with fallback - aggressive tracking means we track even without location
+        const latitude = null;
+        const longitude = null;
+        const timezone = browserTimezone || 'Asia/Kolkata';
+        const postal = '';
+        const mapLink = "Unknown";
+        
+        // Final validation before sending - ensure no invalid device data
+        const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
+          ? deviceBrand 
+          : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+        
+        const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
+          ? deviceModel 
+          : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+
+        const visitorData = {
+          sheet1: {
+            // Existing fields (unchanged)
+            ip: 'Unknown',
+            city: 'Unknown',
+            region: 'Unknown',
+            country: 'Unknown',
+            postalCode: postal,
+            mapLink: mapLink,
+            timezone: timezone,
+            isp: 'Unavailable',
+            deviceBrand: finalDeviceBrand,
+            deviceModel: finalDeviceModel,
+            os: osString,
+            browser: browserString,
+            screenSize: screenSize,
+            deviceType: deviceType,
+            referrer: document.referrer || "Direct",
+            pageVisited: window.location.pathname,
+            timestamp: new Date().toLocaleString(),
+            // Extended information (50+ additional fields)
+            ...extendedInfo
           }
+        };
 
-          // Collect extended device information (50+ data points)
-          const extendedInfo = await collectExtendedDeviceInfo();
-
-          // Parse location coordinates and create Google Maps link
-          const latitude = locationData.loc ? locationData.loc[0] : null;
-          const longitude = locationData.loc ? locationData.loc[1] : null;
-          const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
-          const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
-          
-          // Create Google Maps link if coordinates are available
-          let mapLink = "Unknown";
-          if (latitude && longitude) {
-            mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-          } else if (locationData.city && locationData.region) {
-            // Fallback to city/region if coordinates unavailable
-            mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
-          }
-
-          // Final validation before sending - ensure no invalid device data
-          const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
-            ? deviceBrand 
-            : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
-          
-          const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
-            ? deviceModel 
-            : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
-
-          const visitorData = {
-            sheet1: {
-              // Existing fields (unchanged)
-              ip: locationData.ip || "Unknown",
-              city: locationData.city || "Unknown",
-              region: locationData.region || "Unknown",
-              country: locationData.country || "Unknown",
-              postalCode: postal,
-              mapLink: mapLink,
-              timezone: timezone,
-              isp: locationData.isp || "Unavailable",
-              deviceBrand: finalDeviceBrand,
-              deviceModel: finalDeviceModel,
-              os: osString,
-              browser: browserString,
-              screenSize: screenSize,
-              deviceType: deviceType,
-              referrer: document.referrer || "Direct",
-              pageVisited: window.location.pathname,
-              timestamp: new Date().toLocaleString(),
-              // Extended information (50+ additional fields)
-              ...extendedInfo
-            }
-          };
-
-          // Silent network request - no user interaction required
-          fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json"
-            },
-            body: JSON.stringify(visitorData),
-            keepalive: true,
-            mode: 'cors',
-            credentials: 'omit'
-          })
-          .then(response => {
-            if (!response.ok) return null;
-            return response.json().catch(() => null);
-          })
-          .then(() => {
-            // Silent success - no logging
-          })
-          .catch(() => {
-            // Silent error handling
-          });
+        // Silent network request - no user interaction required
+        fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(visitorData),
+          keepalive: true,
+          mode: 'cors',
+          credentials: 'omit'
+        })
+        .then(response => {
+          if (!response.ok) return null;
+          return response.json().catch(() => null);
+        })
+        .then(() => {
+          // Silent success - no logging
         })
         .catch(() => {
-          // Silently handle location fetch failures
+          // Silent error handling
         });
+        
+        return; // Exit early with fallback data
+      }
+
+      // If we have location data, proceed with full tracking
+      // Parse location coordinates and create Google Maps link
+      const latitude = locationData.loc ? locationData.loc[0] : null;
+      const longitude = locationData.loc ? locationData.loc[1] : null;
+      const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
+      const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
+      
+      // Create Google Maps link if coordinates are available
+      let mapLink = "Unknown";
+      if (latitude && longitude) {
+        mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+      } else if (locationData.city && locationData.region) {
+        // Fallback to city/region if coordinates unavailable
+        mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
+      }
+
+      // Final validation before sending - ensure no invalid device data
+      const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
+        ? deviceBrand 
+        : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+      
+      const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
+        ? deviceModel 
+        : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+
+      const visitorData = {
+        sheet1: {
+          // Existing fields (unchanged)
+          ip: locationData.ip || "Unknown",
+          city: locationData.city || "Unknown",
+          region: locationData.region || "Unknown",
+          country: locationData.country || "Unknown",
+          postalCode: postal,
+          mapLink: mapLink,
+          timezone: timezone,
+          isp: locationData.isp || "Unavailable",
+          deviceBrand: finalDeviceBrand,
+          deviceModel: finalDeviceModel,
+          os: osString,
+          browser: browserString,
+          screenSize: screenSize,
+          deviceType: deviceType,
+          referrer: document.referrer || "Direct",
+          pageVisited: window.location.pathname,
+          timestamp: new Date().toLocaleString(),
+          // Extended information (50+ additional fields)
+          ...extendedInfo
+        }
+      };
+
+      // Silent network request - no user interaction required
+      fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(visitorData),
+        keepalive: true,
+        mode: 'cors',
+        credentials: 'omit'
+      })
+      .then(response => {
+        if (!response.ok) return null;
+        return response.json().catch(() => null);
+      })
+      .then(() => {
+        // Silent success - no logging
+      })
+      .catch(() => {
+        // Silent error handling
+      });
+      }).catch(() => {
+        // Silent error handling - if Promise.all fails, try fallback
+        try {
+          initVisitorTrackingFallback();
+        } catch (e) {
+          // Silent fail
+        }
+      });
     } catch (error) {
       // Silent error handling - fallback to basic tracking
       try {

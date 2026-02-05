@@ -6,81 +6,50 @@ export default function VisitorTracking() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    try {
-      // Check if script is already loaded
-      if (document.getElementById('device-detector-script')) {
-        setTimeout(() => {
-          try {
-            initVisitorTracking();
-          } catch (e) {
-            // Silent fail
-          }
-        }, 50);
-        return;
-      }
-
-      // Check if DeviceDetector is already available (might be loaded elsewhere)
-      if (typeof DeviceDetector !== 'undefined') {
-        setTimeout(() => {
-          try {
-            initVisitorTracking();
-          } catch (e) {
-            // Silent fail
-          }
-        }, 50);
-        return;
-      }
-
-      // Load the script dynamically - silent loading
-      const script = document.createElement('script');
-      script.id = 'device-detector-script';
-      script.src = 'https://cdn.jsdelivr.net/npm/device-detector-js@2.2.10/dist/device-detector.min.js';
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      
-      script.onload = () => {
-        // Small delay to ensure DeviceDetector is available
-        setTimeout(() => {
-          try {
-            initVisitorTracking();
-          } catch (e) {
-            // Silent fail - try fallback
-            try {
-              initVisitorTrackingFallback();
-            } catch (e2) {
-              // Silent fail
-            }
-          }
-        }, 100);
-      };
-      
-      script.onerror = () => {
-        // Silently handle script load failure - no errors exposed
-        try {
-          initVisitorTrackingFallback();
-        } catch (e) {
-          // Silent fail - tracking is optional
-        }
-      };
-
-      try {
-        document.head.appendChild(script);
-      } catch (e) {
-        // Silent fail if append fails
-      }
-    } catch (error) {
-      // Silent fail - no errors exposed to user
+    // Check if script is already loaded
+    if (document.getElementById('device-detector-script')) {
+      initVisitorTracking();
+      return;
     }
 
-    // Cleanup function - silent cleanup
-    return () => {
+    // Check if DeviceDetector is already available (might be loaded elsewhere)
+    if (typeof DeviceDetector !== 'undefined') {
+      initVisitorTracking();
+      return;
+    }
+
+    // Load the script dynamically
+    const script = document.createElement('script');
+    script.id = 'device-detector-script';
+    script.src = 'https://cdn.jsdelivr.net/npm/device-detector-js@2.2.10/dist/device-detector.min.js';
+    script.async = true;
+    
+    script.onload = () => {
+      // Small delay to ensure DeviceDetector is available
+      setTimeout(() => {
+        initVisitorTracking();
+      }, 100);
+    };
+    
+    script.onerror = () => {
+      // Silently handle script load failure (e.g., network issues, ad blockers)
+      // Don't log as error - this is expected in some environments
+      // Try to continue without DeviceDetector if possible
       try {
-        const existingScript = document.getElementById('device-detector-script');
-        if (existingScript && existingScript.parentNode) {
-          existingScript.parentNode.removeChild(existingScript);
-        }
+        // Fallback: try to get basic device info without DeviceDetector
+        initVisitorTrackingFallback();
       } catch (e) {
-        // Silent cleanup failure
+        // Silently fail - tracking is optional
+      }
+    };
+
+    document.head.appendChild(script);
+
+    // Cleanup function
+    return () => {
+      const existingScript = document.getElementById('device-detector-script');
+      if (existingScript && existingScript.parentNode) {
+        existingScript.parentNode.removeChild(existingScript);
       }
     };
   }, []);
@@ -88,9 +57,8 @@ export default function VisitorTracking() {
   // Enhanced location detection using IP-based geolocation only (no permission required)
   // Uses multiple IP geolocation services for better accuracy
   const getEnhancedLocation = async () => {
-    try {
-      // Advanced IP-based geolocation with weighted averaging and cross-validation
-      // No permission required, works silently - best possible accuracy without GPS
+    // Advanced IP-based geolocation with weighted averaging and cross-validation
+    // No permission required, works silently - best possible accuracy without GPS
     
     // Service reliability weights (higher = more reliable/accurate)
     const serviceWeights = {
@@ -517,10 +485,6 @@ export default function VisitorTracking() {
         `Reverse geocoded (most accurate)` :
         `IP-based (weighted avg from ${resultsToUse.length} services, ~${Math.round(accuracyRadius)}km radius)`
     };
-    } catch (error) {
-      // Silent fail - return null if location detection fails completely
-      return null;
-    }
   };
 
   // Enhanced device detection from user agent and browser APIs
@@ -545,15 +509,13 @@ export default function VisitorTracking() {
       const androidMatch = ua.match(/Android\s([\d.]+)/);
       if (androidMatch) osVersion = androidMatch[1];
       
-      // Aggressive mobile detection - try multiple patterns to extract device brand and model
+      // Try multiple patterns to extract device brand and model from Android user agent
       // Pattern 1: (Linux; Android 13; SM-S918B)
       // Pattern 2: (Linux; Android 13; wsmn) - some devices use model codes
       // Pattern 3: Build/... - some UAs have device info in Build string
-      // Pattern 4: Mobile Safari patterns for better mobile detection
-      // Pattern 5: Chrome Mobile patterns
       let deviceInfo = null;
       
-      // Try primary pattern - most common
+      // Try primary pattern
       const deviceMatch1 = ua.match(/\(Linux; Android [^;]+; ([^)]+)\)/);
       if (deviceMatch1) {
         deviceInfo = deviceMatch1[1];
@@ -569,25 +531,9 @@ export default function VisitorTracking() {
       
       // Try Build pattern: Build/... which sometimes contains device model
       if (!deviceInfo) {
-        const buildMatch = ua.match(/Build\/([^)\s]+)/);
+        const buildMatch = ua.match(/Build\/([^)]+)/);
         if (buildMatch) {
-          deviceInfo = buildMatch[1].split('/')[0].split(';')[0];
-        }
-      }
-      
-      // Try Mobile Safari pattern for iOS devices
-      if (!deviceInfo && ua.includes('Mobile')) {
-        const mobileMatch = ua.match(/Mobile\/([A-Z0-9]+)/);
-        if (mobileMatch) {
-          deviceInfo = mobileMatch[1];
-        }
-      }
-      
-      // Try Chrome Mobile pattern
-      if (!deviceInfo && ua.includes('Mobile')) {
-        const chromeMobileMatch = ua.match(/Chrome\/[\d.]+ Mobile\/([^)]+)/);
-        if (chromeMobileMatch) {
-          deviceInfo = chromeMobileMatch[1];
+          deviceInfo = buildMatch[1].split('/')[0];
         }
       }
       
@@ -781,317 +727,10 @@ export default function VisitorTracking() {
     };
   };
 
-  // Comprehensive function to collect 50+ additional data points
-  const collectExtendedDeviceInfo = async () => {
-    if (typeof window === 'undefined') return {};
-    
-    const extendedInfo = {};
-    
-    try {
-      // Silent data collection - no user interaction required
-      // Screen Information (5+ points)
-      extendedInfo.screenWidth = window.screen?.width || null;
-      extendedInfo.screenHeight = window.screen?.height || null;
-      extendedInfo.screenAvailWidth = window.screen?.availWidth || null;
-      extendedInfo.screenAvailHeight = window.screen?.availHeight || null;
-      extendedInfo.screenColorDepth = window.screen?.colorDepth || null;
-      extendedInfo.screenPixelDepth = window.screen?.pixelDepth || null;
-      extendedInfo.devicePixelRatio = window.devicePixelRatio || null;
-      extendedInfo.orientation = window.screen?.orientation?.type || (window.orientation ? (window.orientation === 0 || window.orientation === 180 ? 'portrait' : 'landscape') : null);
-      extendedInfo.orientationAngle = window.screen?.orientation?.angle ?? window.orientation ?? null;
-      
-      // Viewport Information (3+ points)
-      extendedInfo.viewportWidth = window.innerWidth || null;
-      extendedInfo.viewportHeight = window.innerHeight || null;
-      extendedInfo.scrollbarWidth = window.innerWidth - document.documentElement.clientWidth || null;
-      
-      // Browser & Navigator Info (10+ points)
-      extendedInfo.userAgent = navigator.userAgent || null;
-      extendedInfo.platform = navigator.platform || null;
-      extendedInfo.vendor = navigator.vendor || null;
-      extendedInfo.language = navigator.language || null;
-      extendedInfo.languages = navigator.languages ? navigator.languages.join(',') : null;
-      extendedInfo.cookieEnabled = navigator.cookieEnabled ? 'Yes' : 'No';
-      extendedInfo.doNotTrack = navigator.doNotTrack || 'Unknown';
-      extendedInfo.onLine = navigator.onLine ? 'Yes' : 'No';
-      extendedInfo.hardwareConcurrency = navigator.hardwareConcurrency || null;
-      extendedInfo.deviceMemory = navigator.deviceMemory || null;
-      extendedInfo.maxTouchPoints = navigator.maxTouchPoints || null;
-      extendedInfo.webdriver = navigator.webdriver ? 'Yes' : 'No';
-      extendedInfo.javaEnabled = navigator.javaEnabled ? 'Yes' : 'No';
-      
-      // Time & Date Information (5+ points)
-      const now = new Date();
-      extendedInfo.localTime = now.toLocaleString();
-      extendedInfo.utcTime = now.toUTCString();
-      extendedInfo.timezoneOffset = now.getTimezoneOffset();
-      extendedInfo.timezoneOffsetHours = (now.getTimezoneOffset() / -60).toFixed(2);
-      extendedInfo.dayOfWeek = now.getDay();
-      extendedInfo.hourOfDay = now.getHours();
-      extendedInfo.dateString = now.toDateString();
-      
-      // Storage Information (4+ points)
-      try {
-        extendedInfo.localStorageEnabled = typeof(Storage) !== 'undefined' && window.localStorage ? 'Yes' : 'No';
-        extendedInfo.sessionStorageEnabled = typeof(Storage) !== 'undefined' && window.sessionStorage ? 'Yes' : 'No';
-        extendedInfo.indexedDBEnabled = typeof indexedDB !== 'undefined' ? 'Yes' : 'No';
-        extendedInfo.webSQLEnabled = typeof openDatabase !== 'undefined' ? 'Yes' : 'No';
-      } catch (e) {
-        extendedInfo.localStorageEnabled = 'Unknown';
-        extendedInfo.sessionStorageEnabled = 'Unknown';
-        extendedInfo.indexedDBEnabled = 'Unknown';
-        extendedInfo.webSQLEnabled = 'Unknown';
-      }
-      
-      // Connection Information (if available) (5+ points)
-      if (navigator.connection || navigator.mozConnection || navigator.webkitConnection) {
-        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        extendedInfo.connectionType = conn.effectiveType || null;
-        extendedInfo.connectionDownlink = conn.downlink || null;
-        extendedInfo.connectionRtt = conn.rtt || null;
-        extendedInfo.connectionSaveData = conn.saveData ? 'Yes' : 'No';
-        extendedInfo.connectionBandwidth = conn.bandwidth || null;
-      } else {
-        // Initialize connection fields even if API not available
-        extendedInfo.connectionType = null;
-        extendedInfo.connectionDownlink = null;
-        extendedInfo.connectionRtt = null;
-        extendedInfo.connectionSaveData = 'Unknown';
-        extendedInfo.connectionBandwidth = null;
-      }
-      
-      // Media Devices (if available) (3+ points) - Aggressive collection with timeout
-      try {
-        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-          // Use timeout to prevent blocking on mobile devices
-          const devicesPromise = navigator.mediaDevices.enumerateDevices();
-          const devices = await Promise.race([
-            devicesPromise,
-            new Promise((resolve) => setTimeout(() => resolve([]), 2000)) // 2 second timeout
-          ]);
-          if (Array.isArray(devices)) {
-            extendedInfo.audioInputDevices = devices.filter(d => d.kind === 'audioinput').length;
-            extendedInfo.videoInputDevices = devices.filter(d => d.kind === 'videoinput').length;
-            extendedInfo.audioOutputDevices = devices.filter(d => d.kind === 'audiooutput').length;
-          } else {
-            extendedInfo.audioInputDevices = 0;
-            extendedInfo.videoInputDevices = 0;
-            extendedInfo.audioOutputDevices = 0;
-          }
-        } else {
-          extendedInfo.audioInputDevices = 0;
-          extendedInfo.videoInputDevices = 0;
-          extendedInfo.audioOutputDevices = 0;
-        }
-      } catch (e) {
-        extendedInfo.audioInputDevices = 0;
-        extendedInfo.videoInputDevices = 0;
-        extendedInfo.audioOutputDevices = 0;
-      }
-      
-      // Plugins Information (5+ points)
-      try {
-        extendedInfo.pluginsCount = navigator.plugins?.length || 0;
-        extendedInfo.pluginsList = [];
-        if (navigator.plugins && navigator.plugins.length > 0) {
-          for (let i = 0; i < Math.min(navigator.plugins.length, 10); i++) {
-            extendedInfo.pluginsList.push(navigator.plugins[i].name);
-          }
-          extendedInfo.pluginsList = extendedInfo.pluginsList.join('; ');
-        }
-        extendedInfo.mimeTypesCount = navigator.mimeTypes?.length || 0;
-      } catch (e) {
-        extendedInfo.pluginsCount = null;
-        extendedInfo.pluginsList = null;
-        extendedInfo.mimeTypesCount = null;
-      }
-      
-      // Canvas Fingerprint (2+ points)
-      try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.textBaseline = 'top';
-          ctx.font = '14px Arial';
-          ctx.fillText('Canvas fingerprint test 🔍', 2, 2);
-          extendedInfo.canvasFingerprint = canvas.toDataURL().substring(0, 50) + '...';
-          extendedInfo.canvasSupported = 'Yes';
-        } else {
-          extendedInfo.canvasSupported = 'No';
-        }
-      } catch (e) {
-        extendedInfo.canvasSupported = 'No';
-      }
-      
-      // WebGL Information (5+ points)
-      try {
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (gl) {
-          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-          extendedInfo.webGLSupported = 'Yes';
-          extendedInfo.webGLVendor = gl.getParameter(gl.VENDOR) || null;
-          extendedInfo.webGLRenderer = gl.getParameter(gl.RENDERER) || null;
-          extendedInfo.webGLVersion = gl.getParameter(gl.VERSION) || null;
-          if (debugInfo) {
-            extendedInfo.webGLUnmaskedVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || null;
-            extendedInfo.webGLUnmaskedRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || null;
-          }
-        } else {
-          extendedInfo.webGLSupported = 'No';
-        }
-      } catch (e) {
-        extendedInfo.webGLSupported = 'No';
-      }
-      
-      // Audio Context Fingerprint (2+ points)
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (AudioContext) {
-          const audioContext = new AudioContext();
-          extendedInfo.audioContextSupported = 'Yes';
-          extendedInfo.audioContextSampleRate = audioContext.sampleRate || null;
-          audioContext.close();
-        } else {
-          extendedInfo.audioContextSupported = 'No';
-        }
-      } catch (e) {
-        extendedInfo.audioContextSupported = 'No';
-      }
-      
-      // Font Detection (3+ points)
-      try {
-        const baseFonts = ['monospace', 'sans-serif', 'serif'];
-        const testString = 'mmmmmmmmmmlli';
-        const testSize = '72px';
-        const h = document.getElementsByTagName('body')[0];
-        const s = document.createElement('span');
-        s.style.position = 'absolute';
-        s.style.left = '-9999px';
-        s.style.fontSize = testSize;
-        const defaultWidth = {};
-        const defaultHeight = {};
-        
-        for (let i = 0; i < baseFonts.length; i++) {
-          s.style.fontFamily = baseFonts[i];
-          h.appendChild(s);
-          defaultWidth[baseFonts[i]] = s.offsetWidth;
-          defaultHeight[baseFonts[i]] = s.offsetHeight;
-          h.removeChild(s);
-        }
-        
-        const detectedFonts = [];
-        const testFonts = ['Arial', 'Verdana', 'Times New Roman', 'Courier New', 'Georgia', 'Palatino', 'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact'];
-        
-        for (let i = 0; i < testFonts.length; i++) {
-          let detected = false;
-          for (let j = 0; j < baseFonts.length; j++) {
-            s.style.fontFamily = testFonts[i] + ',' + baseFonts[j];
-            h.appendChild(s);
-            const matched = (s.offsetWidth !== defaultWidth[baseFonts[j]] || s.offsetHeight !== defaultHeight[baseFonts[j]]);
-            h.removeChild(s);
-            if (matched) {
-              detected = true;
-              break;
-            }
-          }
-          if (detected) detectedFonts.push(testFonts[i]);
-        }
-        
-        extendedInfo.detectedFonts = detectedFonts.join(', ') || 'None';
-        extendedInfo.fontsCount = detectedFonts.length;
-      } catch (e) {
-        extendedInfo.detectedFonts = 'Unknown';
-        extendedInfo.fontsCount = null;
-      }
-      
-      // Battery API (if available) (4+ points) - Aggressive collection with timeout
-      try {
-        if (navigator.getBattery) {
-          // Use timeout to prevent blocking on mobile devices
-          const batteryPromise = navigator.getBattery();
-          const battery = await Promise.race([
-            batteryPromise,
-            new Promise((resolve) => setTimeout(() => resolve(null), 2000)) // 2 second timeout
-          ]);
-          if (battery) {
-            extendedInfo.batterySupported = 'Yes';
-            extendedInfo.batteryLevel = battery.level !== null ? (battery.level * 100).toFixed(0) + '%' : null;
-            extendedInfo.batteryCharging = battery.charging ? 'Yes' : 'No';
-            extendedInfo.batteryChargingTime = battery.chargingTime !== Infinity ? battery.chargingTime + 's' : 'Unknown';
-            extendedInfo.batteryDischargingTime = battery.dischargingTime !== Infinity ? battery.dischargingTime + 's' : 'Unknown';
-          } else {
-            extendedInfo.batterySupported = 'Timeout';
-          }
-        } else {
-          extendedInfo.batterySupported = 'No';
-        }
-      } catch (e) {
-        extendedInfo.batterySupported = 'No';
-      }
-      
-      // Performance Information (3+ points)
-      try {
-        if (window.performance && window.performance.memory) {
-          extendedInfo.jsHeapSizeLimit = (window.performance.memory.jsHeapSizeLimit / 1048576).toFixed(2) + ' MB';
-          extendedInfo.totalJSHeapSize = (window.performance.memory.totalJSHeapSize / 1048576).toFixed(2) + ' MB';
-          extendedInfo.usedJSHeapSize = (window.performance.memory.usedJSHeapSize / 1048576).toFixed(2) + ' MB';
-        }
-        if (window.performance && window.performance.timing) {
-          extendedInfo.pageLoadTime = (window.performance.timing.loadEventEnd - window.performance.timing.navigationStart) + ' ms';
-        }
-      } catch (e) {
-        // Silent fail
-      }
-      
-      // URL & Page Information (5+ points)
-      extendedInfo.fullURL = window.location.href || null;
-      extendedInfo.hostname = window.location.hostname || null;
-      extendedInfo.protocol = window.location.protocol || null;
-      extendedInfo.port = window.location.port || null;
-      extendedInfo.pathname = window.location.pathname || null;
-      extendedInfo.search = window.location.search || null;
-      extendedInfo.hash = window.location.hash || null;
-      extendedInfo.origin = window.location.origin || null;
-      
-      // Document Information (3+ points)
-      extendedInfo.documentTitle = document.title || null;
-      extendedInfo.documentCharset = document.characterSet || document.charset || null;
-      extendedInfo.documentReferrer = document.referrer || 'Direct';
-      
-      // Window Information (3+ points)
-      extendedInfo.windowOuterWidth = window.outerWidth || null;
-      extendedInfo.windowOuterHeight = window.outerHeight || null;
-      extendedInfo.windowInnerWidth = window.innerWidth || null;
-      extendedInfo.windowInnerHeight = window.innerHeight || null;
-      
-      // Additional Browser Features (5+ points)
-      extendedInfo.geolocationSupported = 'geolocation' in navigator ? 'Yes' : 'No';
-      extendedInfo.serviceWorkerSupported = 'serviceWorker' in navigator ? 'Yes' : 'No';
-      extendedInfo.pushManagerSupported = 'PushManager' in window ? 'Yes' : 'No';
-      extendedInfo.notificationSupported = 'Notification' in window ? 'Yes' : 'No';
-      extendedInfo.vibrateSupported = 'vibrate' in navigator ? 'Yes' : 'No';
-      
-      // Touch Support (2+ points)
-      extendedInfo.touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0 ? 'Yes' : 'No';
-      extendedInfo.maxTouchPoints = navigator.maxTouchPoints || 0;
-      
-      // Pointer Support (2+ points)
-      extendedInfo.pointerSupport = 'PointerEvent' in window ? 'Yes' : 'No';
-      extendedInfo.pointerMediaQuery = window.matchMedia && window.matchMedia('(pointer: fine)').matches ? 'Fine' : (window.matchMedia && window.matchMedia('(pointer: coarse)').matches ? 'Coarse' : 'None');
-      
-    } catch (error) {
-      // Silent fail - return what we have
-    }
-    
-    return extendedInfo;
-  };
-
   const initVisitorTrackingFallback = async () => {
     if (typeof window === 'undefined') return;
     
     try {
-      // Aggressive data collection - collect immediately, don't wait for async
       // Enhanced device detection from user agent
       const ua = navigator.userAgent;
       const screenSize = `${window.innerWidth}x${window.innerHeight}`;
@@ -1103,106 +742,17 @@ export default function VisitorTracking() {
       const deviceModel = deviceInfo.deviceModel;
       const deviceType = deviceInfo.deviceType || (/Mobile|Android|iPhone|iPad/.test(ua) ? "Mobile" : "Desktop");
 
-      // Collect extended device information IMMEDIATELY (synchronous parts first)
-      // This ensures we get data even if location services fail
-      const extendedInfo = await collectExtendedDeviceInfo();
-
-      // Get enhanced location from multiple services - but don't block on it
-      // Start location fetch in parallel, but proceed with tracking even if it fails
-      const locationPromise = getEnhancedLocation().catch(() => null);
+      // Get enhanced location from multiple services
+      const locationData = await getEnhancedLocation();
       
-      // Wait for location with timeout - don't wait forever
-      const locationData = await Promise.race([
-        locationPromise,
-        new Promise(resolve => setTimeout(() => resolve(null), 5000)) // 5 second timeout
-      ]);
-      
-      // If location fails, use basic fallback data - still track the visitor
       if (!locationData) {
-        // Use basic location data from browser timezone
-        const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const fallbackLocation = {
-          ip: 'Unknown',
-          city: 'Unknown',
-          region: 'Unknown',
-          country: 'Unknown',
-          postalCode: '',
-          timezone: browserTimezone || 'Asia/Kolkata',
-          isp: 'Unavailable',
-          loc: null
-        };
-        
-        // Continue with fallback - aggressive tracking means we track even without location
-        const latitude = null;
-        const longitude = null;
-        const timezone = browserTimezone || 'Asia/Kolkata';
-        const postal = '';
-        const mapLink = "Unknown";
-        
-        // Final validation before sending - ensure no invalid device data
-        const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
-          ? deviceBrand 
-          : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
-        
-        const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
-          ? deviceModel 
-          : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop');
-
-        const visitorData = {
-          sheet1: {
-            // Existing fields (unchanged)
-            ip: 'Unknown',
-            city: 'Unknown',
-            region: 'Unknown',
-            country: 'Unknown',
-            postalCode: postal,
-            mapLink: mapLink,
-            timezone: timezone,
-            isp: 'Unavailable',
-            deviceBrand: finalDeviceBrand,
-            deviceModel: finalDeviceModel,
-            os: os,
-            browser: browser,
-            screenSize: screenSize,
-            deviceType: deviceType,
-            referrer: document.referrer || "Direct",
-            pageVisited: window.location.pathname,
-            timestamp: new Date().toLocaleString(),
-            // Extended information (50+ additional fields)
-            ...extendedInfo
-          }
-        };
-
-        // Silent network request - no user interaction required
-        fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(visitorData),
-          keepalive: true,
-          mode: 'cors',
-          credentials: 'omit'
-        })
-        .then(response => {
-          if (!response.ok) return null;
-          return response.json().catch(() => null);
-        })
-        .then(() => {
-          // Silent success - no logging
-        })
-        .catch(() => {
-          // Silent error handling
-        });
-        
-        return; // Exit early with fallback data
+        // If all services fail, silently skip tracking
+        return;
       }
 
       // Parse location coordinates and create Google Maps link
       const latitude = locationData.loc ? locationData.loc[0] : null;
       const longitude = locationData.loc ? locationData.loc[1] : null;
-      const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
       const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
       
@@ -1226,7 +776,6 @@ export default function VisitorTracking() {
 
             const visitorData = {
               sheet1: {
-          // Existing fields (unchanged)
           ip: locationData.ip || "Unknown",
           city: locationData.city || "Unknown",
           region: locationData.region || "Unknown",
@@ -1243,71 +792,60 @@ export default function VisitorTracking() {
                 deviceType: deviceType,
                 referrer: document.referrer || "Direct",
                 pageVisited: window.location.pathname,
-                timestamp: new Date().toLocaleString(),
-                // Extended information (50+ additional fields)
-                ...extendedInfo
+                timestamp: new Date().toLocaleString()
               }
             };
 
-            // Silent network request - no user interaction required
             fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
               },
-              body: JSON.stringify(visitorData),
-              keepalive: true,
-              mode: 'cors',
-              credentials: 'omit'
+              body: JSON.stringify(visitorData)
             })
             .then(response => {
-              if (!response.ok) return null;
-              return response.json().catch(() => null);
+              if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+              return response.json();
             })
-      .then(() => {
-        // Silent success - no logging
+      .then(data => {
+        // Silently log success (optional - can be removed if not needed)
+        if (process.env.NODE_ENV === 'development') {
+          console.log("✅ Visitor logged (fallback):", data);
+        }
       })
       .catch(() => {
-        // Silent error handling
+        // Silently handle fetch errors
       });
       } catch (error) {
-      // Silent error handling - no errors exposed to user
+      // Silently handle any errors
     }
   };
 
   const initVisitorTracking = () => {
     if (typeof window === 'undefined') return;
     
+    // DeviceDetector should be available globally after script loads
+    if (typeof DeviceDetector === 'undefined') {
+      // Try a few times, then fallback
+      let attempts = 0;
+      const maxAttempts = 10;
+      const checkDeviceDetector = () => {
+        attempts++;
+        if (typeof DeviceDetector !== 'undefined') {
+      initVisitorTracking();
+        } else if (attempts < maxAttempts) {
+          setTimeout(checkDeviceDetector, 50);
+    } else {
+          // Fallback to basic tracking if DeviceDetector never loads
+          initVisitorTrackingFallback();
+        }
+      };
+      setTimeout(checkDeviceDetector, 50);
+      return;
+    }
+
     try {
-      // DeviceDetector should be available globally after script loads
-      if (typeof DeviceDetector === 'undefined') {
-        // Try a few times, then fallback - silent retry
-        let attempts = 0;
-        const maxAttempts = 10;
-        const checkDeviceDetector = () => {
-          try {
-            attempts++;
-            if (typeof DeviceDetector !== 'undefined') {
-              initVisitorTracking();
-            } else if (attempts < maxAttempts) {
-              setTimeout(checkDeviceDetector, 50);
-            } else {
-              // Fallback to basic tracking if DeviceDetector never loads
-              initVisitorTrackingFallback();
-            }
-          } catch (e) {
-            // Silent fail - try fallback
-            try {
-              initVisitorTrackingFallback();
-            } catch (e2) {
-              // Silent fail
-            }
-          }
-        };
-        setTimeout(checkDeviceDetector, 50);
-        return;
-      }
       const detector = new DeviceDetector();
       const result = detector.parse(navigator.userAgent);
 
@@ -1357,193 +895,90 @@ export default function VisitorTracking() {
         deviceType = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? "Mobile" : "Desktop";
       }
 
-      // Aggressive tracking - collect data immediately, don't wait for location
-      // Collect extended device information FIRST (synchronous parts)
-      // This ensures we get data even if location services fail
-      const extendedInfoPromise = collectExtendedDeviceInfo();
-      
-      // Get enhanced location from multiple services - but don't block on it
-      // Start both in parallel for faster collection
-      const locationPromise = getEnhancedLocation().catch(() => null);
-      
-      // Wait for both with timeout - don't wait forever (aggressive: 5 second max)
-      Promise.all([
-        Promise.race([
-          locationPromise,
-          new Promise(resolve => setTimeout(() => resolve(null), 5000)) // 5 second timeout
-        ]),
-        extendedInfoPromise
-      ]).then(([locationData, extendedInfo]) => {
-        // If location fails, use basic fallback data - still track the visitor
-      if (!locationData) {
-        // Use basic location data from browser timezone
-        const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const fallbackLocation = {
-          ip: 'Unknown',
-          city: 'Unknown',
-          region: 'Unknown',
-          country: 'Unknown',
-          postalCode: '',
-          timezone: browserTimezone || 'Asia/Kolkata',
-          isp: 'Unavailable',
-          loc: null
-        };
-        
-        // Continue with fallback - aggressive tracking means we track even without location
-        const latitude = null;
-        const longitude = null;
-        const timezone = browserTimezone || 'Asia/Kolkata';
-        const postal = '';
-        const mapLink = "Unknown";
-        
-        // Final validation before sending - ensure no invalid device data
-        const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
-          ? deviceBrand 
-          : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
-        
-        const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
-          ? deviceModel 
-          : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
-
-        const visitorData = {
-          sheet1: {
-            // Existing fields (unchanged)
-            ip: 'Unknown',
-            city: 'Unknown',
-            region: 'Unknown',
-            country: 'Unknown',
-            postalCode: postal,
-            mapLink: mapLink,
-            timezone: timezone,
-            isp: 'Unavailable',
-            deviceBrand: finalDeviceBrand,
-            deviceModel: finalDeviceModel,
-            os: osString,
-            browser: browserString,
-            screenSize: screenSize,
-            deviceType: deviceType,
-            referrer: document.referrer || "Direct",
-            pageVisited: window.location.pathname,
-            timestamp: new Date().toLocaleString(),
-            // Extended information (50+ additional fields)
-            ...extendedInfo
+      // Get enhanced location from multiple services
+      getEnhancedLocation()
+        .then(locationData => {
+          if (!locationData) {
+            // If all services fail, silently skip tracking
+            return;
           }
-        };
 
-        // Silent network request - no user interaction required
-        fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(visitorData),
-          keepalive: true,
-          mode: 'cors',
-          credentials: 'omit'
-        })
-        .then(response => {
-          if (!response.ok) return null;
-          return response.json().catch(() => null);
-        })
-        .then(() => {
-          // Silent success - no logging
+          // Parse location coordinates and create Google Maps link
+          const latitude = locationData.loc ? locationData.loc[0] : null;
+          const longitude = locationData.loc ? locationData.loc[1] : null;
+          const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
+          const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
+          
+          // Create Google Maps link if coordinates are available
+          let mapLink = "Unknown";
+          if (latitude && longitude) {
+            mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+          } else if (locationData.city && locationData.region) {
+            // Fallback to city/region if coordinates unavailable
+            mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
+          }
+
+          // Final validation before sending - ensure no invalid device data
+          const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
+            ? deviceBrand 
+            : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+          
+          const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
+            ? deviceModel 
+            : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
+
+          const visitorData = {
+            sheet1: {
+              ip: locationData.ip || "Unknown",
+              city: locationData.city || "Unknown",
+              region: locationData.region || "Unknown",
+              country: locationData.country || "Unknown",
+              postalCode: postal,
+              mapLink: mapLink,
+              timezone: timezone,
+              isp: locationData.isp || "Unavailable",
+              deviceBrand: finalDeviceBrand,
+              deviceModel: finalDeviceModel,
+              os: osString,
+              browser: browserString,
+              screenSize: screenSize,
+              deviceType: deviceType,
+              referrer: document.referrer || "Direct",
+              pageVisited: window.location.pathname,
+              timestamp: new Date().toLocaleString()
+            }
+          };
+
+          fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify(visitorData)
+          })
+          .then(response => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            return response.json();
+          })
+          .then(data => {
+            // Silently log success (optional - can be removed if not needed)
+            if (process.env.NODE_ENV === 'development') {
+              console.log("✅ Visitor logged:", data);
+            }
+          })
+          .catch(() => {
+            // Silently handle logging failures
+          });
         })
         .catch(() => {
-          // Silent error handling
+          // Silently handle location fetch failures
         });
-        
-        return; // Exit early with fallback data
-      }
-
-      // If we have location data, proceed with full tracking
-      // Parse location coordinates and create Google Maps link
-      const latitude = locationData.loc ? locationData.loc[0] : null;
-      const longitude = locationData.loc ? locationData.loc[1] : null;
-      const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const timezone = locationData.timezone && locationData.timezone !== 'Unknown' ? locationData.timezone : (browserTimezone || 'Asia/Kolkata');
-      const postal = locationData.postal && locationData.postal !== 'Unknown' && locationData.postal !== '' ? locationData.postal : '';
-      
-      // Create Google Maps link if coordinates are available
-      let mapLink = "Unknown";
-      if (latitude && longitude) {
-        mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-      } else if (locationData.city && locationData.region) {
-        // Fallback to city/region if coordinates unavailable
-        mapLink = `https://www.google.com/maps/search/${encodeURIComponent(locationData.city + ', ' + locationData.region + ', ' + locationData.country)}`;
-      }
-
-      // Final validation before sending - ensure no invalid device data
-      const finalDeviceBrand = (deviceBrand && deviceBrand.length >= 2 && deviceBrand !== 'K' && deviceBrand !== 'Unknown') 
-        ? deviceBrand 
-        : (uaInfo.deviceBrand && uaInfo.deviceBrand.length >= 2 ? uaInfo.deviceBrand : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
-      
-      const finalDeviceModel = (deviceModel && deviceModel.length >= 2 && deviceModel !== 'K' && deviceModel !== 'Unknown') 
-        ? deviceModel 
-        : (uaInfo.deviceModel && uaInfo.deviceModel.length >= 2 ? uaInfo.deviceModel : (deviceType === 'Mobile' ? 'Mobile Device' : 'Desktop'));
-
-      const visitorData = {
-        sheet1: {
-          // Existing fields (unchanged)
-          ip: locationData.ip || "Unknown",
-          city: locationData.city || "Unknown",
-          region: locationData.region || "Unknown",
-          country: locationData.country || "Unknown",
-          postalCode: postal,
-          mapLink: mapLink,
-          timezone: timezone,
-          isp: locationData.isp || "Unavailable",
-          deviceBrand: finalDeviceBrand,
-          deviceModel: finalDeviceModel,
-          os: osString,
-          browser: browserString,
-          screenSize: screenSize,
-          deviceType: deviceType,
-          referrer: document.referrer || "Direct",
-          pageVisited: window.location.pathname,
-          timestamp: new Date().toLocaleString(),
-          // Extended information (50+ additional fields)
-          ...extendedInfo
-        }
-      };
-
-      // Silent network request - no user interaction required
-      fetch("https://api.sheety.co/2aee85d5e142542cbb36fc6bb7620a90/portfolioVisitors/sheet1", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(visitorData),
-        keepalive: true,
-        mode: 'cors',
-        credentials: 'omit'
-      })
-      .then(response => {
-        if (!response.ok) return null;
-        return response.json().catch(() => null);
-      })
-      .then(() => {
-        // Silent success - no logging
-      })
-      .catch(() => {
-        // Silent error handling
-      });
-      }).catch(() => {
-        // Silent error handling - if Promise.all fails, try fallback
-        try {
-          initVisitorTrackingFallback();
-        } catch (e) {
-          // Silent fail
-        }
-      });
     } catch (error) {
-      // Silent error handling - fallback to basic tracking
-      try {
-        initVisitorTrackingFallback();
-      } catch (e) {
-        // Silent fail - no errors exposed
-      }
+      // Silently handle DeviceDetector initialization failures
+      // Fallback to basic tracking
+      initVisitorTrackingFallback();
     }
   };
 

@@ -124,14 +124,14 @@
     --backdrop-blur-light: blur(16px) saturate(100%) brightness(100%) contrast(100%);
     --backdrop-blur-nav: blur(24px) saturate(100%) brightness(100%) contrast(100%);
     
-    /* Particle Colors - Light Mode (visible but subtle) */
-    --particle-accent: rgba(0, 86, 179, 0.12);
-    --particle-accent-light: rgba(0, 86, 179, 0.08);
-    --particle-accent-very-light: rgba(0, 86, 179, 0.04);
-    --particle-white: rgba(20, 20, 25, 0.06);
-    --particle-white-light: rgba(20, 20, 25, 0.12);
-    --particle-white-very-light: rgba(20, 20, 25, 0.025);
-    --particle-glow: rgba(0, 86, 179, 0.12);
+    /* Particle Colors - Light Mode (enhanced visibility similar to dark mode) */
+    --particle-accent: rgba(0, 86, 179, 0.22);
+    --particle-accent-light: rgba(0, 86, 179, 0.15);
+    --particle-accent-very-light: rgba(0, 86, 179, 0.08);
+    --particle-white: rgba(20, 20, 25, 0.14);
+    --particle-white-light: rgba(20, 20, 25, 0.22);
+    --particle-white-very-light: rgba(20, 20, 25, 0.06);
+    --particle-glow: rgba(0, 86, 179, 0.2);
     
     /* Section Underline - Light Mode */
     --section-underline: rgba(0, 86, 179, 0.3);
